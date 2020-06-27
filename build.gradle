@@ -1,0 +1,81 @@
+plugins {
+	id 'com.google.protobuf' version '0.8.12'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
+}
+
+group = 'com.github.noelyap.setterforcatan'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+dependencyLocking {
+  lockAllConfigurations()
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+protobuf {
+	protoc {
+		artifact = 'com.google.protobuf:protoc:3.4.0'
+	}
+
+	plugins {
+		grpc {
+			artifact = "io.grpc:protoc-gen-grpc-java:${grpc_version}"
+		}
+	}
+	
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
+
+dependencies {
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	compileOnly 'org.projectlombok:lombok'
+
+	implementation 'net.devh:grpc-server-spring-boot-starter:2.+'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+  implementation 'com.google.protobuf:protobuf-java-util:3.+'
+	implementation 'io.vavr:vavr:0.+'
+	implementation "io.grpc:grpc-netty:${grpc_version}"
+	implementation "io.grpc:grpc-protobuf:${grpc_version}"
+	implementation "io.grpc:grpc-stub:${grpc_version}"
+	implementation 'javax.annotation:javax.annotation-api'
+	implementation 'org.apache.commons:commons-lang3:3.+'
+	implementation 'org.springframework.session:spring-session-core'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	
+	testImplementation 'io.projectreactor:reactor-test'
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs "${buildDir}/generated/source/proto/main/grpc"
+			srcDirs "${buildDir}/generated/source/proto/main/java"
+		}
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
