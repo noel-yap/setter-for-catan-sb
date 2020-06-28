@@ -1,7 +1,7 @@
 package com.github.noelyap.setterforcatan;
 
 import com.github.noelyap.setterforcatan.board.protogen.GenerateBoardRequest;
-import com.github.noelyap.setterforcatan.board.RestBoardService;
+import com.github.noelyap.setterforcatan.board.BoardRestService;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/setter-for-catan")
 @RequiredArgsConstructor
 public class SetterForCatanController {
-  final RestBoardService restBoardService;
+  final BoardRestService BoardRestService;
 
   @PostMapping(path = "/generate-board", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> generateBoard(@RequestBody final GenerateBoardRequest request) {
-    return ResponseEntity.ok(restBoardService.generateBoard(request));
+    return ResponseEntity.ok(BoardRestService.generateBoard(request));
   }
 }
