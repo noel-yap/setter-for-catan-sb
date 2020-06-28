@@ -1,0 +1,11 @@
+syntax = "proto3";
+option java_multiple_files = true;
+
+import "google/api/annotations.proto";
+
+package com.github.noelyap.setterforcatan;
+
+option java_package = "com.github.noelyap.setterforcatan.protogen";
+option java_outer_classname = "SetterForCatan";
+
+import "board_service.proto";
