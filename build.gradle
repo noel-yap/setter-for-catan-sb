@@ -47,6 +47,7 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 
+	implementation 'com.okta.spring:okta-spring-boot-starter:1.+'
 	implementation 'net.devh:grpc-server-spring-boot-starter:2.+'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
