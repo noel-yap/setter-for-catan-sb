@@ -1,8 +1,8 @@
 package com.github.noelyap.setterforcatan;
 
-import com.github.noelyap.setterforcatan.board.protogen.GenerateBoardRequest;
 import com.github.noelyap.setterforcatan.board.BoardRestService;
-
+import com.github.noelyap.setterforcatan.board.protogen.GenerateBoardRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/setter-for-catan")

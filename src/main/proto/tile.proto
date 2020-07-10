@@ -29,7 +29,7 @@ message Tile {
     FISHERY = 15;
     RIVER = 16;
   
-    GOLD = 17;
+    GOLD_FIELD = 17;
     SWAMP = 18;
     OASIS = 19;
     CASTLE = 20;
