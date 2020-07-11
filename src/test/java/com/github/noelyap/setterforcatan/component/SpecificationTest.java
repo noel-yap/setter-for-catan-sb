@@ -26,13 +26,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(SoftAssertionsExtension.class)
 @SuppressWarnings({"deprecation", "unchecked"})
+// TODO(nyap): Use `VavrAssertions`.
 public class SpecificationTest {
   final MersenneTwister prng = new MersenneTwister();
 
   @Test
   public void shouldCreateSpecificationWithFisheries(final SoftAssertions softly) throws Exception {
-    final Coordinate[] desertCoordinates = newCoordinates(Tuple.of(1, 1));
-    final Coordinate[] desertOrLakeCoordinates =
+    final Array<Coordinate> desertCoordinates = newCoordinates(Tuple.of(1, 1));
+    final Array<Coordinate> desertOrLakeCoordinates =
         newCoordinates(Tuple.of(2, 2), Tuple.of(3, 3), Tuple.of(4, 4), Tuple.of(5, 5));
 
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
@@ -41,16 +42,16 @@ public class SpecificationTest {
             newChitlessTiles(Tile.Type.DESERT),
             "«DESERT»|«LAKE»",
             newChitlessTiles(Tile.Type.DESERT, Tile.Type.DESERT, Tile.Type.DESERT, Tile.Type.DESERT));
-    final Map<String, Chits[]> chits = HashMap.empty();
-    final Map<String, String[]> chitsTilesMap = HashMap.empty();
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.empty();
+    final Map<String, Array<String>> chitsTilesMap = HashMap.empty();
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("desert", desertCoordinates, "«DESERT»|«LAKE»", desertOrLakeCoordinates);
-    final Map<String, String[]> coordinatesTilesMap =
+    final Map<String, Array<String>> coordinatesTilesMap =
         HashMap.of(
-            "desert", newArray("desert"),
-            "«DESERT»|«LAKE»", newArray("«DESERT»|«LAKE»"));
+            "desert", Array.of("desert"),
+            "«DESERT»|«LAKE»", Array.of("«DESERT»|«LAKE»"));
 
-    final Coordinate[] fisheriesCoordinates =
+    final Array<Coordinate> fisheriesCoordinates =
         newCoordinates(
             Tuple.of(6, 6, Vertex.Position.TOP),
             Tuple.of(7, 7, Vertex.Position.TOP_RIGHT),
@@ -90,7 +91,7 @@ public class SpecificationTest {
 
     softly.assertThat(actual.size()).isEqualTo(14);
     softly.assertThat(actualDesertChits).isEmpty();
-    softly.assertThat(actualDesertCoordinates).containsExactlyInAnyOrder(desertCoordinates);
+    softly.assertThat(actualDesertCoordinates).containsExactlyInAnyOrder(desertCoordinates.toJavaArray(Coordinate[]::new));
     softly
         .assertThat(actualLakeChits)
         .containsExactlyInAnyOrder(
@@ -112,10 +113,10 @@ public class SpecificationTest {
                             Array.of(4, 10).map(v -> Chit.newBuilder().setValue(v).build()))
                         .build())
                 .toJavaArray(Chits[]::new));
-    softly.assertThat(actualLakeCoordinates).containsExactlyInAnyOrder(desertOrLakeCoordinates);
+    softly.assertThat(actualLakeCoordinates).containsExactlyInAnyOrder(desertOrLakeCoordinates.toJavaArray(Coordinate[]::new));
     softly
         .assertThat(actualFisheryChits)
-        .containsExactlyInAnyOrder(newChits(4, 4, 5, 5, 6, 8, 9, 9, 10));
+        .containsExactlyInAnyOrder(newChits(4, 4, 5, 5, 6, 8, 9, 9, 10).toJavaArray(Chits[]::new));
   }
 
   @Test
@@ -129,7 +130,7 @@ public class SpecificationTest {
             "rivers-of-catan", newTiles(Tile.Type.SWAMP),
             "traders-and-barbarians",
                 newTiles(Tile.Type.CASTLE, Tile.Type.GLASSWORKS, Tile.Type.QUARRY));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of(
             "desert-and-lake", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)),
             "seafarers", newCoordinates(Tuple.of(3, 3), Tuple.of(4, 4)),
@@ -140,12 +141,12 @@ public class SpecificationTest {
                     Tuple.of(7, 7),
                     Tuple.of(8, 8),
                     Tuple.of(9, 9)));
-    final Map<String, String[]> coordinatesTilesMap =
+    final Map<String, Array<String>> coordinatesTilesMap =
         HashMap.of(
-            "desert-and-lake", newArray("desert-and-lake"),
-            "seafarers", newArray("gold", "sea"),
+            "desert-and-lake", Array.of("desert-and-lake"),
+            "seafarers", Array.of("gold", "sea"),
             "traders-and-barbarians",
-                newArray("caravans", "rivers-of-catan", "traders-and-barbarians"));
+                Array.of("caravans", "rivers-of-catan", "traders-and-barbarians"));
 
     final Multimap<Tile, Coordinate> actual =
         Specification.shuffleTiles(prng, tiles, coordinates, coordinatesTilesMap);
@@ -175,7 +176,7 @@ public class SpecificationTest {
                 Tuple.of(6, 6),
                 Tuple.of(7, 7),
                 Tuple.of(8, 8),
-                Tuple.of(9, 9)));
+                Tuple.of(9, 9)).toJavaArray(Coordinate[]::new));
 
     softly
         .assertThat(actual.get(newTile(Tile.Type.DESERT)).get())
@@ -249,8 +250,8 @@ public class SpecificationTest {
   @Test
   public void shouldNotDedupTiles() {
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles = HashMap.of("sea", newTiles(Tile.Type.SEA, Tile.Type.SEA));
-    final Map<String, Chits[]> chits = HashMap.of("sea", newChits(1, 2));
-    final Map<String, String[]> chitsTilesMap = HashMap.of("sea", newArray("sea"));
+    final Map<String, Array<Chits>> chits = HashMap.of("sea", newChits(1, 2));
+    final Map<String, Array<String>> chitsTilesMap = HashMap.of("sea", Array.of("sea"));
 
     final Multimap<Tile, Chits> actual =
         Specification.shuffleTiles(prng, tiles, chits, chitsTilesMap);
@@ -261,18 +262,18 @@ public class SpecificationTest {
   @Test
   public void shouldValidateCountMismatch() {
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles = HashMap.of("sea", newTiles(Tile.Type.SEA));
-    final Map<String, Chits[]> chits = HashMap.of("sea", newChits(1, 2));
-    final Map<String, String[]> chitsTilesMap = HashMap.of("sea", newArray("sea"));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.of("sea", newChits(1, 2));
+    final Map<String, Array<String>> chitsTilesMap = HashMap.of("sea", Array.of("sea"));
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("sea", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
-    final Map<String, String[]> coordinatesTilesMap = HashMap.of("sea", newArray("sea"));
+    final Map<String, Array<String>> coordinatesTilesMap = HashMap.of("sea", Array.of("sea"));
 
     final Set<String> actual =
         Specification.checkForFeaturesVersusTilesCountMismatchError(
-                "chits", tiles, HashMap.ofEntries(chits), chitsTilesMap)
+                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
             .union(
                 Specification.checkForFeaturesVersusTilesCountMismatchError(
-                    "coordinates", tiles, HashMap.ofEntries(coordinates), coordinatesTilesMap));
+                    "coordinates", tiles, Specification.widenFeaturesMap(coordinates), coordinatesTilesMap));
 
     assertThat(actual)
         .containsExactlyInAnyOrder(
@@ -288,19 +289,19 @@ public class SpecificationTest {
             newTiles(Tile.Type.DESERT, Tile.Type.DESERT),
             "gold-field",
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
-    final Map<String, Chits[]> chits = HashMap.of("oasis", newChits(1, 2));
-    final Map<String, String[]> chitsTilesMap = HashMap.of("swamp", newArray("desert", "lake"));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.of("oasis", newChits(1, 2));
+    final Map<String, Array<String>> chitsTilesMap = HashMap.of("swamp", Array.of("desert", "lake"));
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
-    final Map<String, String[]> coordinatesTilesMap =
-        HashMap.of("oasis", newArray("desert", "lake"));
+    final Map<String, Array<String>> coordinatesTilesMap =
+        HashMap.of("oasis", Array.of("desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUndefinedTilesErrors(
-                "chits", tiles, HashMap.ofEntries(chits), chitsTilesMap)
+                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
             .union(
                 Specification.checkForUndefinedTilesErrors(
-                    "coordinates", tiles, HashMap.ofEntries(coordinates), coordinatesTilesMap));
+                    "coordinates", tiles, Specification.widenFeaturesMap(coordinates), coordinatesTilesMap));
 
     assertThat(actual)
         .containsExactlyInAnyOrder(
@@ -316,19 +317,19 @@ public class SpecificationTest {
             newTiles(Tile.Type.DESERT, Tile.Type.DESERT),
             "gold-field",
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
-    final Map<String, Chits[]> chits = HashMap.of("oasis", newChits(1, 2));
-    final Map<String, String[]> chitsTilesMap = HashMap.of("swamp", newArray("desert", "lake"));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.of("oasis", newChits(1, 2));
+    final Map<String, Array<String>> chitsTilesMap = HashMap.of("swamp", Array.of("desert", "lake"));
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
-    final Map<String, String[]> coordinatesTilesMap =
-        HashMap.of("oasis", newArray("desert", "lake"));
+    final Map<String, Array<String>> coordinatesTilesMap =
+        HashMap.of("oasis", Array.of("desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUnreferencedTilesErrors(
-                "chits", tiles, HashMap.ofEntries(chits), chitsTilesMap)
+                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
             .union(
                 Specification.checkForUnreferencedTilesErrors(
-                    "coordinates", tiles, HashMap.ofEntries(coordinates), coordinatesTilesMap));
+                    "coordinates", tiles, Specification.widenFeaturesMap(coordinates), coordinatesTilesMap));
 
     assertThat(actual)
         .containsExactlyInAnyOrder(
@@ -344,19 +345,19 @@ public class SpecificationTest {
             newTiles(Tile.Type.DESERT, Tile.Type.DESERT),
             "gold-field",
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
-    final Map<String, Chits[]> chits = HashMap.of("oasis", newChits(1, 2));
-    final Map<String, String[]> chitsTilesMap = HashMap.of("swamp", newArray("desert", "lake"));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.of("oasis", newChits(1, 2));
+    final Map<String, Array<String>> chitsTilesMap = HashMap.of("swamp", Array.of("desert", "lake"));
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
-    final Map<String, String[]> coordinatesTilesMap =
-        HashMap.of("oasis", newArray("desert", "lake"));
+    final Map<String, Array<String>> coordinatesTilesMap =
+        HashMap.of("oasis", Array.of("desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUndefinedFeaturesErrors(
-                "chits", tiles, HashMap.ofEntries(chits), chitsTilesMap)
+                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
             .union(
                 Specification.checkForUndefinedFeaturesErrors(
-                    "coordinates", tiles, HashMap.ofEntries(coordinates), coordinatesTilesMap));
+                    "coordinates", tiles, Specification.widenFeaturesMap(coordinates), coordinatesTilesMap));
 
     assertThat(actual)
         .containsExactlyInAnyOrder(
@@ -372,19 +373,19 @@ public class SpecificationTest {
             newTiles(Tile.Type.DESERT, Tile.Type.DESERT),
             "gold-field",
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
-    final Map<String, Chits[]> chits = HashMap.of("oasis", newChits(1, 2));
-    final Map<String, String[]> chitsTilesMap = HashMap.of("swamp", newArray("desert", "lake"));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.of("oasis", newChits(1, 2));
+    final Map<String, Array<String>> chitsTilesMap = HashMap.of("swamp", Array.of("desert", "lake"));
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
-    final Map<String, String[]> coordinatesTilesMap =
-        HashMap.of("oasis", newArray("desert", "lake"));
+    final Map<String, Array<String>> coordinatesTilesMap =
+        HashMap.of("oasis", Array.of("desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUnreferencedFeaturesErrors(
-                "chits", tiles, HashMap.ofEntries(chits), chitsTilesMap)
+                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
             .union(
                 Specification.checkForUnreferencedFeaturesErrors(
-                    "coordinates", tiles, HashMap.ofEntries(coordinates), coordinatesTilesMap));
+                    "coordinates", tiles, Specification.widenFeaturesMap(coordinates), coordinatesTilesMap));
 
     assertThat(actual)
         .containsExactlyInAnyOrder(
@@ -400,12 +401,12 @@ public class SpecificationTest {
             newTiles(Tile.Type.DESERT, Tile.Type.DESERT),
             "gold-field",
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
-    final Map<String, Chits[]> chits = HashMap.of("oasis", newChits(1, 2));
-    final Map<String, String[]> chitsTilesMap = HashMap.of("swamp", newArray("desert", "lake"));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.of("oasis", newChits(1, 2));
+    final Map<String, Array<String>> chitsTilesMap = HashMap.of("swamp", Array.of("desert", "lake"));
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
-    final Map<String, String[]> coordinatesTilesMap =
-        HashMap.of("oasis", newArray("desert", "lake"));
+    final Map<String, Array<String>> coordinatesTilesMap =
+        HashMap.of("oasis", Array.of("desert", "lake"));
 
     assertThatThrownBy(
             () -> new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap))
@@ -437,9 +438,9 @@ public class SpecificationTest {
     final Tuple2<Array<Tile>, Boolean> tradersAndBarbariansDestinationTiles =
         newChitlessTiles(Tile.Type.CASTLE, Tile.Type.GLASSWORKS, Tile.Type.QUARRY);
 
-    final Chits[] producingTerrainChits = newChits(1, 2, 3, 4, 5, 6, 7);
+    final Array<Chits> producingTerrainChits = newChits(1, 2, 3, 4, 5, 6, 7);
 
-    final Coordinate[] terrainCoordinates =
+    final Array<Coordinate> terrainCoordinates =
         newCoordinates(
             Tuple.of(1, 1),
             Tuple.of(2, 2),
@@ -451,7 +452,7 @@ public class SpecificationTest {
             Tuple.of(8, 8),
             Tuple.of(9, 9),
             Tuple.of(10, 10));
-    final Coordinate[] tradersAndBarbariansDestinationCoordinates =
+    final Array<Coordinate> tradersAndBarbariansDestinationCoordinates =
         newCoordinates(Tuple.of(11, 11), Tuple.of(12, 12), Tuple.of(13, 13));
 
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
@@ -462,21 +463,21 @@ public class SpecificationTest {
             barrenTerrainTiles,
             "traders-and-barbarians-destination",
             tradersAndBarbariansDestinationTiles);
-    final Map<String, Chits[]> chits = HashMap.of("producing-terrain", producingTerrainChits);
-    final Map<String, String[]> chitsTilesMap =
-        HashMap.of("producing-terrain", newArray("producing-terrain"));
-    final Map<String, Coordinate[]> coordinates =
+    final Map<String, Array<Chits>> chits = HashMap.of("producing-terrain", producingTerrainChits);
+    final Map<String, Array<String>> chitsTilesMap =
+        HashMap.of("producing-terrain", Array.of("producing-terrain"));
+    final Map<String, Array<Coordinate>> coordinates =
         HashMap.of(
             "terrain",
             terrainCoordinates,
             "traders-and-barbarians-destination",
             tradersAndBarbariansDestinationCoordinates);
-    final Map<String, String[]> coordinatesTilesMap =
+    final Map<String, Array<String>> coordinatesTilesMap =
         HashMap.of(
             "terrain",
-            newArray("producing-terrain", "barren-terrain"),
+            Array.of("producing-terrain", "barren-terrain"),
             "traders-and-barbarians-destination",
-            newArray("traders-and-barbarians-destination"));
+            Array.of("traders-and-barbarians-destination"));
 
     final Specification specification =
         new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap);
@@ -494,7 +495,7 @@ public class SpecificationTest {
 
     final Set<Configuration> producingTerrainConfigurationsFromChits =
         actual
-            .filter(c -> Array.of(producingTerrainChits).contains(c.getChitsList().get(0)))
+            .filter(c -> producingTerrainChits.contains(c.getChitsList().get(0)))
             .toSet();
     final Set<Configuration> configurationsWithNoChits =
         actual
@@ -502,12 +503,12 @@ public class SpecificationTest {
             .toSet();
 
     final Set<Configuration> terrainConfigurationsFromCoordinates =
-        actual.filter(c -> Array.of(terrainCoordinates).contains(c.getCoordinate())).toSet();
+        actual.filter(c -> terrainCoordinates.contains(c.getCoordinate())).toSet();
     final Set<Configuration> tradersAndBarbariansDestinationConfigurationsFromCoordinates =
         actual
             .filter(
                 c ->
-                    Array.of(tradersAndBarbariansDestinationCoordinates)
+                    tradersAndBarbariansDestinationCoordinates
                         .contains(c.getCoordinate()))
             .toSet();
 
@@ -533,30 +534,25 @@ public class SpecificationTest {
                 Configuration[]::new));
   }
 
-  private <T> T[] newArray(final T... elements) {
-    return elements;
-  }
-
-  private Coordinate[] newCoordinates(final Tuple2<Integer, Integer>... tuple2s) {
-    return Array.of(tuple2s).map(t2 -> newCoordinate(t2._1, t2._2)).toJavaArray(Coordinate[]::new);
+  private Array<Coordinate> newCoordinates(final Tuple2<Integer, Integer>... tuple2s) {
+    return Array.of(tuple2s).map(t2 -> newCoordinate(t2._1, t2._2));
   }
 
   private Coordinate newCoordinate(final int x, final int y) {
     return Coordinate.newBuilder().setX(x).setY(y).build();
   }
 
-  private Coordinate[] newCoordinates(final Tuple3<Integer, Integer, Vertex.Position>... tuple3s) {
+  private Array<Coordinate> newCoordinates(final Tuple3<Integer, Integer, Vertex.Position>... tuple3s) {
     return Array.of(tuple3s)
-        .map(t3 -> newCoordinate(t3._1, t3._2, t3._3))
-        .toJavaArray(Coordinate[]::new);
+        .map(t3 -> newCoordinate(t3._1, t3._2, t3._3));
   }
 
   private Coordinate newCoordinate(final int x, final int y, final Vertex.Position p) {
     return Coordinate.newBuilder().setX(x).setY(y).addVertexPositions(p).build();
   }
 
-  private Chits[] newChits(final Integer... values) {
-    return Array.of(values).map(v -> newChits(v)).toJavaArray(Chits[]::new);
+  private Array<Chits> newChits(final Integer... values) {
+    return Array.of(values).map(v -> newChits(v));
   }
 
   private Chits newChits(final int value) {
