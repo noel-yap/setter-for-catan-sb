@@ -48,4 +48,5 @@ message Tile {
 message Tiles {
   string name = 1;
   repeated Tile tiles = 2;
+  bool chitless = 3;
 }

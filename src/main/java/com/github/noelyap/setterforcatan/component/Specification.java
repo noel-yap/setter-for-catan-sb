@@ -6,12 +6,14 @@ import com.github.noelyap.setterforcatan.protogen.ConfigurationOuterClass.Config
 import com.github.noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import com.github.noelyap.setterforcatan.protogen.MarkerOuterClass.Marker;
 import com.github.noelyap.setterforcatan.protogen.TileOuterClass.Tile;
+import com.github.noelyap.setterforcatan.protogen.TileOuterClass.Tiles;
 import com.github.noelyap.setterforcatan.util.MersenneTwister;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vavr.Function1;
 import io.vavr.Function4;
 import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.Tuple3;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
@@ -37,7 +39,7 @@ public class Specification {
   private final MersenneTwister coordinatesShufflerPrng =
       new MersenneTwister(prng.nextInt() ^ prng.nextInt());
 
-  private final Map<String, Tile[]> tiles;
+  private final Map<String, Tuple2<Array<Tile>, Boolean>> tiles;
   private final Map<String, Coordinate[]> coordinates;
   private final Map<String, Chits[]> chits;
   private final Map<String, String[]> coordinatesTilesMap;
@@ -47,7 +49,27 @@ public class Specification {
   private final Function1<Configuration, Boolean> filterConfigurationScorer;
 
   public Specification(
-      final Map<String, Tile[]> tiles,
+      final Set<Tiles> tiles,
+      final Map<String, Coordinate[]> coordinates,
+      final Map<String, Chits[]> chits,
+      final Map<String, String[]> coordinatesTilesMap,
+      final Map<String, String[]> chitsTilesMap)
+      throws InvalidSpecificationError {
+    this(
+        HashMap.ofEntries(
+            tiles.map(
+                t -> {
+                  return Tuple.of(
+                      t.getName(), Tuple.of(Array.ofAll(t.getTilesList()), t.getChitless()));
+                })),
+        coordinates,
+        chits,
+        coordinatesTilesMap,
+        chitsTilesMap);
+  }
+
+  public Specification(
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, Coordinate[]> coordinates,
       final Map<String, Chits[]> chits,
       final Map<String, String[]> coordinatesTilesMap,
@@ -65,7 +87,7 @@ public class Specification {
   }
 
   public Specification(
-      final Map<String, Tile[]> tiles,
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, Coordinate[]> coordinates,
       final Map<String, Chits[]> chits,
       final Map<String, String[]> coordinatesTilesMap,
@@ -105,14 +127,14 @@ public class Specification {
                 .build());
 
     // TODO(nyap): Create `DESERT_OR_LAKE` constant.
-    final int desertCount = tiles.get("«DESERT»|«LAKE»").map(ts -> ts.length).getOrElse(0);
+    final int desertCount = tiles.get("«DESERT»|«LAKE»").map(t2 -> t2._1.size()).getOrElse(0);
     final int fisheryCount = fisheryCoordinates.length;
 
-    final Map<String, Tile[]> tiles =
+    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
         this.tiles
             .filter(t2 -> !"«DESERT»|«LAKE»".equals(t2._1))
-            .put("«LAKE»", Array.fill(desertCount, lakeTile).toJavaArray(Tile[]::new))
-            .put("«FISHERY»", Array.fill(fisheryCount, fisheryTile).toJavaArray(Tile[]::new));
+            .put("«LAKE»", Tuple.of(Array.fill(desertCount, lakeTile), false))
+            .put("«FISHERY»", Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
 
     // TODO(nyap): Create `FISHERY` constant.
     // TODO(nyap): Create `LAKE` constant.
@@ -193,13 +215,14 @@ public class Specification {
     final Array<
             Function4<
                 String,
-                Map<String, Tile[]>,
+                Map<String, Tuple2<Array<Tile>, Boolean>>,
                 Map<String, GeneratedMessageV3[]>,
                 Map<String, String[]>,
                 Set<String>>>
         fns =
             Array.of(
                 Specification::checkForUndefinedTilesErrors,
+                Specification::checkForUnreferencedTilesErrors,
                 Specification::checkForUndefinedFeaturesErrors,
                 Specification::checkForUnreferencedFeaturesErrors,
                 Specification::checkForFeaturesVersusTilesCountMismatchError);
@@ -214,7 +237,7 @@ public class Specification {
                 t2 -> {
                   final Function4<
                           String,
-                          Map<String, Tile[]>,
+                          Map<String, Tuple2<Array<Tile>, Boolean>>,
                           Map<String, GeneratedMessageV3[]>,
                           Map<String, String[]>,
                           Set<String>>
@@ -223,12 +246,7 @@ public class Specification {
                       arg = t2._2;
 
                   return fn.apply(arg._1, this.tiles, arg._2, arg._3);
-                })
-            .union(
-                // TODO(nyap): Check for unreferenced tiles against chits while still allowing for
-                // tiles that shouldn't have chits.
-                Specification.checkForUnreferencedTilesErrors(
-                    "coordinates", tiles, HashMap.ofEntries(coordinates), coordinatesTilesMap));
+                });
 
     if (errors.length() != 0) {
       throw new InvalidSpecificationError(
@@ -240,7 +258,7 @@ public class Specification {
   @VisibleForTesting
   static Set<String> checkForUndefinedTilesErrors(
       final String feature,
-      final Map<String, Tile[]> tiles,
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, GeneratedMessageV3[]> features,
       final Map<String, String[]> featuresTilesMap) {
     return featuresTilesMap
@@ -264,10 +282,11 @@ public class Specification {
   @VisibleForTesting
   static Set<String> checkForUnreferencedTilesErrors(
       final String feature,
-      final Map<String, Tile[]> tiles,
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, GeneratedMessageV3[]> features,
       final Map<String, String[]> featuresTilesMap) {
     return tiles
+        .filter(t2 -> !t2._2._2)
         .keySet()
         .diff(featuresTilesMap.flatMap(t2 -> HashSet.of(t2._2)).toSet())
         .map(key -> String.format("\"%s\" tiles is not referenced in %sTilesMap.", key, feature));
@@ -276,7 +295,7 @@ public class Specification {
   @VisibleForTesting
   static Set<String> checkForUndefinedFeaturesErrors(
       final String feature,
-      final Map<String, Tile[]> tiles,
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, GeneratedMessageV3[]> features,
       final Map<String, String[]> featuresTilesMap) {
     final Set<String> featuresTilesMapKeys = featuresTilesMap.keySet();
@@ -293,7 +312,7 @@ public class Specification {
   @VisibleForTesting
   static Set<String> checkForUnreferencedFeaturesErrors(
       final String feature,
-      final Map<String, Tile[]> tiles,
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, GeneratedMessageV3[]> features,
       final Map<String, String[]> featuresTilesMap) {
     final Set<String> featuresTilesMapKeys = featuresTilesMap.keySet();
@@ -310,7 +329,7 @@ public class Specification {
   @VisibleForTesting
   static Set<String> checkForFeaturesVersusTilesCountMismatchError(
       final String feature,
-      final Map<String, Tile[]> tiles,
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, GeneratedMessageV3[]> features,
       final Map<String, String[]> featuresTilesMap) {
     return featuresTilesMap
@@ -332,8 +351,8 @@ public class Specification {
                           tileName ->
                               tiles
                                   .get(tileName)
-                                  .getOrElse(Array.<Tile>empty().toJavaArray(Tile[]::new))
-                                  .length)
+                                  .getOrElse(Tuple.of(Array.<Tile>empty(), false))
+                                  ._1.size())
                       .sum()
                       .intValue();
 
@@ -392,7 +411,7 @@ public class Specification {
   static <ChitsOrCoordinates extends GeneratedMessageV3>
       Multimap<Tile, ChitsOrCoordinates> shuffleTiles(
           final Random prng,
-          final Map<String, Tile[]> tiles,
+          final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
           final Map<String, ChitsOrCoordinates[]> featuresMap,
           final Map<String, String[]> featuresTilesMap) {
     return HashMultimap.withSeq()
@@ -405,7 +424,7 @@ public class Specification {
                           Array.of(tilesNames)
                               .flatMap(
                                   tilesName -> {
-                                    return Array.of(tiles.get(tilesName).get());
+                                    return tiles.get(tilesName).get()._1;
                                   });
                       final ChitsOrCoordinates[] chitsOrCoordinates =
                           featuresMap.get(featureName).get();
