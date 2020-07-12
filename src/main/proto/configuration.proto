@@ -11,5 +11,5 @@ import "tile.proto";
 message Configuration {
   Coordinate coordinate = 1;
   Tile tile = 2;
-  repeated Chits chits = 3;
+  Chit chit = 3;
 }
