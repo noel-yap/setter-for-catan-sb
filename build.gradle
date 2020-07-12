@@ -70,6 +70,7 @@ dependencies {
   
   testImplementation 'io.projectreactor:reactor-test'
   testImplementation 'org.assertj:assertj-core'
+  testImplementation 'org.assertj:assertj-vavr:+'
 }
 
 sourceSets {
