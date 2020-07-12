@@ -11,6 +11,8 @@ import com.github.noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex;
 import com.github.noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import com.github.noelyap.setterforcatan.util.ChitUtils;
 import com.github.noelyap.setterforcatan.util.MersenneTwister;
+import com.github.noelyap.setterforcatan.util.TileMappingUtils;
+import com.github.noelyap.setterforcatan.util.TileUtils;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.Tuple3;
@@ -26,31 +28,41 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(SoftAssertionsExtension.class)
 @SuppressWarnings({"deprecation", "unchecked"})
-// TODO(nyap): Use `VavrAssertions`.
 public class SpecificationTest {
   final MersenneTwister prng = new MersenneTwister();
 
   @Test
   public void shouldCreateSpecificationWithFisheries(final SoftAssertions softly) throws Exception {
+    final Array<Coordinate> goldFieldCoordinates = newCoordinates(Tuple.of(6, 6));
     final Array<Coordinate> desertCoordinates = newCoordinates(Tuple.of(1, 1));
     final Array<Coordinate> desertOrLakeCoordinates =
         newCoordinates(Tuple.of(2, 2), Tuple.of(3, 3), Tuple.of(4, 4), Tuple.of(5, 5));
 
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
         HashMap.of(
+            "gold-field",
+            newTiles(Tile.Type.GOLD_FIELD),
             "desert",
             newChitlessTiles(Tile.Type.DESERT),
-            "«DESERT»|«LAKE»",
+            TileUtils.DESERT_OR_LAKE_NAME,
             newChitlessTiles(
                 Tile.Type.DESERT, Tile.Type.DESERT, Tile.Type.DESERT, Tile.Type.DESERT));
-    final Map<String, Array<Chit>> chits = HashMap.empty();
-    final Map<String, Array<String>> chitsTilesMap = HashMap.empty();
+    final Map<String, Array<Chit>> chits = HashMap.of("gold-field", ChitUtils.newChits(6));
+    final Map<String, Array<String>> chitsTilesMap =
+        HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("gold-field"));
     final Map<String, Array<Coordinate>> coordinates =
-        HashMap.of("desert", desertCoordinates, "«DESERT»|«LAKE»", desertOrLakeCoordinates);
-    final Map<String, Array<String>> coordinatesTilesMap =
         HashMap.of(
-            "desert", Array.of("desert"),
-            "«DESERT»|«LAKE»", Array.of("«DESERT»|«LAKE»"));
+            "gold-field",
+            goldFieldCoordinates,
+            "desert",
+            desertCoordinates,
+            TileUtils.DESERT_OR_LAKE_NAME,
+            desertOrLakeCoordinates);
+    final Map<String, Array<String>> coordinatesTilesMap =
+        HashMap.ofEntries(
+            TileMappingUtils.newSelfReferringEntry("gold-field"),
+            TileMappingUtils.newSelfReferringEntry("desert"),
+            TileMappingUtils.newSelfReferringEntry(TileUtils.DESERT_OR_LAKE_NAME));
 
     final Array<Coordinate> fisheriesCoordinates =
         newCoordinates(
@@ -89,7 +101,7 @@ public class SpecificationTest {
     final Array<Chit> actualFisheryChits =
         Array.ofAll(actualFisheryConfigurations).map(c -> c.getChit());
 
-    softly.assertThat(actual).hasSize(14);
+    softly.assertThat(actual).hasSize(15);
     softly.assertThat(actualDesertChits).isEmpty();
     softly
         .assertThat(actualDesertCoordinates)
@@ -116,30 +128,33 @@ public class SpecificationTest {
   public void shouldShuffleTilesWithArtifacts(final SoftAssertions softly) {
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
         HashMap.of(
-            "desert-and-lake", newTiles(Tile.Type.DESERT, Tile.Type.LAKE),
-            "gold", newTiles(Tile.Type.GOLD_FIELD),
-            "sea", newTiles(Tile.Type.SEA),
-            "caravans", newTiles(Tile.Type.OASIS),
-            "rivers-of-catan", newTiles(Tile.Type.SWAMP),
+            "desert-and-lake",
+            newTiles(Tile.Type.DESERT, Tile.Type.LAKE),
+            "gold",
+            newTiles(Tile.Type.GOLD_FIELD),
+            "sea",
+            newTiles(Tile.Type.SEA),
+            "caravans",
+            newTiles(Tile.Type.OASIS),
+            "rivers-of-catan",
+            newTiles(Tile.Type.SWAMP),
             "traders-and-barbarians",
-                newTiles(Tile.Type.CASTLE, Tile.Type.GLASSWORKS, Tile.Type.QUARRY));
+            newTiles(Tile.Type.CASTLE, Tile.Type.GLASSWORKS, Tile.Type.QUARRY));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of(
-            "desert-and-lake", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)),
-            "seafarers", newCoordinates(Tuple.of(3, 3), Tuple.of(4, 4)),
+            "desert-and-lake",
+            newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)),
+            "seafarers",
+            newCoordinates(Tuple.of(3, 3), Tuple.of(4, 4)),
             "traders-and-barbarians",
-                newCoordinates(
-                    Tuple.of(5, 5),
-                    Tuple.of(6, 6),
-                    Tuple.of(7, 7),
-                    Tuple.of(8, 8),
-                    Tuple.of(9, 9)));
+            newCoordinates(
+                Tuple.of(5, 5), Tuple.of(6, 6), Tuple.of(7, 7), Tuple.of(8, 8), Tuple.of(9, 9)));
     final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.of(
-            "desert-and-lake", Array.of("desert-and-lake"),
-            "seafarers", Array.of("gold", "sea"),
-            "traders-and-barbarians",
-                Array.of("caravans", "rivers-of-catan", "traders-and-barbarians"));
+        HashMap.ofEntries(
+            TileMappingUtils.newSelfReferringEntry("desert-and-lake"),
+            TileMappingUtils.newEntry("seafarers", "gold", "sea"),
+            TileMappingUtils.newEntry(
+                "traders-and-barbarians", "caravans", "rivers-of-catan", "traders-and-barbarians"));
 
     final Multimap<Tile, Coordinate> actual =
         Specification.shuffleTiles(prng, tiles, coordinates, coordinatesTilesMap);
@@ -188,8 +203,7 @@ public class SpecificationTest {
         .allSatisfy(c -> assertThat(c).isIn(newCoordinate(3, 3), newCoordinate(4, 4)));
     softly
         .assertThat(actual.get(newTile(Tile.Type.OASIS)).get())
-        .allSatisfy(
-            c ->
+        .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
                         newCoordinate(5, 5),
@@ -199,8 +213,7 @@ public class SpecificationTest {
                         newCoordinate(9, 9)));
     softly
         .assertThat(actual.get(newTile(Tile.Type.SWAMP)).get())
-        .allSatisfy(
-            c ->
+        .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
                         newCoordinate(5, 5),
@@ -210,8 +223,7 @@ public class SpecificationTest {
                         newCoordinate(9, 9)));
     softly
         .assertThat(actual.get(newTile(Tile.Type.CASTLE)).get())
-        .allSatisfy(
-            c ->
+        .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
                         newCoordinate(5, 5),
@@ -221,8 +233,7 @@ public class SpecificationTest {
                         newCoordinate(9, 9)));
     softly
         .assertThat(actual.get(newTile(Tile.Type.GLASSWORKS)).get())
-        .allSatisfy(
-            c ->
+        .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
                         newCoordinate(5, 5),
@@ -232,8 +243,7 @@ public class SpecificationTest {
                         newCoordinate(9, 9)));
     softly
         .assertThat(actual.get(newTile(Tile.Type.QUARRY)).get())
-        .allSatisfy(
-            c ->
+        .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
                         newCoordinate(5, 5),
@@ -249,7 +259,7 @@ public class SpecificationTest {
         HashMap.of("gold-field", newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("gold-field", ChitUtils.newChits(1, 1));
     final Map<String, Array<String>> chitsTilesMap =
-        HashMap.of("gold-field", Array.of("gold-field"));
+        HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("gold-field"));
 
     final Multimap<Tile, Chit> actual =
         Specification.shuffleTiles(prng, tiles, chits, chitsTilesMap);
@@ -258,14 +268,35 @@ public class SpecificationTest {
   }
 
   @Test
+  public void shouldValidateDuplicateCoordinates(final SoftAssertions softly) {
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of(
+            "key-1",
+            Array.of(newCoordinate(1, 2), newCoordinate(1, 2), newCoordinate(3, 5)),
+            "key-2",
+            Array.of(newCoordinate(3, 5), newCoordinate(8, 13)));
+
+    final Set<String> actual = Specification.checkForDuplicateCoordinates(coordinates);
+
+    softly.assertThat(actual).hasSize(2);
+    softly
+        .assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "Coordinate `x: 1\ny: 2\n` referenced more than once in [key-1]",
+            "Coordinate `x: 3\ny: 5\n` referenced more than once across [key-1, key-2]");
+  }
+
+  @Test
   public void shouldValidateCountMismatch() {
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
         HashMap.of("sea", newTiles(Tile.Type.SEA));
     final Map<String, Array<Chit>> chits = HashMap.of("sea", ChitUtils.newChits(1, 2));
-    final Map<String, Array<String>> chitsTilesMap = HashMap.of("sea", Array.of("sea"));
+    final Map<String, Array<String>> chitsTilesMap =
+        HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("sea"));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("sea", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
-    final Map<String, Array<String>> coordinatesTilesMap = HashMap.of("sea", Array.of("sea"));
+    final Map<String, Array<String>> coordinatesTilesMap =
+        HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("sea"));
 
     final Set<String> actual =
         Specification.checkForFeaturesVersusTilesCountMismatchError(
@@ -293,11 +324,11 @@ public class SpecificationTest {
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", ChitUtils.newChits(1, 2));
     final Map<String, Array<String>> chitsTilesMap =
-        HashMap.of("swamp", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
     final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.of("oasis", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUndefinedTilesErrors(
@@ -325,11 +356,11 @@ public class SpecificationTest {
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", ChitUtils.newChits(1, 2));
     final Map<String, Array<String>> chitsTilesMap =
-        HashMap.of("swamp", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
     final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.of("oasis", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUnreferencedTilesErrors(
@@ -357,11 +388,11 @@ public class SpecificationTest {
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", ChitUtils.newChits(1, 2));
     final Map<String, Array<String>> chitsTilesMap =
-        HashMap.of("swamp", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
     final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.of("oasis", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUndefinedFeaturesErrors(
@@ -389,11 +420,11 @@ public class SpecificationTest {
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", ChitUtils.newChits(1, 2));
     final Map<String, Array<String>> chitsTilesMap =
-        HashMap.of("swamp", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
     final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.of("oasis", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
         Specification.checkForUnreferencedFeaturesErrors(
@@ -421,11 +452,11 @@ public class SpecificationTest {
             newTiles(Tile.Type.GOLD_FIELD, Tile.Type.GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", ChitUtils.newChits(1, 2));
     final Map<String, Array<String>> chitsTilesMap =
-        HashMap.of("swamp", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("swamp", newCoordinates(Tuple.of(1, 1), Tuple.of(2, 2)));
     final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.of("oasis", Array.of("desert", "lake"));
+        HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     assertThatThrownBy(
             () -> new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap))
@@ -485,7 +516,7 @@ public class SpecificationTest {
             tradersAndBarbariansDestinationTiles);
     final Map<String, Array<Chit>> chits = HashMap.of("producing-terrain", producingTerrainChits);
     final Map<String, Array<String>> chitsTilesMap =
-        HashMap.of("producing-terrain", Array.of("producing-terrain"));
+        HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain"));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of(
             "terrain",
@@ -493,11 +524,9 @@ public class SpecificationTest {
             "traders-and-barbarians-destination",
             tradersAndBarbariansDestinationCoordinates);
     final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.of(
-            "terrain",
-            Array.of("producing-terrain", "barren-terrain"),
-            "traders-and-barbarians-destination",
-            Array.of("traders-and-barbarians-destination"));
+        HashMap.ofEntries(
+            TileMappingUtils.newEntry("terrain", "producing-terrain", "barren-terrain"),
+            TileMappingUtils.newSelfReferringEntry("traders-and-barbarians-destination"));
 
     final Specification specification =
         new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap);

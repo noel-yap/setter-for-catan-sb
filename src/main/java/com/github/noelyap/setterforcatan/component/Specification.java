@@ -1,17 +1,18 @@
 package com.github.noelyap.setterforcatan.component;
 
-import com.github.noelyap.setterforcatan.board.protogen.ChitsTilesMapping;
-import com.github.noelyap.setterforcatan.board.protogen.CoordinateTilesMapping;
 import com.github.noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import com.github.noelyap.setterforcatan.protogen.ChitOuterClass.Chits;
 import com.github.noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import com.github.noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import com.github.noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinates;
 import com.github.noelyap.setterforcatan.protogen.MarkerOuterClass.Marker;
+import com.github.noelyap.setterforcatan.protogen.SpecificationOuterClass.ChitsTilesMapping;
+import com.github.noelyap.setterforcatan.protogen.SpecificationOuterClass.CoordinateTilesMapping;
 import com.github.noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import com.github.noelyap.setterforcatan.protogen.TileOuterClass.Tiles;
 import com.github.noelyap.setterforcatan.util.ChitUtils;
 import com.github.noelyap.setterforcatan.util.MersenneTwister;
+import com.github.noelyap.setterforcatan.util.TileUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vavr.Function1;
@@ -27,11 +28,13 @@ import io.vavr.collection.Map;
 import io.vavr.collection.Multimap;
 import io.vavr.collection.Set;
 import io.vavr.collection.Stream;
+import io.vavr.collection.Traversable;
 import java.util.Random;
+import org.apache.commons.lang3.StringUtils;
 
 public class Specification {
   @SuppressWarnings("serial")
-  public static class InvalidSpecificationError extends Exception {
+  public static class InvalidSpecificationError extends RuntimeException {
     public InvalidSpecificationError(final String message) {
       super(message);
     }
@@ -45,9 +48,20 @@ public class Specification {
   private final Map<String, Array<Chit>> chits;
   private final Map<String, Array<String>> coordinatesTilesMap;
   private final Map<String, Array<String>> chitsTilesMap;
-  private final Marker[] markers;
+  private final Set<Marker> markers;
   private final Function1<Configuration, Boolean> validateConfiguration;
   private final Function1<Configuration, Boolean> filterConfigurationScorer;
+
+  public Specification(
+      com.github.noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification that)
+      throws InvalidSpecificationError {
+    this(
+        HashSet.ofAll(that.getTilesList()),
+        HashSet.ofAll(that.getCoordinatesList()),
+        HashSet.ofAll(that.getChitsList()),
+        HashSet.ofAll(that.getCoordinatesTilesMappingsList()),
+        HashSet.ofAll(that.getChitsTilesMappingsList()));
+  }
 
   public Specification(
       final Set<Tiles> tiles,
@@ -58,29 +72,24 @@ public class Specification {
       throws InvalidSpecificationError {
     this(
         HashMap.ofEntries(
-            tiles.map(
-                t -> {
+            tiles.map(t -> {
                   return Tuple.of(
                       t.getName(), Tuple.of(Array.ofAll(t.getTilesList()), t.getChitless()));
                 })),
         HashMap.ofEntries(
-            coordinates.map(
-                c -> {
+            coordinates.map(c -> {
                   return Tuple.of(c.getName(), Array.ofAll(c.getCoordinatesList()));
                 })),
         HashMap.ofEntries(
-            chits.map(
-                c -> {
+            chits.map(c -> {
                   return Tuple.of(c.getName(), Array.ofAll(c.getChitsList()));
                 })),
         HashMap.ofEntries(
-            coordinatesTilesMap.map(
-                ct -> {
+            coordinatesTilesMap.map(ct -> {
                   return Tuple.of(ct.getCoordinatesName(), Array.ofAll(ct.getTilesNamesList()));
                 })),
         HashMap.ofEntries(
-            chitsTilesMap.map(
-                ct -> {
+            chitsTilesMap.map(ct -> {
                   return Tuple.of(ct.getChitsName(), Array.ofAll(ct.getTilesNamesList()));
                 })));
   }
@@ -98,7 +107,7 @@ public class Specification {
         chits,
         coordinatesTilesMap,
         chitsTilesMap,
-        new Marker[0],
+        HashSet.empty(),
         c -> true,
         c -> true);
   }
@@ -109,7 +118,7 @@ public class Specification {
       final Map<String, Array<Chit>> chits,
       final Map<String, Array<String>> coordinatesTilesMap,
       final Map<String, Array<String>> chitsTilesMap,
-      final Marker[] markers,
+      final Set<Marker> markers,
       final Function1<Configuration, Boolean> validateConfiguration,
       final Function1<Configuration, Boolean> filterConfigurationScorer)
       throws InvalidSpecificationError {
@@ -135,37 +144,48 @@ public class Specification {
     final Stream<Chit> lakeChits =
         Stream.of(ChitUtils.newChit(2, 3, 11, 12), ChitUtils.newChit(4, 10));
 
-    // TODO(nyap): Create `DESERT_OR_LAKE` constant.
-    final int desertCount = tiles.get("«DESERT»|«LAKE»").map(t2 -> t2._1.size()).getOrElse(0);
+    final int desertCount =
+        tiles.get(TileUtils.DESERT_OR_LAKE_NAME).map(t2 -> t2._1.size()).getOrElse(0);
     final int fisheryCount = fisheryCoordinates.size();
 
     final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
         this.tiles
-            .filter(t2 -> !"«DESERT»|«LAKE»".equals(t2._1))
-            .put("«LAKE»", Tuple.of(Array.fill(desertCount, lakeTile), false))
-            .put("«FISHERY»", Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
+            .filter(t2 -> !TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1))
+            .put(TileUtils.LAKE_NAME, Tuple.of(Array.fill(desertCount, lakeTile), false))
+            .put(TileUtils.FISHERY_NAME, Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
 
-    // TODO(nyap): Create `FISHERY` constant.
-    // TODO(nyap): Create `LAKE` constant.
     final Map<String, Array<Chit>> chits =
         this.chits
-            .put("«LAKE»", Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
-            .put("«FISHERY»", Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
+            .put(TileUtils.LAKE_NAME, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
+            .put(TileUtils.FISHERY_NAME, Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
     final Map<String, Array<String>> chitsTilesMap =
         this.chitsTilesMap
-            .put("«LAKE»", Array.of("«LAKE»"))
-            .put("«FISHERY»", Array.of("«FISHERY»"));
+            .put(TileUtils.LAKE_NAME, Array.of(TileUtils.LAKE_NAME))
+            .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
 
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.ofEntries(
-                this.coordinates.map(
-                    t2 -> Tuple.of("«DESERT»|«LAKE»".equals(t2._1) ? "«LAKE»" : t2._1, t2._2)))
-            .put("«FISHERY»", fisheryCoordinates);
+                this.coordinates.map(t2 ->
+                        Tuple.of(
+                            TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1)
+                                ? TileUtils.LAKE_NAME
+                                : t2._1,
+                            t2._2)))
+            .put(TileUtils.FISHERY_NAME, fisheryCoordinates);
     final Map<String, Array<String>> coordinatesTilesMap =
-        this.coordinatesTilesMap
-            .filter(t2 -> !"«DESERT»|«LAKE»".equals(t2._1))
-            .put("«LAKE»", Array.of("«LAKE»"))
-            .put("«FISHERY»", Array.of("«FISHERY»"));
+        HashMap.ofEntries(
+                this.coordinatesTilesMap.map(t2 -> {
+                      final String key = t2._1;
+                      final Array<String> value = t2._2;
+
+                      return Tuple.of(
+                          TileUtils.DESERT_OR_LAKE_NAME.equals(key) ? TileUtils.LAKE_NAME : key,
+                          value.map(v ->
+                                  TileUtils.DESERT_OR_LAKE_NAME.equals(v)
+                                      ? TileUtils.LAKE_NAME
+                                      : v));
+                    }))
+            .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
 
     return new Specification(
         tiles,
@@ -185,7 +205,7 @@ public class Specification {
         this.chits,
         this.coordinatesTilesMap,
         this.chitsTilesMap,
-        markers,
+        HashSet.of(markers),
         this.validateConfiguration,
         this.filterConfigurationScorer);
   }
@@ -218,8 +238,11 @@ public class Specification {
         configurationScorerFilter);
   }
 
+  public Set<Marker> getMarkers() {
+    return markers;
+  }
+
   @SuppressWarnings("deprecation")
-  // TODO(nyap): Check for duplicate coordinates errors.
   private void validate() throws InvalidSpecificationError {
     final Array<
             Function4<
@@ -242,29 +265,72 @@ public class Specification {
                 Tuple.of("coordinates", widenFeaturesMap(coordinates), coordinatesTilesMap));
 
     final Set<String> errors =
-        HashSet.ofAll(fns.crossProduct(args))
-            .flatMap(
-                t2 -> {
-                  final Function4<
-                          String,
-                          Map<String, Tuple2<Array<Tile>, Boolean>>,
-                          Map<String, Array<GeneratedMessageV3>>,
-                          Map<String, Array<String>>,
-                          Set<String>>
-                      fn = t2._1;
-                  final Tuple3<
-                          String,
-                          Map<String, Array<GeneratedMessageV3>>,
-                          Map<String, Array<String>>>
-                      arg = t2._2;
+        checkForEmptyFeatureMaps("tiles", tiles)
+            .union(checkForEmptyFeatureMaps("coordinates", coordinates))
+            .union(checkForEmptyFeatureMaps("chits", chits))
+            .union(checkForDuplicateCoordinates(coordinates))
+            .union(
+                HashSet.ofAll(fns.crossProduct(args))
+                    .flatMap(t2 -> {
+                          final Function4<
+                                  String,
+                                  Map<String, Tuple2<Array<Tile>, Boolean>>,
+                                  Map<String, Array<GeneratedMessageV3>>,
+                                  Map<String, Array<String>>,
+                                  Set<String>>
+                              fn = t2._1;
+                          final Tuple3<
+                                  String,
+                                  Map<String, Array<GeneratedMessageV3>>,
+                                  Map<String, Array<String>>>
+                              arg = t2._2;
 
-                  return fn.apply(arg._1, this.tiles, arg._2, arg._3);
-                });
+                          return fn.apply(arg._1, this.tiles, arg._2, arg._3);
+                        }));
 
     if (errors.length() != 0) {
       throw new InvalidSpecificationError(
           "Invalid Specification:\n\t" + String.join("\n\t", errors.toJavaArray(String[]::new)));
     }
+  }
+
+  private static <T> Set<String> checkForEmptyFeatureMaps(
+      final String feature, final Map<String, T> featuresMap) {
+    return featuresMap.isEmpty()
+        ? HashSet.of(String.format("%s map is empty.", StringUtils.capitalize(feature)))
+        : HashSet.empty();
+  }
+
+  @SuppressWarnings("deprecation")
+  @VisibleForTesting
+  static Set<String> checkForDuplicateCoordinates(
+      final Map<String, Array<Coordinate>> coordinates) {
+    final Multimap<Coordinate, String> reverseIndex =
+        HashMultimap.withSeq()
+            .ofEntries(
+                coordinates.flatMap(t2 -> {
+                      return t2._2.map(s -> {
+                            return Tuple.of(s, t2._1);
+                          });
+                    }));
+    final Multimap<Coordinate, String> duplicates =
+        reverseIndex.filter(t2 -> {
+              final Coordinate key = t2._1;
+
+              return reverseIndex.get(key).get().size() > 1;
+            });
+
+    return duplicates
+        .keySet()
+        .map(c -> {
+              final Traversable<String> coordinateNames = duplicates.get(c).get().distinct();
+
+              return String.format(
+                  "Coordinate `%s` referenced more than once %s [%s]",
+                  c,
+                  coordinateNames.size() == 1 ? "in" : "across",
+                  String.join(", ", coordinateNames.toJavaArray(String[]::new)));
+            });
   }
 
   @SuppressWarnings("deprecation")
@@ -275,16 +341,14 @@ public class Specification {
       final Map<String, Array<GeneratedMessageV3>> features,
       final Map<String, Array<String>> featuresTilesMap) {
     return featuresTilesMap
-        .map(
-            t2 -> {
+        .map(t2 -> {
               final String featuresName = t2._1;
               final Array<String> tilesNames = t2._2;
 
               return Tuple.of(featuresName, HashSet.ofAll(tilesNames).diff(tiles.keySet()));
             })
         .filter(t2 -> !t2._2.isEmpty())
-        .map(
-            t2 ->
+        .map(t2 ->
                 String.format(
                     "[%s] tiles referenced in %sTilesMap \"%s\" are not defined.",
                     String.join(", ", t2._2), feature, t2._1))
@@ -316,8 +380,7 @@ public class Specification {
 
     return featuresTilesMapKeys
         .diff(featureKeys)
-        .map(
-            key ->
+        .map(key ->
                 String.format(
                     "\"%s\" referenced in %sTilesMap not defined in %s.", key, feature, feature));
   }
@@ -333,8 +396,7 @@ public class Specification {
 
     return featureKeys
         .diff(featuresTilesMapKeys)
-        .map(
-            key ->
+        .map(key ->
                 String.format("\"%s\" in %s not referenced in %sTilesMap.", key, feature, feature));
   }
 
@@ -346,8 +408,7 @@ public class Specification {
       final Map<String, Array<GeneratedMessageV3>> features,
       final Map<String, Array<String>> featuresTilesMap) {
     return featuresTilesMap
-        .map(
-            t2 -> {
+        .map(t2 -> {
               final String featuresName = t2._1;
               final Array<String> tilesNames = t2._2;
 
@@ -356,8 +417,7 @@ public class Specification {
 
               final int tilesCount =
                   tilesNames
-                      .map(
-                          tileName ->
+                      .map(tileName ->
                               tiles
                                   .get(tileName)
                                   .getOrElse(Tuple.of(Array.<Tile>empty(), false))
@@ -369,8 +429,7 @@ public class Specification {
               return Tuple.of(featuresName, featuresCount, tilesNames, tilesCount);
             })
         .filter(t4 -> t4._2 != t4._4)
-        .map(
-            t4 -> {
+        .map(t4 -> {
               final String featuresName = t4._1;
               final int featuresCount = t4._2;
               final Array<String> tilesNames = t4._3;
@@ -383,8 +442,7 @@ public class Specification {
         .toSet();
   }
 
-  @VisibleForTesting
-  Array<Configuration> toConfiguration() {
+  public Array<Configuration> toConfiguration() {
     final Multimap<Tile, Chit> tileChitsMap =
         shuffleTiles(chitsShufflerPrng, tiles, chits, chitsTilesMap);
     final Multimap<Tile, Coordinate> tileCoordinateMap =
@@ -393,8 +451,7 @@ public class Specification {
     return Array.ofAll(
         tileCoordinateMap
             .keySet()
-            .flatMap(
-                tile -> {
+            .flatMap(tile -> {
                   final Array<Coordinate> coordinates =
                       Array.ofAll(tileCoordinateMap.get(tile).get());
                   final Array<Chit> chits =
@@ -406,8 +463,7 @@ public class Specification {
 
                   return coordinates
                       .zip(chits)
-                      .map(
-                          t2 -> {
+                      .map(t2 -> {
                             return Configuration.newBuilder()
                                 .setTile(tile)
                                 .setCoordinate(t2._1)
@@ -427,12 +483,10 @@ public class Specification {
     return HashMultimap.withSeq()
         .ofEntries(
             Array.ofAll(featuresTilesMap.keySet()) // prevent dedup
-                .flatMap(
-                    featureName -> {
+                .flatMap(featureName -> {
                       final Array<String> tilesNames = featuresTilesMap.get(featureName).get();
                       final Array<Tile> tileIds =
-                          tilesNames.flatMap(
-                              tilesName -> {
+                          tilesNames.flatMap(tilesName -> {
                                 return tiles.get(tilesName).get()._1;
                               });
                       final Array<ChitsOrCoordinates> chitsOrCoordinates =
@@ -446,7 +500,6 @@ public class Specification {
   static <ChitsOrCoordinates extends GeneratedMessageV3>
       Map<String, Array<GeneratedMessageV3>> widenFeaturesMap(
           final Map<String, Array<ChitsOrCoordinates>> featuresMap) {
-    return HashMap.ofEntries(
-        featuresMap.map(t2 -> Tuple.of(t2._1, Array.<GeneratedMessageV3>ofAll(t2._2))));
+    return HashMap.ofEntries(featuresMap.map(t2 -> Tuple.of(t2._1, Array.narrow(t2._2))));
   }
 }

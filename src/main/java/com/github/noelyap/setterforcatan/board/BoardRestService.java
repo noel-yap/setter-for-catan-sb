@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class BoardRestService {
   public GenerateBoardResponse generateBoard(final GenerateBoardRequest request) {
-    return Try.of(
-            () -> {
+    return Try.of(() -> {
               final AtomicReference<GenerateBoardResponse> generateBoardResponse =
                   new AtomicReference<GenerateBoardResponse>();
 

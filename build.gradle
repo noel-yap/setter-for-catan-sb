@@ -7,6 +7,8 @@ plugins {
   id 'org.springframework.boot' version '2.3.1.RELEASE'
 }
 
+apply from: 'spotless.gradle'
+
 group = 'com.github.noelyap.setterforcatan'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -79,24 +81,6 @@ sourceSets {
       srcDirs "${buildDir}/generated/source/proto/main/grpc"
       srcDirs "${buildDir}/generated/source/proto/main/java"
     }
-  }
-}
-
-spotless {
-  groovy {
-    target project.fileTree(project.rootDir) {
-      include 'gradle.properties', '**/*.gradle', '**/src/**/*.groovy'
-      exclude '.history/**'
-    }
-  }
-
-  java {
-    target project.fileTree(project.rootDir) {
-      include '**/src/**/*.java'
-      exclude '.history/**'
-    }
-
-    googleJavaFormat()
   }
 }
 
