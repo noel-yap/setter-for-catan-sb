@@ -9,7 +9,7 @@ plugins {
 
 apply from: 'spotless.gradle'
 
-group = 'com.github.noelyap.setterforcatan'
+group = 'noelyap.setterforcatan'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -62,7 +62,7 @@ dependencies {
   implementation "io.grpc:grpc-protobuf:${grpc_version}"
   implementation "io.grpc:grpc-stub:${grpc_version}"
   implementation 'javax.annotation:javax.annotation-api'
-  implementation 'org.apache.commons:commons-lang3:3.+'
+  implementation 'org.apache.commons:commons-lang3:3.11'
   implementation 'org.apache.commons:commons-math3:3.+'
   implementation 'org.springframework.session:spring-session-core'
 

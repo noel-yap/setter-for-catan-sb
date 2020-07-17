@@ -3,9 +3,9 @@ option java_multiple_files = true;
 
 import "google/api/annotations.proto";
 
-package com.github.noelyap.setterforcatan.board;
+package noelyap.setterforcatan.board;
 
-option java_package = "com.github.noelyap.setterforcatan.board.protogen";
+option java_package = "noelyap.setterforcatan.board.protogen";
 
 import "board.proto";
 import "grader_strategy.proto";
