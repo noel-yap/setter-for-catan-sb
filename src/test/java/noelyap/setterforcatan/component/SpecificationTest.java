@@ -77,8 +77,9 @@ public class SpecificationTest {
             Tuple.of(14, 14, Vertex.Position.BOTTOM_LEFT));
 
     final Array<Configuration> actual =
-        new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
+        Specification.newBuilder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
             .withFisheries(fisheriesCoordinates)
+            .build()
             .toConfiguration();
 
     final Set<Configuration> actualDesertConfigurations =
@@ -459,7 +460,10 @@ public class SpecificationTest {
         HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     assertThatThrownBy(
-            () -> new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap))
+            () ->
+                Specification.newBuilder(
+                        tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
+                    .build())
         .isInstanceOf(InvalidSpecificationError.class)
         .hasMessageContainingAll(
             "0 chits in \"swamp\" do not match 2 tiles in [desert, lake].",
@@ -529,7 +533,8 @@ public class SpecificationTest {
             TileMappingUtils.newSelfReferringEntry("traders-and-barbarians-destination"));
 
     final Specification specification =
-        new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap);
+        Specification.newBuilder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
+            .build();
 
     final Array<Configuration> actual = specification.toConfiguration();
 

@@ -49,5 +49,9 @@ public class SchemaUtils {
               Scenario.BASE,
               HashMap.of(
                   Range.between(3, 4),
-                  Tuple.of(Base.P3_P4_SPECIFICATION, Base.P3_P4_FISHERMEN_SPECIFICATION)));
+                  Tuple.of(Base.P3_P4_SPECIFICATION, Base.P3_P4_FISHERMEN_SPECIFICATION),
+                  Range.between(5, 6),
+                  Tuple.of(Base.P5_P6_SPECIFICATION, Base.P5_P6_FISHERMEN_SPECIFICATION))); // ,
+  // Range.between(7, 8),
+  // Tuple.of(Base.P7_P8_SPECIFICATION, Base.P7_P8_FISHERMEN_SPECIFICATION)));
 }

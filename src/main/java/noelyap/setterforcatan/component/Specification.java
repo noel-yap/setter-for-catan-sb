@@ -2,7 +2,6 @@ package noelyap.setterforcatan.component;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.GeneratedMessageV3;
-import io.vavr.Function1;
 import io.vavr.Function4;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -40,6 +39,96 @@ public class Specification {
     }
   }
 
+  public static class Builder {
+    private final Map<String, Tuple2<Array<Tile>, Boolean>> tiles;
+    private final Map<String, Array<Coordinate>> coordinates;
+    private final Map<String, Array<Chit>> chits;
+    private final Map<String, Array<String>> coordinatesTilesMap;
+    private final Map<String, Array<String>> chitsTilesMap;
+    private final Set<Marker> markers;
+
+    private Builder(
+        final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+        final Map<String, Array<Coordinate>> coordinates,
+        final Map<String, Array<Chit>> chits,
+        final Map<String, Array<String>> coordinatesTilesMap,
+        final Map<String, Array<String>> chitsTilesMap,
+        final Set<Marker> markers) {
+      this.tiles = tiles;
+      this.coordinates = coordinates;
+      this.chits = chits;
+      this.coordinatesTilesMap = coordinatesTilesMap;
+      this.chitsTilesMap = chitsTilesMap;
+      this.markers = markers;
+    }
+
+    public Specification build() throws InvalidSpecificationError {
+      final Specification specification =
+          new Specification(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap, markers);
+
+      specification.validate();
+
+      return specification;
+    }
+
+    public Builder withFisheries(final Array<Coordinate> fisheryCoordinates) {
+      final Tile fisheryTile = Tile.newBuilder().setType(Tile.Type.FISHERY).build();
+      final Stream<Chit> fisheryChits =
+          Stream.of(4, 10, 5, 9, 6, 8, 5, 9).map(v -> ChitUtils.newChit(v));
+
+      final Tile lakeTile = Tile.newBuilder().setType(Tile.Type.LAKE).build();
+      final Stream<Chit> lakeChits =
+          Stream.of(ChitUtils.newChit(2, 3, 11, 12), ChitUtils.newChit(4, 10));
+
+      final int desertCount =
+          tiles.get(TileUtils.DESERT_OR_LAKE_NAME).map(t2 -> t2._1.size()).getOrElse(0);
+      final int fisheryCount = fisheryCoordinates.size();
+
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+          this.tiles
+              .filter(t2 -> !TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1))
+              .put(TileUtils.LAKE_NAME, Tuple.of(Array.fill(desertCount, lakeTile), false))
+              .put(TileUtils.FISHERY_NAME, Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
+
+      final Map<String, Array<Chit>> chits =
+          this.chits
+              .put(TileUtils.LAKE_NAME, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
+              .put(
+                  TileUtils.FISHERY_NAME, Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
+      final Map<String, Array<String>> chitsTilesMap =
+          this.chitsTilesMap
+              .put(TileUtils.LAKE_NAME, Array.of(TileUtils.LAKE_NAME))
+              .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
+
+      final Map<String, Array<Coordinate>> coordinates =
+          HashMap.ofEntries(
+                  this.coordinates.map(t2 ->
+                          Tuple.of(
+                              TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1)
+                                  ? TileUtils.LAKE_NAME
+                                  : t2._1,
+                              t2._2)))
+              .put(TileUtils.FISHERY_NAME, fisheryCoordinates);
+      final Map<String, Array<String>> coordinatesTilesMap =
+          HashMap.ofEntries(
+                  this.coordinatesTilesMap.map(t2 -> {
+                        final String key = t2._1;
+                        final Array<String> value = t2._2;
+
+                        return Tuple.of(
+                            TileUtils.DESERT_OR_LAKE_NAME.equals(key) ? TileUtils.LAKE_NAME : key,
+                            value.map(v ->
+                                    TileUtils.DESERT_OR_LAKE_NAME.equals(v)
+                                        ? TileUtils.LAKE_NAME
+                                        : v));
+                      }))
+              .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
+
+      return new Builder(
+          tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap, this.markers);
+    }
+  }
+
   private final MersenneTwister chitsShufflerPrng = new MersenneTwister();
   private final MersenneTwister coordinatesShufflerPrng = new MersenneTwister();
 
@@ -49,27 +138,27 @@ public class Specification {
   private final Map<String, Array<String>> coordinatesTilesMap;
   private final Map<String, Array<String>> chitsTilesMap;
   private final Set<Marker> markers;
-  private final Function1<Configuration, Boolean> validateConfiguration;
-  private final Function1<Configuration, Boolean> filterConfigurationScorer;
 
-  public Specification(noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification that)
+  public static Builder newBuilder(
+      final noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification that)
       throws InvalidSpecificationError {
-    this(
+    return newBuilder(
         HashSet.ofAll(that.getTilesList()),
         HashSet.ofAll(that.getCoordinatesList()),
         HashSet.ofAll(that.getChitsList()),
         HashSet.ofAll(that.getCoordinatesTilesMappingsList()),
-        HashSet.ofAll(that.getChitsTilesMappingsList()));
+        HashSet.ofAll(that.getChitsTilesMappingsList()),
+        HashSet.ofAll(that.getMarkersList()));
   }
 
-  public Specification(
+  public static Builder newBuilder(
       final Set<Tiles> tiles,
       final Set<Coordinates> coordinates,
       final Set<Chits> chits,
       final Set<CoordinateTilesMapping> coordinatesTilesMap,
-      final Set<ChitsTilesMapping> chitsTilesMap)
-      throws InvalidSpecificationError {
-    this(
+      final Set<ChitsTilesMapping> chitsTilesMap,
+      final Set<Marker> markers) {
+    return newBuilder(
         HashMap.ofEntries(
             tiles.map(t -> {
                   return Tuple.of(
@@ -90,155 +179,47 @@ public class Specification {
         HashMap.ofEntries(
             chitsTilesMap.map(ct -> {
                   return Tuple.of(ct.getChitsName(), Array.ofAll(ct.getTilesNamesList()));
-                })));
+                })),
+        markers);
   }
 
-  public Specification(
+  public static Builder newBuilder(
       final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, Array<Coordinate>> coordinates,
       final Map<String, Array<Chit>> chits,
       final Map<String, Array<String>> coordinatesTilesMap,
-      final Map<String, Array<String>> chitsTilesMap)
-      throws InvalidSpecificationError {
-    this(
-        tiles,
-        coordinates,
-        chits,
-        coordinatesTilesMap,
-        chitsTilesMap,
-        HashSet.empty(),
-        c -> true,
-        c -> true);
+      final Map<String, Array<String>> chitsTilesMap) {
+    return newBuilder(
+        tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap, HashSet.empty());
   }
 
-  public Specification(
+  public static Builder newBuilder(
       final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
       final Map<String, Array<Coordinate>> coordinates,
       final Map<String, Array<Chit>> chits,
       final Map<String, Array<String>> coordinatesTilesMap,
       final Map<String, Array<String>> chitsTilesMap,
-      final Set<Marker> markers,
-      final Function1<Configuration, Boolean> validateConfiguration,
-      final Function1<Configuration, Boolean> filterConfigurationScorer)
-      throws InvalidSpecificationError {
+      final Set<Marker> markers) {
+    return new Builder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap, markers);
+  }
+
+  private Specification(
+      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Coordinate>> coordinates,
+      final Map<String, Array<Chit>> chits,
+      final Map<String, Array<String>> coordinatesTilesMap,
+      final Map<String, Array<String>> chitsTilesMap,
+      final Set<Marker> markers) {
     this.tiles = tiles;
     this.coordinates = coordinates;
     this.chits = chits;
     this.coordinatesTilesMap = coordinatesTilesMap;
     this.chitsTilesMap = chitsTilesMap;
     this.markers = markers;
-    this.validateConfiguration = validateConfiguration;
-    this.filterConfigurationScorer = filterConfigurationScorer;
-
-    this.validate();
-  }
-
-  public Specification withFisheries(final Array<Coordinate> fisheryCoordinates)
-      throws InvalidSpecificationError {
-    final Tile fisheryTile = Tile.newBuilder().setType(Tile.Type.FISHERY).build();
-    final Stream<Chit> fisheryChits =
-        Stream.of(4, 10, 5, 9, 6, 8, 5, 9).map(v -> ChitUtils.newChit(v));
-
-    final Tile lakeTile = Tile.newBuilder().setType(Tile.Type.LAKE).build();
-    final Stream<Chit> lakeChits =
-        Stream.of(ChitUtils.newChit(2, 3, 11, 12), ChitUtils.newChit(4, 10));
-
-    final int desertCount =
-        tiles.get(TileUtils.DESERT_OR_LAKE_NAME).map(t2 -> t2._1.size()).getOrElse(0);
-    final int fisheryCount = fisheryCoordinates.size();
-
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
-        this.tiles
-            .filter(t2 -> !TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1))
-            .put(TileUtils.LAKE_NAME, Tuple.of(Array.fill(desertCount, lakeTile), false))
-            .put(TileUtils.FISHERY_NAME, Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
-
-    final Map<String, Array<Chit>> chits =
-        this.chits
-            .put(TileUtils.LAKE_NAME, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
-            .put(TileUtils.FISHERY_NAME, Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
-    final Map<String, Array<String>> chitsTilesMap =
-        this.chitsTilesMap
-            .put(TileUtils.LAKE_NAME, Array.of(TileUtils.LAKE_NAME))
-            .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
-
-    final Map<String, Array<Coordinate>> coordinates =
-        HashMap.ofEntries(
-                this.coordinates.map(t2 ->
-                        Tuple.of(
-                            TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1)
-                                ? TileUtils.LAKE_NAME
-                                : t2._1,
-                            t2._2)))
-            .put(TileUtils.FISHERY_NAME, fisheryCoordinates);
-    final Map<String, Array<String>> coordinatesTilesMap =
-        HashMap.ofEntries(
-                this.coordinatesTilesMap.map(t2 -> {
-                      final String key = t2._1;
-                      final Array<String> value = t2._2;
-
-                      return Tuple.of(
-                          TileUtils.DESERT_OR_LAKE_NAME.equals(key) ? TileUtils.LAKE_NAME : key,
-                          value.map(v ->
-                                  TileUtils.DESERT_OR_LAKE_NAME.equals(v)
-                                      ? TileUtils.LAKE_NAME
-                                      : v));
-                    }))
-            .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
-
-    return new Specification(
-        tiles,
-        coordinates,
-        chits,
-        coordinatesTilesMap,
-        chitsTilesMap,
-        this.markers,
-        this.validateConfiguration,
-        this.filterConfigurationScorer);
-  }
-
-  public Specification withMarkers(final Marker... markers) throws InvalidSpecificationError {
-    return new Specification(
-        this.tiles,
-        this.coordinates,
-        this.chits,
-        this.coordinatesTilesMap,
-        this.chitsTilesMap,
-        HashSet.of(markers),
-        this.validateConfiguration,
-        this.filterConfigurationScorer);
-  }
-
-  public Specification withConfigurationValidator(
-      final Function1<Configuration, Boolean> configurationValidator)
-      throws InvalidSpecificationError {
-    return new Specification(
-        this.tiles,
-        this.coordinates,
-        this.chits,
-        this.coordinatesTilesMap,
-        this.chitsTilesMap,
-        this.markers,
-        configurationValidator,
-        this.filterConfigurationScorer);
-  }
-
-  public Specification withConfigurationScorerFilter(
-      final Function1<Configuration, Boolean> configurationScorerFilter)
-      throws InvalidSpecificationError {
-    return new Specification(
-        this.tiles,
-        this.coordinates,
-        this.chits,
-        this.coordinatesTilesMap,
-        this.chitsTilesMap,
-        this.markers,
-        this.validateConfiguration,
-        configurationScorerFilter);
   }
 
   public Set<Marker> getMarkers() {
-    return markers;
+    return this.markers;
   }
 
   @SuppressWarnings("deprecation")
@@ -288,8 +269,14 @@ public class Specification {
                         }));
 
     if (errors.length() != 0) {
+      final Set<Tuple2<String, Integer>> enumeratedErrors = errors.zipWithIndex();
+      final Array<String> errorMessages =
+          Array.ofAll(enumeratedErrors.map(t2 -> String.format("Violation %d: %s", t2._2 + 1, t2._1)))
+              .sorted();
+
       throw new InvalidSpecificationError(
-          "Invalid Specification:\n\t" + String.join("\n\t", errors.toJavaArray(String[]::new)));
+          "Invalid Specification:\n\t"
+              + String.join("\n\t", errorMessages.toJavaArray(String[]::new)));
     }
   }
 

@@ -1,6 +1,7 @@
 package noelyap.setterforcatan.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario;
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class SchemaUtilsTest {
   @Test
   public void shouldNotHaveInvalidSpecifications() {
-    assertThat(new SchemaUtils()).isNotNull();
+    assertThatCode(() -> new SchemaUtils()).doesNotThrowAnyException();
   }
 
   @Test

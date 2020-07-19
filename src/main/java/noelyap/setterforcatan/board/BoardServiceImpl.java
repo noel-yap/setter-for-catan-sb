@@ -59,7 +59,7 @@ public class BoardServiceImpl extends BoardServiceImplBase {
                             $(is(GenerateBoardRequest.ArgCase.SPECIFICATION)),
                             () ->
                                 newBoard(
-                                    new Specification(request.getSpecification()),
+                                    Specification.newBuilder(request.getSpecification()).build(),
                                     compositeGrader)),
                         Case(
                             $(),
