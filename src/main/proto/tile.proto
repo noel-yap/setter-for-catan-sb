@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package com.github.noelyap.setterforcatan;
+package noelyap.setterforcatan;
 
-option java_package = "com.github.noelyap.setterforcatan.protogen";
+option java_package = "noelyap.setterforcatan.protogen";
 
 import "coordinate.proto";
 
@@ -29,7 +29,7 @@ message Tile {
     FISHERY = 15;
     RIVER = 16;
   
-    GOLD = 17;
+    GOLD_FIELD = 17;
     SWAMP = 18;
     OASIS = 19;
     CASTLE = 20;
@@ -48,4 +48,5 @@ message Tile {
 message Tiles {
   string name = 1;
   repeated Tile tiles = 2;
+  bool chitless = 3;
 }

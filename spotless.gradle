@@ -1,0 +1,22 @@
+spotless {
+  groovy {
+    target project.fileTree(project.rootDir) {
+      include 'gradle.properties', '**/*.gradle', '**/src/**/*.groovy'
+      exclude '.history/**'
+    }
+  }
+
+  java {
+    target project.fileTree(project.rootDir) {
+      include '**/src/**/*.java'
+      exclude '.history/**'
+    }
+
+    googleJavaFormat('1.8')
+
+    replaceRegex(
+        'Combine function call with lambda.',
+        '(\\.[A-Za-z][0-9A-Za-z]+\\()\\n\\s+(.*->)',
+        '$1$2')
+  }
+}

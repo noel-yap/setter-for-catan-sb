@@ -1,4 +1,4 @@
-package com.github.noelyap.setterforcatan.config;
+package noelyap.setterforcatan.config;
 
 import lombok.Data;
 import org.springframework.context.annotation.Bean;

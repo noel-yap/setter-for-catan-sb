@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package noelyap.setterforcatan;
+
+option java_package = "noelyap.setterforcatan.protogen";
+
+import "chit.proto";
+import "coordinate.proto";
+import "marker.proto";
+import "tile.proto";
+
+message CoordinateTilesMapping {
+  string coordinates_name = 1;
+  repeated string tiles_names = 2;
+}
+
+message ChitsTilesMapping {
+  string chits_name = 1;
+  repeated string tiles_names = 2;
+}
+
+message Specification {
+  repeated Tiles tiles = 1;
+  repeated Coordinates coordinates = 2;
+  repeated Chits chits = 3;
+  repeated CoordinateTilesMapping coordinates_tiles_mappings = 4;
+  repeated ChitsTilesMapping chits_tiles_mappings = 5;
+  repeated Marker markers = 6;
+}

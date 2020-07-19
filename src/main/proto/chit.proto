@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package com.github.noelyap.setterforcatan;
+package noelyap.setterforcatan;
 
-option java_package = "com.github.noelyap.setterforcatan.protogen";
+option java_package = "noelyap.setterforcatan.protogen";
 
 message Chit {
-  int32 values = 1;
+  repeated int32 value = 1;
 }
 
 message Chits {

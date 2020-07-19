@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package noelyap.setterforcatan;
+
+option java_package = "noelyap.setterforcatan.protogen";
+
+enum GraderStrategy {
+  PASS_THROUGH = 0;
+  UNIFORM_ODDS_DISTRIBUTION = 1;
+  DISPERSED_SIXES_AND_EIGHTS_DISTRIBUTION = 2;
+  DISPERSED_TWOS_AND_TWELVES_DISTRIBUTION = 3;
+}
