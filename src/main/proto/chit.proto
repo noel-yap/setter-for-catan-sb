@@ -5,7 +5,7 @@ package noelyap.setterforcatan;
 option java_package = "noelyap.setterforcatan.protogen";
 
 message Chit {
-  repeated int32 value = 1;
+  repeated int32 values = 1;
 }
 
 message Chits {

@@ -5,7 +5,7 @@ import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
-import noelyap.setterforcatan.component.Specification;
+import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge;
@@ -101,8 +101,8 @@ public class Base {
   public static final Map<String, Array<Chit>> P3_P4_CHITS =
       HashMap.of("producing-terrain", P3_P4_PRODUCING_TERRAIN_CHITS);
 
-  private static final Specification.Builder P3_P4_SPECIFICATION_BUILDER =
-      Specification.newBuilder(
+  private static final SpecificationImpl.Builder P3_P4_SPECIFICATION_BUILDER =
+      SpecificationImpl.newBuilder(
           P3_P4_TILES,
           P3_P4_COORDINATES,
           P3_P4_CHITS,
@@ -111,8 +111,9 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
-  public static final Specification P3_P4_SPECIFICATION = P3_P4_SPECIFICATION_BUILDER.build();
-  public static final Specification P3_P4_FISHERMEN_SPECIFICATION =
+  public static final SpecificationImpl P_3_P_4_SPECIFICATION_IMPL =
+      P3_P4_SPECIFICATION_BUILDER.build();
+  public static final SpecificationImpl P_3_P_4_FISHERMEN_SPECIFICATION_IMPL =
       P3_P4_SPECIFICATION_BUILDER.withFisheries(P3_P4_FISHERY_COORDINATES).build();
 
   public static final Tuple2<Array<Tile>, Boolean> P5_P6_PRODUCING_TILES =
@@ -217,8 +218,8 @@ public class Base {
   public static final Map<String, Array<Chit>> P5_P6_CHITS =
       HashMap.of("producing-terrain", P5_P6_PRODUCING_TERRAIN_CHITS);
 
-  private static final Specification.Builder P5_P6_SPECIFICATION_BUILDER =
-      Specification.newBuilder(
+  private static final SpecificationImpl.Builder P5_P6_SPECIFICATION_BUILDER =
+      SpecificationImpl.newBuilder(
           P5_P6_TILES,
           P5_P6_COORDINATES,
           P5_P6_CHITS,
@@ -227,8 +228,9 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
-  public static final Specification P5_P6_SPECIFICATION = P5_P6_SPECIFICATION_BUILDER.build();
-  public static final Specification P5_P6_FISHERMEN_SPECIFICATION =
+  public static final SpecificationImpl P_5_P_6_SPECIFICATION_IMPL =
+      P5_P6_SPECIFICATION_BUILDER.build();
+  public static final SpecificationImpl P_5_P_6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_FISHERY_COORDINATES).build();
 
   public static final Tuple2<Array<Tile>, Boolean> P7_P8_PRODUCING_TILES =
@@ -325,8 +327,8 @@ public class Base {
   public static final Map<String, Array<Chit>> P7_P8_CHITS =
       HashMap.of("producing-terrain", P7_P8_PRODUCING_TERRAIN_CHITS);
 
-  public static final Specification.Builder P7_P8_SPECIFICATION_BUILDER =
-      Specification.newBuilder(
+  public static final SpecificationImpl.Builder P7_P8_SPECIFICATION_BUILDER =
+      SpecificationImpl.newBuilder(
           P7_P8_TILES,
           P7_P8_COORDINATES,
           P7_P8_CHITS,
@@ -335,7 +337,8 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
-  public static final Specification P7_P8_SPECIFICATION = P7_P8_SPECIFICATION_BUILDER.build();
-  public static final Specification P7_P8_FISHERMEN_SPECIFICATION =
+  public static final SpecificationImpl P_7_P_8_SPECIFICATION_IMPL =
+      P7_P8_SPECIFICATION_BUILDER.build();
+  public static final SpecificationImpl P_7_P_8_FISHERMEN_SPECIFICATION_IMPL =
       P7_P8_SPECIFICATION_BUILDER.withFisheries(P7_P8_FISHERY_COORDINATES).build();
 }

@@ -12,7 +12,7 @@ spotless {
       exclude '.history/**'
     }
 
-    googleJavaFormat('1.8')
+    googleJavaFormat()
 
     replaceRegex(
         'Combine function call with lambda.',

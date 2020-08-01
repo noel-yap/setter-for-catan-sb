@@ -1,3 +1,6 @@
-okta:
-  oauth2:
-    issuer: https://dev-587152.okta.com//oauth2/default
+server:
+  port: 8081
+
+grpc:
+  server:
+    port: 9091

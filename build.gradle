@@ -1,5 +1,5 @@
 plugins {
-  id 'com.diffplug.gradle.spotless' version '4.5.1'
+  id 'com.diffplug.spotless' version '5.1.0'
   id 'com.google.protobuf' version '0.8.12'
   id 'groovy'
   id 'io.spring.dependency-management' version '1.0.9.RELEASE'
@@ -11,7 +11,8 @@ apply from: 'spotless.gradle'
 
 group = 'noelyap.setterforcatan'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = JavaVersion.VERSION_14
+targetCompatibility = JavaVersion.VERSION_14
 
 dependencyLocking {
   lockAllConfigurations()
@@ -56,6 +57,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
   implementation 'com.google.protobuf:protobuf-java-util:3.+'
+  implementation 'commons-io:commons-io:2.+'
   implementation 'io.vavr:vavr:1.+'
   implementation "io.grpc:grpc-netty:${grpc_version}"
   implementation "io.grpc:grpc-protobuf:${grpc_version}"

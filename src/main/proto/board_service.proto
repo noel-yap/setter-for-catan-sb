@@ -22,9 +22,18 @@ message GenerateBoardRequest {
 }
 
 message GenerateBoardResponse {
+  message Success {
+    Specification specification = 1;
+    Board board = 2;
+  }
+
+  message Failure {
+    string error_message = 1;
+  }
+
   oneof result {
-    Board board = 1;
-    string error_message = 2;
+    Success success = 1;
+    Failure failure = 2;
   }
 }
 
