@@ -5,7 +5,8 @@ import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 
 public class PassThroughGrader implements GraderStrategy {
   @Override
-  public Grade gradeConfiguration(Array<Configuration> configuration, int attempt) {
+  public Grade gradeConfiguration(
+      final Array<Configuration> configuration, final double threshold) {
     return new Grade(1.0, true);
   }
 }

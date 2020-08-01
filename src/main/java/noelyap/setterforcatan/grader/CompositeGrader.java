@@ -17,11 +17,12 @@ public class CompositeGrader implements GraderStrategy {
   }
 
   @Override
-  public Grade gradeConfiguration(Array<Configuration> configuration, int attempt) {
+  public Grade gradeConfiguration(
+      final Array<Configuration> configuration, final double threshold) {
     final Array<Grade> grades =
         Array.ofAll(graders)
             .map(g -> {
-                  return g.gradeConfiguration(configuration, attempt);
+                  return g.gradeConfiguration(configuration, threshold);
                 });
 
     return GradeUtils.aggregate(grades);

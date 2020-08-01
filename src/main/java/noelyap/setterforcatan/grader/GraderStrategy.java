@@ -25,8 +25,11 @@ public interface GraderStrategy {
   }
 
   /**
+   * @param threshold Within [0, 1] monotonically decreasing from 1 to 0. 1 means the grader should
+   *     use the strictest constraints for passing. 0 means the grader should use the most lenient
+   *     constraints for passing (ideally it should always pass at a threshold of 0).
    * @return Grade of the configuration. The score must be idempotent. Whether or not it passed may
    *     be dependent on a threshold that changes.
    */
-  Grade gradeConfiguration(final Array<Configuration> configuration, final int attempt);
+  Grade gradeConfiguration(final Array<Configuration> configuration, final double threshold);
 }

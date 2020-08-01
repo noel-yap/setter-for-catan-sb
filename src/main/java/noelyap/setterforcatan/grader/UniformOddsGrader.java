@@ -15,12 +15,11 @@ import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex;
 import noelyap.setterforcatan.util.ChitUtils;
 import org.apache.commons.lang3.Range;
-import org.apache.commons.math3.util.ArithmeticUtils;
 
 public class UniformOddsGrader implements GraderStrategy {
   @Override
-  public Grade gradeConfiguration(final Array<Configuration> configurations, final int attempt) {
-    final int attemptsPerStep = ArithmeticUtils.pow(6, 3);
+  public Grade gradeConfiguration(
+      final Array<Configuration> configurations, final double threshold) {
     final Array<Array<Tuple2<Integer, Integer>>> steppedValidOddsRanges =
         Array.of(
             Array.of(Tuple.of(1, 6), Tuple.of(3, 11), Tuple.of(6, 15)),
@@ -34,8 +33,7 @@ public class UniformOddsGrader implements GraderStrategy {
                 Tuple.of(0, Integer.MAX_VALUE)));
 
     final Array<Tuple2<Integer, Integer>> validOddsRanges =
-        steppedValidOddsRanges.get(
-            Math.min(attempt / attemptsPerStep, steppedValidOddsRanges.size() - 1));
+        steppedValidOddsRanges.get((int) ((1 - threshold) * (steppedValidOddsRanges.size() - 1)));
 
     return gradeConfiguration(configurations, validOddsRanges);
   }
@@ -84,7 +82,7 @@ public class UniformOddsGrader implements GraderStrategy {
                       Array.of(
                               Tuple.of(x, y, Vertex.Position.TOP),
                               Tuple.of(x - 1, y - 1, Vertex.Position.BOTTOM_RIGHT),
-                              Tuple.of(x - 1, y + 1, Vertex.Position.BOTTOM_LEFT))
+                              Tuple.of(x + 1, y - 1, Vertex.Position.BOTTOM_LEFT))
                           .map(t3 -> coordinateOddsMap.get(t3))
                           .flatMap(o -> o);
                   final Array<Integer> topRightVertexContributions =

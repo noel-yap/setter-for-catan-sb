@@ -11,7 +11,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import io.vavr.collection.Multimap;
 import io.vavr.collection.Set;
-import noelyap.setterforcatan.component.Specification.InvalidSpecificationError;
+import noelyap.setterforcatan.component.SpecificationImpl.InvalidSpecificationError;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(SoftAssertionsExtension.class)
 @SuppressWarnings({"deprecation", "unchecked"})
-public class SpecificationTest {
+public class SpecificationImplTest {
   final MersenneTwister prng = new MersenneTwister();
 
   @Test
@@ -77,7 +77,7 @@ public class SpecificationTest {
             Tuple.of(14, 14, Vertex.Position.BOTTOM_LEFT));
 
     final Array<Configuration> actual =
-        Specification.newBuilder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
+        SpecificationImpl.newBuilder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
             .withFisheries(fisheriesCoordinates)
             .build()
             .toConfiguration();
@@ -87,7 +87,7 @@ public class SpecificationTest {
     final Array<Chit> actualDesertChits =
         Array.ofAll(actualDesertConfigurations)
             .map(c -> c.getChit())
-            .filter(c -> c.getValueCount() != 0);
+            .filter(c -> c.getValuesCount() != 0);
     final Set<Coordinate> actualDesertCoordinates =
         actualDesertConfigurations.map(c -> c.getCoordinate());
 
@@ -158,7 +158,7 @@ public class SpecificationTest {
                 "traders-and-barbarians", "caravans", "rivers-of-catan", "traders-and-barbarians"));
 
     final Multimap<Tile, Coordinate> actual =
-        Specification.shuffleTiles(prng, tiles, coordinates, coordinatesTilesMap);
+        SpecificationImpl.shuffleTiles(prng, tiles, coordinates, coordinatesTilesMap);
 
     softly
         .assertThat(actual.keySet())
@@ -263,7 +263,7 @@ public class SpecificationTest {
         HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("gold-field"));
 
     final Multimap<Tile, Chit> actual =
-        Specification.shuffleTiles(prng, tiles, chits, chitsTilesMap);
+        SpecificationImpl.shuffleTiles(prng, tiles, chits, chitsTilesMap);
 
     assertThat(actual).hasSize(2);
   }
@@ -277,7 +277,7 @@ public class SpecificationTest {
             "key-2",
             Array.of(newCoordinate(3, 5), newCoordinate(8, 13)));
 
-    final Set<String> actual = Specification.checkForDuplicateCoordinates(coordinates);
+    final Set<String> actual = SpecificationImpl.checkForDuplicateCoordinates(coordinates);
 
     softly.assertThat(actual).hasSize(2);
     softly
@@ -300,13 +300,13 @@ public class SpecificationTest {
         HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("sea"));
 
     final Set<String> actual =
-        Specification.checkForFeaturesVersusTilesCountMismatchError(
-                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
+        SpecificationImpl.checkForFeaturesVersusTilesCountMismatchError(
+                "chits", tiles, SpecificationImpl.widenFeaturesMap(chits), chitsTilesMap)
             .union(
-                Specification.checkForFeaturesVersusTilesCountMismatchError(
+                SpecificationImpl.checkForFeaturesVersusTilesCountMismatchError(
                     "coordinates",
                     tiles,
-                    Specification.widenFeaturesMap(coordinates),
+                    SpecificationImpl.widenFeaturesMap(coordinates),
                     coordinatesTilesMap));
 
     assertThat(actual)
@@ -332,13 +332,13 @@ public class SpecificationTest {
         HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
-        Specification.checkForUndefinedTilesErrors(
-                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
+        SpecificationImpl.checkForUndefinedTilesErrors(
+                "chits", tiles, SpecificationImpl.widenFeaturesMap(chits), chitsTilesMap)
             .union(
-                Specification.checkForUndefinedTilesErrors(
+                SpecificationImpl.checkForUndefinedTilesErrors(
                     "coordinates",
                     tiles,
-                    Specification.widenFeaturesMap(coordinates),
+                    SpecificationImpl.widenFeaturesMap(coordinates),
                     coordinatesTilesMap));
 
     assertThat(actual)
@@ -364,13 +364,13 @@ public class SpecificationTest {
         HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
-        Specification.checkForUnreferencedTilesErrors(
-                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
+        SpecificationImpl.checkForUnreferencedTilesErrors(
+                "chits", tiles, SpecificationImpl.widenFeaturesMap(chits), chitsTilesMap)
             .union(
-                Specification.checkForUnreferencedTilesErrors(
+                SpecificationImpl.checkForUnreferencedTilesErrors(
                     "coordinates",
                     tiles,
-                    Specification.widenFeaturesMap(coordinates),
+                    SpecificationImpl.widenFeaturesMap(coordinates),
                     coordinatesTilesMap));
 
     assertThat(actual)
@@ -396,13 +396,13 @@ public class SpecificationTest {
         HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
-        Specification.checkForUndefinedFeaturesErrors(
-                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
+        SpecificationImpl.checkForUndefinedFeaturesErrors(
+                "chits", tiles, SpecificationImpl.widenFeaturesMap(chits), chitsTilesMap)
             .union(
-                Specification.checkForUndefinedFeaturesErrors(
+                SpecificationImpl.checkForUndefinedFeaturesErrors(
                     "coordinates",
                     tiles,
-                    Specification.widenFeaturesMap(coordinates),
+                    SpecificationImpl.widenFeaturesMap(coordinates),
                     coordinatesTilesMap));
 
     assertThat(actual)
@@ -428,13 +428,13 @@ public class SpecificationTest {
         HashMap.ofEntries(TileMappingUtils.newEntry("oasis", "desert", "lake"));
 
     final Set<String> actual =
-        Specification.checkForUnreferencedFeaturesErrors(
-                "chits", tiles, Specification.widenFeaturesMap(chits), chitsTilesMap)
+        SpecificationImpl.checkForUnreferencedFeaturesErrors(
+                "chits", tiles, SpecificationImpl.widenFeaturesMap(chits), chitsTilesMap)
             .union(
-                Specification.checkForUnreferencedFeaturesErrors(
+                SpecificationImpl.checkForUnreferencedFeaturesErrors(
                     "coordinates",
                     tiles,
-                    Specification.widenFeaturesMap(coordinates),
+                    SpecificationImpl.widenFeaturesMap(coordinates),
                     coordinatesTilesMap));
 
     assertThat(actual)
@@ -461,7 +461,7 @@ public class SpecificationTest {
 
     assertThatThrownBy(
             () ->
-                Specification.newBuilder(
+                SpecificationImpl.newBuilder(
                         tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
                     .build())
         .isInstanceOf(InvalidSpecificationError.class)
@@ -532,11 +532,11 @@ public class SpecificationTest {
             TileMappingUtils.newEntry("terrain", "producing-terrain", "barren-terrain"),
             TileMappingUtils.newSelfReferringEntry("traders-and-barbarians-destination"));
 
-    final Specification specification =
-        Specification.newBuilder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
+    final SpecificationImpl specificationImpl =
+        SpecificationImpl.newBuilder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
             .build();
 
-    final Array<Configuration> actual = specification.toConfiguration();
+    final Array<Configuration> actual = specificationImpl.toConfiguration();
 
     final Set<Configuration> producingTerrainConfigurationsFromTiles =
         actual.filter(c -> producingTerrainTiles._1.contains(c.getTile())).toSet();
@@ -548,7 +548,7 @@ public class SpecificationTest {
     final Set<Configuration> producingTerrainConfigurationsFromChits =
         actual.filter(c -> producingTerrainChits.contains(c.getChit())).toSet();
     final Set<Configuration> configurationsWithNoChits =
-        actual.filter(c -> c.getChit().getValueCount() == 0).toSet();
+        actual.filter(c -> c.getChit().getValuesCount() == 0).toSet();
 
     final Set<Configuration> terrainConfigurationsFromCoordinates =
         actual.filter(c -> terrainCoordinates.contains(c.getCoordinate())).toSet();
