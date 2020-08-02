@@ -2,6 +2,7 @@ plugins {
   id 'com.diffplug.spotless' version '5.1.0'
   id 'com.google.protobuf' version '0.8.12'
   id 'groovy'
+  id 'io.protop' version '1.0.0'
   id 'io.spring.dependency-management' version '1.0.9.RELEASE'
   id 'java'
   id 'org.springframework.boot' version '2.3.1.RELEASE'
@@ -28,6 +29,11 @@ repositories {
   mavenCentral()
 }
 
+protop {
+  useLinks = true
+  refreshGitSources = true
+}
+
 protobuf {
   protoc {
     artifact = 'com.google.protobuf:protoc:3.4.0'
@@ -42,6 +48,9 @@ protobuf {
   generateProtoTasks {
     all()*.plugins {
       grpc {}
+    }
+    all().each { task ->
+      task.dependsOn { protopSync }
     }
   }
 }
@@ -81,6 +90,9 @@ sourceSets {
     java {
       srcDirs "${buildDir}/generated/source/proto/main/grpc"
       srcDirs "${buildDir}/generated/source/proto/main/java"
+    }
+    proto {
+      srcDirs += protop.path
     }
   }
 }
