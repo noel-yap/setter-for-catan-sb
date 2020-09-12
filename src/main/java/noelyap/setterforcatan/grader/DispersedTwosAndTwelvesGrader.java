@@ -7,7 +7,7 @@ public class DispersedTwosAndTwelvesGrader implements GraderStrategy {
   @Override
   public Grade gradeConfiguration(
       final Array<Configuration> configuration, final double threshold) {
-    // TODO(nyap): Implement.
+    // TODO(noel-yap): Implement.
     throw new IllegalArgumentException(
         String.format(
             "GraderStrategy `%s` not yet implemented.",

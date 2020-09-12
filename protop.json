@@ -1,0 +1,5 @@
+{
+  "dependencies" : {
+    "noel-yap/setter-for-catan": "git:https://github.com/noel-yap/setter-for-catan-protos.git"
+  }
+}

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/setter-for-catan")
 @CrossOrigin(
     origins = {"http://localhost:3001", "http://setter-for-catan.com:3001"},
-    maxAge = 3600) // TODO(nyap): Use SSL.
+    maxAge = 3600) // TODO(noel-yap): Use SSL.
 @RequiredArgsConstructor
 @Slf4j
 public class SetterForCatanController {

@@ -49,9 +49,6 @@ protobuf {
     all()*.plugins {
       grpc {}
     }
-    all().each { task ->
-      task.dependsOn { protopSync }
-    }
   }
 }
 
@@ -92,6 +89,7 @@ sourceSets {
       srcDirs "${buildDir}/generated/source/proto/main/java"
     }
     proto {
+      // TODO(noel-yap): Have `protop-gradle-plugin` do this automatically
       srcDirs += protop.path
     }
   }
