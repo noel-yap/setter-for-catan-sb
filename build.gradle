@@ -2,7 +2,7 @@ plugins {
   id 'com.diffplug.spotless' version '5.1.0'
   id 'com.google.protobuf' version '0.8.12'
   id 'groovy'
-  id 'io.protop' version '1.0.0'
+  id 'io.protop' version '1.1.0'
   id 'io.spring.dependency-management' version '1.0.9.RELEASE'
   id 'java'
   id 'org.springframework.boot' version '2.3.1.RELEASE'
@@ -87,10 +87,6 @@ sourceSets {
     java {
       srcDirs "${buildDir}/generated/source/proto/main/grpc"
       srcDirs "${buildDir}/generated/source/proto/main/java"
-    }
-    proto {
-      // TODO(noel-yap): Have `protop-gradle-plugin` do this automatically
-      srcDirs += protop.path
     }
   }
 }
