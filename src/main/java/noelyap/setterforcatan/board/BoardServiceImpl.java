@@ -1,12 +1,5 @@
 package noelyap.setterforcatan.board;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.is;
-import static noelyap.setterforcatan.board.protogen.GenerateBoardRequest.*;
-import static noelyap.setterforcatan.board.protogen.GenerateBoardRequest.ArgCase.*;
-
 import com.google.common.annotations.VisibleForTesting;
 import io.grpc.stub.StreamObserver;
 import io.vavr.Tuple;
@@ -25,7 +18,6 @@ import noelyap.setterforcatan.grader.DispersedTwosAndTwelvesGrader;
 import noelyap.setterforcatan.grader.PassThroughGrader;
 import noelyap.setterforcatan.grader.UniformOddsGrader;
 import noelyap.setterforcatan.protogen.BoardOuterClass.Board;
-import noelyap.setterforcatan.protogen.GraderStrategyOuterClass.GraderStrategy;
 import noelyap.setterforcatan.protogen.SchemaOuterClass.Schema;
 import noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification;
 
@@ -38,34 +30,22 @@ public class BoardServiceImpl extends BoardServiceImplBase {
     final CompositeGrader compositeGrader =
         CompositeGrader.ofAll(
             HashSet.ofAll(request.getGradersList())
-                .map(g -> {
-                      return Match(g)
-                          .of(
-                              Case(
-                                  $(is(GraderStrategy.UNIFORM_ODDS_DISTRIBUTION)),
-                                  new UniformOddsGrader()),
-                              Case(
-                                  $(is(GraderStrategy.DISPERSED_SIXES_AND_EIGHTS_DISTRIBUTION)),
-                                  new DispersedSixesAndEightsGrader()),
-                              Case(
-                                  $(is(GraderStrategy.DISPERSED_TWOS_AND_TWELVES_DISTRIBUTION)),
-                                  new DispersedTwosAndTwelvesGrader()),
-                              Case($(), new PassThroughGrader()));
-                    }));
+                .map(g ->
+                        switch (g) {
+                          case UNIFORM_ODDS_DISTRIBUTION -> new UniformOddsGrader();
+                          case DISPERSED_SIXES_AND_EIGHTS_DISTRIBUTION -> new DispersedSixesAndEightsGrader();
+                          case DISPERSED_TWOS_AND_TWELVES_DISTRIBUTION -> new DispersedTwosAndTwelvesGrader();
+                          default -> new PassThroughGrader();
+                        }));
 
     final Try<Tuple2<Specification, Board>> result =
         Try.of(() ->
-                Match(request.getArgCase())
-                    .of(Case($(is(SCHEMA)), () -> newBoard(request.getSchema(), compositeGrader)),
-                        Case(
-                            $(is(SPECIFICATION)),
-                            () -> newBoard(request.getSpecification(), compositeGrader)),
-                        Case(
-                            $(),
-                            () -> {
-                              throw new IllegalArgumentException(
-                                  "Must specify `schema` or `specification` in the request.");
-                            })));
+                switch (request.getArgCase()) {
+                  case SCHEMA -> newBoard(request.getSchema(), compositeGrader);
+                  case SPECIFICATION -> newBoard(request.getSpecification(), compositeGrader);
+                  default -> throw new IllegalArgumentException(
+                      "Must specify `schema` or `specification` in the request.");
+                });
 
     final GenerateBoardResponse response = newResponse(result);
 
