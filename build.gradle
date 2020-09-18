@@ -2,6 +2,7 @@ plugins {
   id 'com.diffplug.spotless' version '5.1.0'
   id 'com.google.protobuf' version '0.8.13'
   id 'groovy'
+  id 'io.protop' version '1.1.0'
   id 'io.spring.dependency-management' version '1.0.9.RELEASE'
   id 'java'
   id 'org.springframework.boot' version '2.3.1.RELEASE'
@@ -26,6 +27,11 @@ configurations {
 
 repositories {
   mavenCentral()
+}
+
+protop {
+  useLinks = true
+  refreshGitSources = true
 }
 
 protobuf {
@@ -78,6 +84,11 @@ dependencies {
 
 sourceSets {
   main {
+    // TODO: Remove if setter-for-catan-protos specifies root-dir
+    proto {
+      srcDirs '.protop/path/src/main/proto'
+    }
+
     java {
       srcDirs "${buildDir}/generated/source/proto/main/grpc"
       srcDirs "${buildDir}/generated/source/proto/main/java"
