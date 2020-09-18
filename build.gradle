@@ -84,6 +84,11 @@ dependencies {
 
 sourceSets {
   main {
+    // TODO: Remove if setter-for-catan-protos specifies root-dir
+    proto {
+      srcDirs '.protop/path/src/main/proto'
+    }
+
     java {
       srcDirs "${buildDir}/generated/source/proto/main/grpc"
       srcDirs "${buildDir}/generated/source/proto/main/java"
