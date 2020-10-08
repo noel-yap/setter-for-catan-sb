@@ -6,6 +6,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.component.scenario.Base;
+import noelyap.setterforcatan.component.scenario.seafarers.HeadingForNewShores;
 import noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario;
 import org.apache.commons.lang3.Range;
 
@@ -50,12 +51,27 @@ public class SchemaUtils {
               Scenario.BASE,
               HashMap.of(
                   Range.between(3, 4),
+                  Tuple.of(Base.P3_P4_SPECIFICATION_IMPL, Base.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(5, 6),
+                  Tuple.of(Base.P5_P6_SPECIFICATION_IMPL, Base.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(7, 8),
+                  Tuple.of(Base.P7_P8_SPECIFICATION_IMPL, Base.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
+              Scenario.SEAFARERS_HEADING_FOR_NEW_SHORES,
+              HashMap.of(
+                  Range.is(3),
                   Tuple.of(
-                      Base.P_3_P_4_SPECIFICATION_IMPL, Base.P_3_P_4_FISHERMEN_SPECIFICATION_IMPL),
+                      HeadingForNewShores.P3_SPECIFICATION_IMPL,
+                      HeadingForNewShores.P3_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.is(4),
+                  Tuple.of(
+                      HeadingForNewShores.P4_SPECIFICATION_IMPL,
+                      HeadingForNewShores.P4_FISHERMEN_SPECIFICATION_IMPL),
                   Range.between(5, 6),
                   Tuple.of(
-                      Base.P_5_P_6_SPECIFICATION_IMPL, Base.P_5_P_6_FISHERMEN_SPECIFICATION_IMPL),
+                      HeadingForNewShores.P5_P6_SPECIFICATION_IMPL,
+                      HeadingForNewShores.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
                   Range.between(7, 8),
                   Tuple.of(
-                      Base.P_7_P_8_SPECIFICATION_IMPL, Base.P_7_P_8_FISHERMEN_SPECIFICATION_IMPL)));
+                      HeadingForNewShores.P7_P8_SPECIFICATION_IMPL,
+                      HeadingForNewShores.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 }

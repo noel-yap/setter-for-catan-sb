@@ -88,16 +88,19 @@ public class SpecificationImpl {
           this.tiles
               .filter(t2 -> !TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1))
               .put(TileUtils.LAKE_NAME, Tuple.of(Array.fill(desertCount, lakeTile), false))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(TileUtils.LAKE_NAME))
               .put(TileUtils.FISHERY_NAME, Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
 
       final Map<String, Array<Chit>> chits =
           this.chits
               .put(TileUtils.LAKE_NAME, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(TileUtils.LAKE_NAME))
               .put(
                   TileUtils.FISHERY_NAME, Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
       final Map<String, Array<String>> chitsTilesMap =
           this.chitsTilesMap
               .put(TileUtils.LAKE_NAME, Array.of(TileUtils.LAKE_NAME))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(TileUtils.LAKE_NAME))
               .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
 
       final Map<String, Array<Coordinate>> coordinates =
@@ -288,7 +291,7 @@ public class SpecificationImpl {
       final Set<Tuple2<String, Integer>> enumeratedErrors = errors.zipWithIndex();
       final Array<String> errorMessages =
           Array.ofAll(enumeratedErrors.map(t2 -> String.format("Violation %d: %s", t2._2 + 1, t2._1)))
-              .sorted();
+              .sortBy(s -> Integer.parseInt(s.substring("Violation ".length(), s.indexOf(':'))));
 
       throw new InvalidSpecificationError(
           "Invalid Specification:\n\t"
