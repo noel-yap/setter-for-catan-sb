@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class SchemaUtilsTest {
   @Test
   public void shouldNotHaveInvalidSpecifications() {
-    assertThatCode(() -> new SchemaUtils()).doesNotThrowAnyException();
+    assertThatCode(SchemaUtils::new).doesNotThrowAnyException();
   }
 
   @Test

@@ -1,5 +1,18 @@
 package noelyap.setterforcatan.component.scenario;
 
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.BRICK_HARBOR;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.DESERT;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.FIELD;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.FOREST;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.GENERIC_HARBOR;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.GRAIN_HARBOR;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.HILL;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.LUMBER_HARBOR;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.MOUNTAIN;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.ORE_HARBOR;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.PASTURE;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.WOOL_HARBOR;
+
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.Array;
@@ -18,22 +31,22 @@ import noelyap.setterforcatan.util.TileUtils;
 public class Base {
   public static final Tuple2<Array<Tile>, Boolean> P3_P4_PRODUCING_TILES =
       Tuple.of(
-          TileUtils.newTiles(4, Tile.Type.FIELD)
-              .appendAll(TileUtils.newTiles(4, Tile.Type.FOREST))
-              .appendAll(TileUtils.newTiles(4, Tile.Type.PASTURE))
-              .appendAll(TileUtils.newTiles(3, Tile.Type.HILL))
-              .appendAll(TileUtils.newTiles(3, Tile.Type.MOUNTAIN)),
+          TileUtils.newTiles(4, FIELD)
+              .appendAll(TileUtils.newTiles(4, FOREST))
+              .appendAll(TileUtils.newTiles(4, PASTURE))
+              .appendAll(TileUtils.newTiles(3, HILL))
+              .appendAll(TileUtils.newTiles(3, MOUNTAIN)),
           false);
   public static final Tuple2<Array<Tile>, Boolean> P3_P4_DESERT_TILES =
-      Tuple.of(TileUtils.newTiles(1, Tile.Type.DESERT), true);
+      Tuple.of(Array.of(TileUtils.newTile(DESERT)), true);
   public static final Tuple2<Array<Tile>, Boolean> P3_P4_HARBOR_TILES =
       Tuple.of(
-          TileUtils.newTiles(4, Tile.Type.GENERIC_HARBOR)
-              .append(TileUtils.newTile(Tile.Type.GRAIN_HARBOR))
-              .append(TileUtils.newTile(Tile.Type.LUMBER_HARBOR))
-              .append(TileUtils.newTile(Tile.Type.WOOL_HARBOR))
-              .append(TileUtils.newTile(Tile.Type.BRICK_HARBOR))
-              .append(TileUtils.newTile(Tile.Type.ORE_HARBOR)),
+          TileUtils.newTiles(4, GENERIC_HARBOR)
+              .append(TileUtils.newTile(GRAIN_HARBOR))
+              .append(TileUtils.newTile(LUMBER_HARBOR))
+              .append(TileUtils.newTile(WOOL_HARBOR))
+              .append(TileUtils.newTile(BRICK_HARBOR))
+              .append(TileUtils.newTile(ORE_HARBOR)),
           true);
   public static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_P4_TILES =
       HashMap.of(
@@ -111,29 +124,29 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
-  public static final SpecificationImpl P_3_P_4_SPECIFICATION_IMPL =
+  public static final SpecificationImpl P3_P4_SPECIFICATION_IMPL =
       P3_P4_SPECIFICATION_BUILDER.build();
-  public static final SpecificationImpl P_3_P_4_FISHERMEN_SPECIFICATION_IMPL =
+  public static final SpecificationImpl P3_P4_FISHERMEN_SPECIFICATION_IMPL =
       P3_P4_SPECIFICATION_BUILDER.withFisheries(P3_P4_FISHERY_COORDINATES).build();
 
   public static final Tuple2<Array<Tile>, Boolean> P5_P6_PRODUCING_TILES =
       Tuple.of(
           P3_P4_PRODUCING_TILES
               ._1
-              .appendAll(TileUtils.newTiles(2, Tile.Type.FIELD))
-              .appendAll(TileUtils.newTiles(2, Tile.Type.FOREST))
-              .appendAll(TileUtils.newTiles(2, Tile.Type.PASTURE))
-              .appendAll(TileUtils.newTiles(2, Tile.Type.HILL))
-              .appendAll(TileUtils.newTiles(2, Tile.Type.MOUNTAIN)),
+              .appendAll(TileUtils.newTiles(2, FIELD))
+              .appendAll(TileUtils.newTiles(2, FOREST))
+              .appendAll(TileUtils.newTiles(2, PASTURE))
+              .appendAll(TileUtils.newTiles(2, HILL))
+              .appendAll(TileUtils.newTiles(2, MOUNTAIN)),
           false);
   public static final Tuple2<Array<Tile>, Boolean> P5_P6_DESERT_TILES =
-      Tuple.of(TileUtils.newTiles(2, Tile.Type.DESERT), true);
+      Tuple.of(TileUtils.newTiles(2, DESERT), true);
   public static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES =
       Tuple.of(
           P3_P4_HARBOR_TILES
               ._1
-              .append(TileUtils.newTile(Tile.Type.GENERIC_HARBOR))
-              .append(TileUtils.newTile(Tile.Type.WOOL_HARBOR)),
+              .append(TileUtils.newTile(GENERIC_HARBOR))
+              .append(TileUtils.newTile(WOOL_HARBOR)),
           true);
   public static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
       HashMap.of(
@@ -228,22 +241,21 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
-  public static final SpecificationImpl P_5_P_6_SPECIFICATION_IMPL =
+  public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.build();
-  public static final SpecificationImpl P_5_P_6_FISHERMEN_SPECIFICATION_IMPL =
+  public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_FISHERY_COORDINATES).build();
 
   public static final Tuple2<Array<Tile>, Boolean> P7_P8_PRODUCING_TILES =
       Tuple.of(P3_P4_PRODUCING_TILES._1.appendAll(P3_P4_PRODUCING_TILES._1), false);
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_DESERT_TILES =
-      Tuple.of(TileUtils.newTiles(1, Tile.Type.DESERT), true);
+  public static final Tuple2<Array<Tile>, Boolean> P7_P8_DESERT_TILES = P3_P4_DESERT_TILES;
   public static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES =
       Tuple.of(
           P3_P4_HARBOR_TILES
               ._1
-              .append(TileUtils.newTile(Tile.Type.GRAIN_HARBOR))
-              .append(TileUtils.newTile(Tile.Type.LUMBER_HARBOR))
-              .append(TileUtils.newTile(Tile.Type.WOOL_HARBOR)),
+              .append(TileUtils.newTile(GRAIN_HARBOR))
+              .append(TileUtils.newTile(LUMBER_HARBOR))
+              .append(TileUtils.newTile(WOOL_HARBOR)),
           true);
   public static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
       HashMap.of(
@@ -337,8 +349,8 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
-  public static final SpecificationImpl P_7_P_8_SPECIFICATION_IMPL =
+  public static final SpecificationImpl P7_P8_SPECIFICATION_IMPL =
       P7_P8_SPECIFICATION_BUILDER.build();
-  public static final SpecificationImpl P_7_P_8_FISHERMEN_SPECIFICATION_IMPL =
+  public static final SpecificationImpl P7_P8_FISHERMEN_SPECIFICATION_IMPL =
       P7_P8_SPECIFICATION_BUILDER.withFisheries(P7_P8_FISHERY_COORDINATES).build();
 }
