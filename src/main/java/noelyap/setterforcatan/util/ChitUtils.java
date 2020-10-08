@@ -14,8 +14,9 @@ public class ChitUtils {
   public static final Chit CHITS_10 = newChit(10);
   public static final Chit CHITS_11 = newChit(11);
   public static final Chit CHITS_12 = newChit(12);
-  public static final Chit CHITS_2_3_11_12 = newChit(2, 3, 11, 12);
+  public static final Chit CHITS_2_12 = newChit(2, 12);
   public static final Chit CHITS_4_10 = newChit(4, 10);
+  public static final Chit CHITS_2_3_11_12 = newChit(2, 3, 11, 12);
 
   public static Chit newChit(final int... values) {
     return newChit(Array.ofAll(values));

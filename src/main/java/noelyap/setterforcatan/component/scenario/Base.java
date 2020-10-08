@@ -124,6 +124,7 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
+
   public static final SpecificationImpl P3_P4_SPECIFICATION_IMPL =
       P3_P4_SPECIFICATION_BUILDER.build();
   public static final SpecificationImpl P3_P4_FISHERMEN_SPECIFICATION_IMPL =
@@ -217,17 +218,18 @@ public class Base {
       HashMap.of("terrain", P5_P6_TERRAIN_COORDINATES, "harbor", P5_P6_HARBOR_COORDINATES);
 
   public static final Array<Chit> P5_P6_PRODUCING_TERRAIN_CHITS =
-      P3_P4_PRODUCING_TERRAIN_CHITS
-          .append(ChitUtils.CHITS_2)
-          .append(ChitUtils.CHITS_3)
-          .append(ChitUtils.CHITS_4)
-          .append(ChitUtils.CHITS_5)
-          .append(ChitUtils.CHITS_6)
-          .append(ChitUtils.CHITS_8)
-          .append(ChitUtils.CHITS_9)
-          .append(ChitUtils.CHITS_10)
-          .append(ChitUtils.CHITS_11)
-          .append(ChitUtils.CHITS_12);
+      P3_P4_PRODUCING_TERRAIN_CHITS.appendAll(
+          Array.of(
+              ChitUtils.CHITS_2,
+              ChitUtils.CHITS_3,
+              ChitUtils.CHITS_4,
+              ChitUtils.CHITS_5,
+              ChitUtils.CHITS_6,
+              ChitUtils.CHITS_8,
+              ChitUtils.CHITS_9,
+              ChitUtils.CHITS_10,
+              ChitUtils.CHITS_11,
+              ChitUtils.CHITS_12));
   public static final Map<String, Array<Chit>> P5_P6_CHITS =
       HashMap.of("producing-terrain", P5_P6_PRODUCING_TERRAIN_CHITS);
 
@@ -241,6 +243,7 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
+
   public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.build();
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
@@ -349,6 +352,7 @@ public class Base {
               TileMappingUtils.newEntry(
                   "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
+
   public static final SpecificationImpl P7_P8_SPECIFICATION_IMPL =
       P7_P8_SPECIFICATION_BUILDER.build();
   public static final SpecificationImpl P7_P8_FISHERMEN_SPECIFICATION_IMPL =

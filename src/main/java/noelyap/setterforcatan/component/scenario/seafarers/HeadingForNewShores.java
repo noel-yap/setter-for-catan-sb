@@ -162,6 +162,7 @@ public class HeadingForNewShores {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-producing-terrain"),
               TileMappingUtils.newSelfReferringEntry("small-island-producing-terrain")));
+
   public static final SpecificationImpl P3_SPECIFICATION_IMPL = P3_SPECIFICATION_BUILDER.build();
   public static final SpecificationImpl P3_FISHERMEN_SPECIFICATION_IMPL =
       P3_SPECIFICATION_BUILDER.withFisheries(P3_FISHERY_COORDINATES).build();
