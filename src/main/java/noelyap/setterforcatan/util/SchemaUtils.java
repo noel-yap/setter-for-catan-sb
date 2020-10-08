@@ -7,6 +7,7 @@ import io.vavr.collection.Map;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.component.scenario.Base;
 import noelyap.setterforcatan.component.scenario.seafarers.HeadingForNewShores;
+import noelyap.setterforcatan.component.scenario.seafarers.TheNIslands;
 import noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario;
 import org.apache.commons.lang3.Range;
 
@@ -73,5 +74,23 @@ public class SchemaUtils {
                   Range.between(7, 8),
                   Tuple.of(
                       HeadingForNewShores.P7_P8_SPECIFICATION_IMPL,
-                      HeadingForNewShores.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
+                      HeadingForNewShores.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
+              Scenario.SEAFARERS_THE_N_ISLANDS,
+              HashMap.of(
+                  Range.is(3),
+                  Tuple.of(
+                      TheNIslands.P3_SPECIFICATION_IMPL,
+                      TheNIslands.P3_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.is(4),
+                  Tuple.of(
+                      TheNIslands.P4_SPECIFICATION_IMPL,
+                      TheNIslands.P4_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(5, 6),
+                  Tuple.of(
+                      TheNIslands.P5_P6_SPECIFICATION_IMPL,
+                      TheNIslands.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(7, 8),
+                  Tuple.of(
+                      TheNIslands.P7_P8_SPECIFICATION_IMPL,
+                      TheNIslands.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 }

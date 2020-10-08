@@ -14,15 +14,14 @@ import org.springframework.stereotype.Service;
 public class BoardRestService {
   public GenerateBoardResponse generateBoard(final GenerateBoardRequest request) {
     return Try.of(() -> {
-              final AtomicReference<GenerateBoardResponse> generateBoardResponse =
-                  new AtomicReference<GenerateBoardResponse>();
+              final var generateBoardResponse = new AtomicReference<GenerateBoardResponse>();
 
               log.info("Generating board from " + JsonFormat.printer().print(request));
 
               new BoardServiceImpl()
                   .generateBoard(
                       request,
-                      new StreamObserver<GenerateBoardResponse>() {
+                      new StreamObserver<>() {
                         final GenerateBoardResponse.Builder generateBoardResponseBuilder =
                             GenerateBoardResponse.newBuilder();
 
