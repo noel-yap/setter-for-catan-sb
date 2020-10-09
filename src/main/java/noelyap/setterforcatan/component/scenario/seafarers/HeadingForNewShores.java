@@ -308,19 +308,28 @@ public class HeadingForNewShores {
           CoordinateUtils.newCoordinate(3, 7),
           CoordinateUtils.newCoordinate(15, 7));
   private static final Array<Coordinate> P5_P6_HARBOR_COORDINATES =
-      Base.P5_P6_HARBOR_COORDINATES.map(c ->
-              Coordinate.newBuilder()
-                  .setX(c.getX() + 2)
-                  .setY(c.getY())
-                  .addAllEdgePositions(c.getEdgePositionsList())
-                  .build());
+      CoordinateUtils.newCoordinates(
+          CoordinateUtils.newCoordinate(6, 0, Edge.Position.BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(10, 0, Edge.Position.BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(13, 1, Edge.Position.BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(4, 2, Edge.Position.RIGHT),
+          CoordinateUtils.newCoordinate(3, 3, Edge.Position.BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(15, 3, Edge.Position.BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(3, 5, Edge.Position.RIGHT),
+          CoordinateUtils.newCoordinate(15, 5, Edge.Position.LEFT),
+          CoordinateUtils.newCoordinate(5, 7, Edge.Position.TOP_RIGHT),
+          CoordinateUtils.newCoordinate(13, 7, Edge.Position.TOP_LEFT),
+          CoordinateUtils.newCoordinate(8, 8, Edge.Position.TOP_RIGHT));
   private static final Array<Coordinate> P5_P6_FISHERY_COORDINATES =
-      Base.P5_P6_FISHERY_COORDINATES.map(c ->
-              Coordinate.newBuilder()
-                  .setX(c.getX() + 2)
-                  .setY(c.getY())
-                  .addAllEdgePositions(c.getEdgePositionsList())
-                  .build());
+      CoordinateUtils.newCoordinates(
+          CoordinateUtils.newCoordinate(5, 1, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(14, 2, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
+          CoordinateUtils.newCoordinate(5, 3, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
+          CoordinateUtils.newCoordinate(4, 4, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
+          CoordinateUtils.newCoordinate(14, 4, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(14, 6, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
+          CoordinateUtils.newCoordinate(4, 6, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
+          CoordinateUtils.newCoordinate(11, 7, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT));
   private static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
       HashMap.of(
           "big-island-terrain",

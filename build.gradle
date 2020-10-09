@@ -96,6 +96,8 @@ sourceSets {
   }
 }
 
+build.dependsOn(':spotlessApply')
+
 test {
   useJUnitPlatform()
 }
