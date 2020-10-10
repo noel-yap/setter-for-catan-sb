@@ -60,6 +60,7 @@ org.apache.tomcat.embed:tomcat-embed-core:9.0.36
 org.apache.tomcat.embed:tomcat-embed-websocket:9.0.36
 org.checkerframework:checker-compat-qual:2.5.5
 org.glassfish:jakarta.el:3.0.3
+org.hamcrest:hamcrest:2.2
 org.ow2.asm:asm:5.0.4
 org.projectlombok:lombok:1.18.12
 org.reactivestreams:reactive-streams:1.0.3

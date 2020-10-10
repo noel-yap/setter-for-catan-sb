@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noelyap.setterforcatan.board.BoardRestService;
 import noelyap.setterforcatan.board.protogen.GenerateBoardRequest;
-import noelyap.setterforcatan.board.protogen.GenerateBoardResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,9 +29,6 @@ public class SetterForCatanController {
   public ResponseEntity<?> generateBoard(@RequestBody final GenerateBoardRequest request) {
     log.info(String.format("request = `%s`", request.toString()));
 
-    final ResponseEntity<GenerateBoardResponse> responseEntity =
-        ResponseEntity.ok(boardRestService.generateBoard(request));
-
-    return responseEntity;
+    return ResponseEntity.ok(boardRestService.generateBoard(request));
   }
 }

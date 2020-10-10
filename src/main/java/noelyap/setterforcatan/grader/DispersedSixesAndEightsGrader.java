@@ -5,8 +5,8 @@ import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 
 public class DispersedSixesAndEightsGrader implements GraderStrategy {
   @Override
-  public Grade gradeConfiguration(
-      final Array<Configuration> configuration, final double threshold) {
+  public Grade _gradeConfiguration(
+      final Array<Configuration> configurations, final double threshold) {
     // TODO(noel-yap): Implement.
     throw new IllegalArgumentException(
         String.format(
