@@ -15,7 +15,9 @@ import io.vavr.collection.Multimap;
 import io.vavr.collection.Set;
 import io.vavr.collection.Stream;
 import io.vavr.collection.Traversable;
+import io.vavr.control.Option;
 import java.util.Random;
+import noelyap.setterforcatan.matcher.PassThroughMatcher;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chits;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
@@ -30,6 +32,7 @@ import noelyap.setterforcatan.util.ChitUtils;
 import noelyap.setterforcatan.util.MersenneTwister;
 import noelyap.setterforcatan.util.TileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matcher;
 
 public class SpecificationImpl {
   @SuppressWarnings("serial")
@@ -47,25 +50,35 @@ public class SpecificationImpl {
     private final Map<String, Array<String>> chitsTilesMap;
     private final Set<Marker> markers;
 
+    private final Matcher<Configuration> configurationMatcher;
+
     private Builder(
         final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
         final Map<String, Array<Coordinate>> coordinates,
         final Map<String, Array<Chit>> chits,
         final Map<String, Array<String>> coordinatesTilesMap,
         final Map<String, Array<String>> chitsTilesMap,
-        final Set<Marker> markers) {
+        final Set<Marker> markers,
+        final Matcher<Configuration> configurationMatcher) {
       this.tiles = tiles;
       this.coordinates = coordinates;
       this.chits = chits;
       this.coordinatesTilesMap = coordinatesTilesMap;
       this.chitsTilesMap = chitsTilesMap;
       this.markers = markers;
+      this.configurationMatcher = configurationMatcher;
     }
 
     public SpecificationImpl build() throws InvalidSpecificationError {
       final SpecificationImpl specificationImpl =
           new SpecificationImpl(
-              tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap, markers);
+              tiles,
+              coordinates,
+              chits,
+              coordinatesTilesMap,
+              chitsTilesMap,
+              markers,
+              configurationMatcher);
 
       specificationImpl.validate();
 
@@ -128,7 +141,24 @@ public class SpecificationImpl {
               .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
 
       return new Builder(
-          tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap, this.markers);
+          tiles,
+          coordinates,
+          chits,
+          coordinatesTilesMap,
+          chitsTilesMap,
+          this.markers,
+          this.configurationMatcher);
+    }
+
+    public Builder withConfigurationMatcher(final Matcher<Configuration> configurationMatcher) {
+      return new Builder(
+          this.tiles,
+          this.coordinates,
+          this.chits,
+          this.coordinatesTilesMap,
+          this.chitsTilesMap,
+          this.markers,
+          configurationMatcher);
     }
   }
 
@@ -141,6 +171,7 @@ public class SpecificationImpl {
   private final Map<String, Array<String>> coordinatesTilesMap;
   private final Map<String, Array<String>> chitsTilesMap;
   private final Set<Marker> markers;
+  private final Matcher<Configuration> configurationMatcher;
 
   public static Builder newBuilder(
       final noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification that)
@@ -192,7 +223,14 @@ public class SpecificationImpl {
       final Map<String, Array<String>> coordinatesTilesMap,
       final Map<String, Array<String>> chitsTilesMap,
       final Set<Marker> markers) {
-    return new Builder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap, markers);
+    return new Builder(
+        tiles,
+        coordinates,
+        chits,
+        coordinatesTilesMap,
+        chitsTilesMap,
+        markers,
+        new PassThroughMatcher());
   }
 
   private SpecificationImpl(
@@ -201,13 +239,15 @@ public class SpecificationImpl {
       final Map<String, Array<Chit>> chits,
       final Map<String, Array<String>> coordinatesTilesMap,
       final Map<String, Array<String>> chitsTilesMap,
-      final Set<Marker> markers) {
+      final Set<Marker> markers,
+      final Matcher<Configuration> configurationMatcher) {
     this.tiles = tiles;
     this.coordinates = coordinates;
     this.chits = chits;
     this.coordinatesTilesMap = coordinatesTilesMap;
     this.chitsTilesMap = chitsTilesMap;
     this.markers = markers;
+    this.configurationMatcher = configurationMatcher;
   }
 
   public Set<Marker> getMarkers() {
@@ -438,34 +478,39 @@ public class SpecificationImpl {
         .toSet();
   }
 
-  public Array<Configuration> toConfiguration() {
+  public Option<Array<Configuration>> toConfiguration() {
     final Multimap<Tile, Chit> tileChitsMap =
         shuffleTiles(chitsShufflerPrng, tiles, chits, chitsTilesMap);
     final Multimap<Tile, Coordinate> tileCoordinateMap =
         shuffleTiles(coordinatesShufflerPrng, tiles, coordinates, coordinatesTilesMap);
 
-    return Array.ofAll(
-        tileCoordinateMap
-            .keySet()
-            .flatMap(tile -> {
-                  final Array<Coordinate> coordinates =
-                      Array.ofAll(tileCoordinateMap.get(tile).get());
-                  final Array<Chit> chits =
-                      Array.ofAll(
-                          tileChitsMap
-                              .get(tile)
-                              .getOrElse(
-                                  Array.fill(coordinates.length(), Chit.newBuilder().build())));
+    final Array<Configuration> configurations =
+        Array.ofAll(
+            tileCoordinateMap
+                .keySet()
+                .flatMap(tile -> {
+                      final Array<Coordinate> coordinates =
+                          Array.ofAll(tileCoordinateMap.get(tile).get());
+                      final Array<Chit> chits =
+                          Array.ofAll(
+                              tileChitsMap
+                                  .get(tile)
+                                  .getOrElse(
+                                      Array.fill(coordinates.length(), Chit.newBuilder().build())));
 
-                  return coordinates
-                      .zip(chits)
-                      .map(t2 ->
-                              Configuration.newBuilder()
-                                  .setTile(tile)
-                                  .setCoordinate(t2._1)
-                                  .setChit(t2._2)
-                                  .build());
-                }));
+                      return coordinates
+                          .zip(chits)
+                          .map(t2 ->
+                                  Configuration.newBuilder()
+                                      .setTile(tile)
+                                      .setCoordinate(t2._1)
+                                      .setChit(t2._2)
+                                      .build());
+                    }));
+
+    return configurations.forAll(this::validateConfiguration)
+        ? Option.of(configurations)
+        : Option.none();
   }
 
   @VisibleForTesting
@@ -487,6 +532,10 @@ public class SpecificationImpl {
 
                       return tileIds.zip(chitsOrCoordinates.shuffle(prng));
                     }));
+  }
+
+  public boolean validateConfiguration(final Configuration configuration) {
+    return configurationMatcher.matches(configuration);
   }
 
   @VisibleForTesting

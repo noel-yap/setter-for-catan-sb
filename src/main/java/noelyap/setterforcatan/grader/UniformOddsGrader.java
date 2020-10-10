@@ -20,7 +20,7 @@ import org.apache.commons.lang3.Range;
 
 public class UniformOddsGrader implements GraderStrategy {
   @Override
-  public Grade gradeConfiguration(
+  public Grade _gradeConfiguration(
       final Array<Configuration> configurations, final double threshold) {
     final Array<Array<Tuple2<Integer, Integer>>> steppedValidOddsRanges =
         Array.of(
@@ -40,7 +40,6 @@ public class UniformOddsGrader implements GraderStrategy {
     return gradeConfiguration(configurations, validOddsRanges);
   }
 
-  @SuppressWarnings("deprecation")
   @VisibleForTesting
   static Grade gradeConfiguration(
       final Array<Configuration> configurations,
@@ -51,7 +50,6 @@ public class UniformOddsGrader implements GraderStrategy {
         HashMap.ofEntries(
             configurations
                 .map(c -> Tuple.of(c.getCoordinate(), ChitUtils.odds(c.getChit())))
-                .filter(t2 -> t2._2 > 0) // Filter out chitless coordinates.
                 .flatMap(t2 -> {
                       final Coordinate coordinate = t2._1;
                       final int odds = t2._2;

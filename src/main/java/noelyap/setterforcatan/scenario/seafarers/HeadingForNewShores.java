@@ -1,4 +1,4 @@
-package noelyap.setterforcatan.component.scenario.seafarers;
+package noelyap.setterforcatan.scenario.seafarers;
 
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_RIGHT;
@@ -15,6 +15,16 @@ import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.HILL;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.MOUNTAIN;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.PASTURE;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.SEA;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_10;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_11;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_12;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_2;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_3;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_4;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_5;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_6;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_8;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_9;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -22,11 +32,10 @@ import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import noelyap.setterforcatan.component.SpecificationImpl;
-import noelyap.setterforcatan.component.scenario.Base;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
-import noelyap.setterforcatan.util.ChitUtils;
+import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.util.CoordinateUtils;
 import noelyap.setterforcatan.util.TileMappingUtils;
 import noelyap.setterforcatan.util.TileUtils;
@@ -40,7 +49,7 @@ public class HeadingForNewShores {
               .appendAll(TileUtils.newTiles(2, HILL))
               .appendAll(TileUtils.newTiles(2, MOUNTAIN)),
           false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_SMALL_ISLAND_PRODUCING_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P3_SMALL_ISLAND_LAND_TILES =
       Tuple.of(
           Array.of(TileUtils.newTile(FIELD))
               .append(TileUtils.newTile(PASTURE))
@@ -48,19 +57,19 @@ public class HeadingForNewShores {
               .appendAll(TileUtils.newTiles(2, HILL))
               .appendAll(TileUtils.newTiles(2, MOUNTAIN)),
           false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_SMALL_ISLAND_BARREN_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P3_SMALL_ISLAND_SEA_TILES =
       Tuple.of(TileUtils.newTiles(5, SEA), true);
-  public static final Tuple2<Array<Tile>, Boolean> P3_HARBOR_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P3_HARBOR_TILES =
       Tuple.of(
           TileUtils.newTiles(3, GENERIC_HARBOR).appendAll(TileUtils.TWO_FOR_ONE_HARBORS), true);
   private static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_TILES =
       HashMap.of(
           "big-island",
           P3_BIG_ISLAND_TILES,
-          "small-island-producing",
-          P3_SMALL_ISLAND_PRODUCING_TILES,
-          "small-island-barren",
-          P3_SMALL_ISLAND_BARREN_TILES,
+          "small-island-land",
+          P3_SMALL_ISLAND_LAND_TILES,
+          "small-island-sea",
+          P3_SMALL_ISLAND_SEA_TILES,
           "harbor",
           P3_HARBOR_TILES);
 
@@ -121,27 +130,18 @@ public class HeadingForNewShores {
           P3_HARBOR_COORDINATES);
 
   private static final Array<Chit> P3_BIG_ISLAND_CHITS =
-      Array.of(ChitUtils.CHITS_2, ChitUtils.CHITS_3, ChitUtils.CHITS_4, ChitUtils.CHITS_9)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_5))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_6))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_8))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_10))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_11));
-  private static final Array<Chit> P3_SMALL_ISLAND_PRODUCING_CHITS =
-      Array.of(
-              ChitUtils.CHITS_3,
-              ChitUtils.CHITS_5,
-              ChitUtils.CHITS_8,
-              ChitUtils.CHITS_9,
-              ChitUtils.CHITS_10,
-              ChitUtils.CHITS_12)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_4));
+      Array.of(CHITS_2, CHITS_3, CHITS_4, CHITS_9)
+          .appendAll(Array.fill(2, CHITS_5))
+          .appendAll(Array.fill(2, CHITS_6))
+          .appendAll(Array.fill(2, CHITS_8))
+          .appendAll(Array.fill(2, CHITS_10))
+          .appendAll(Array.fill(2, CHITS_11));
+  private static final Array<Chit> P3_SMALL_ISLAND_LAND_CHITS =
+      Array.of(CHITS_3, CHITS_5, CHITS_8, CHITS_9, CHITS_10, CHITS_12)
+          .appendAll(Array.fill(2, CHITS_4));
   private static final Map<String, Array<Chit>> P3_CHITS =
       HashMap.of(
-          "big-island",
-          P3_BIG_ISLAND_CHITS,
-          "small-island-producing",
-          P3_SMALL_ISLAND_PRODUCING_CHITS);
+          "big-island", P3_BIG_ISLAND_CHITS, "small-island-land", P3_SMALL_ISLAND_LAND_CHITS);
 
   private static final SpecificationImpl.Builder P3_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -151,11 +151,10 @@ public class HeadingForNewShores {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island"),
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry(
-                  "small-island", "small-island-producing", "small-island-barren")),
+              TileMappingUtils.newEntry("small-island", "small-island-land", "small-island-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island"),
-              TileMappingUtils.newSelfReferringEntry("small-island-producing")));
+              TileMappingUtils.newSelfReferringEntry("small-island-land")));
 
   public static final SpecificationImpl P3_SPECIFICATION_IMPL = P3_SPECIFICATION_BUILDER.build();
   public static final SpecificationImpl P3_FISHERMEN_SPECIFICATION_IMPL =
@@ -165,9 +164,9 @@ public class HeadingForNewShores {
       Base.P3_P4_PRODUCING_TILES;
   private static final Tuple2<Array<Tile>, Boolean> P4_BIG_ISLAND_BARREN_TILES =
       Base.P3_P4_BARREN_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_SMALL_ISLAND_PRODUCING_TILES =
-      Tuple.of(P3_SMALL_ISLAND_PRODUCING_TILES._1.append(TileUtils.newTile(FOREST)), false);
-  private static final Tuple2<Array<Tile>, Boolean> P4_SMALL_ISLAND_BARREN_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P4_SMALL_ISLAND_LAND_TILES =
+      Tuple.of(P3_SMALL_ISLAND_LAND_TILES._1.append(TileUtils.newTile(FOREST)), false);
+  private static final Tuple2<Array<Tile>, Boolean> P4_SMALL_ISLAND_SEA_TILES =
       Tuple.of(TileUtils.newTiles(4, SEA), true);
   private static final Tuple2<Array<Tile>, Boolean> P4_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
   private static final Map<String, Tuple2<Array<Tile>, Boolean>> P4_TILES =
@@ -176,10 +175,10 @@ public class HeadingForNewShores {
           P4_BIG_ISLAND_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
           P4_BIG_ISLAND_BARREN_TILES,
-          "small-island-producing",
-          P4_SMALL_ISLAND_PRODUCING_TILES,
-          "small-island-barren",
-          P4_SMALL_ISLAND_BARREN_TILES,
+          "small-island-land",
+          P4_SMALL_ISLAND_LAND_TILES,
+          "small-island-sea",
+          P4_SMALL_ISLAND_SEA_TILES,
           "harbor",
           P4_HARBOR_TILES);
 
@@ -211,23 +210,14 @@ public class HeadingForNewShores {
           P4_HARBOR_COORDINATES);
 
   private static final Array<Chit> P4_BIG_ISLAND_PRODUCING_CHITS = Base.P3_P4_PRODUCING_CHITS;
-  private static final Array<Chit> P4_SMALL_ISLAND_PRODUCING_CHITS =
-      Array.of(
-          ChitUtils.CHITS_2,
-          ChitUtils.CHITS_3,
-          ChitUtils.CHITS_4,
-          ChitUtils.CHITS_5,
-          ChitUtils.CHITS_6,
-          ChitUtils.CHITS_8,
-          ChitUtils.CHITS_9,
-          ChitUtils.CHITS_10,
-          ChitUtils.CHITS_11);
+  private static final Array<Chit> P4_SMALL_ISLAND_LAND_CHITS =
+      Array.of(CHITS_2, CHITS_3, CHITS_4, CHITS_5, CHITS_6, CHITS_8, CHITS_9, CHITS_10, CHITS_11);
   private static final Map<String, Array<Chit>> P4_CHITS =
       HashMap.of(
           "big-island-producing",
           P4_BIG_ISLAND_PRODUCING_CHITS,
-          "small-island-producing",
-          P4_SMALL_ISLAND_PRODUCING_CHITS);
+          "small-island-land",
+          P4_SMALL_ISLAND_LAND_CHITS);
 
   private static final SpecificationImpl.Builder P4_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -238,11 +228,10 @@ public class HeadingForNewShores {
               TileMappingUtils.newSelfReferringEntry("harbor"),
               TileMappingUtils.newEntry(
                   "big-island", "big-island-producing", TileUtils.DESERT_OR_LAKE_NAME),
-              TileMappingUtils.newEntry(
-                  "small-island", "small-island-producing", "small-island-barren")),
+              TileMappingUtils.newEntry("small-island", "small-island-land", "small-island-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-producing"),
-              TileMappingUtils.newSelfReferringEntry("small-island-producing")));
+              TileMappingUtils.newSelfReferringEntry("small-island-land")));
 
   public static final SpecificationImpl P4_SPECIFICATION_IMPL = P4_SPECIFICATION_BUILDER.build();
   public static final SpecificationImpl P4_FISHERMEN_SPECIFICATION_IMPL =
@@ -250,9 +239,9 @@ public class HeadingForNewShores {
 
   private static final Tuple2<Array<Tile>, Boolean> P5_P6_BIG_ISLAND_PRODUCING_TILES =
       Base.P5_P6_PRODUCING_TILES;
-  public static final Tuple2<Array<Tile>, Boolean> P5_P6_BIG_ISLAND_BARREN_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_BIG_ISLAND_BARREN_TILES =
       Tuple.of(TileUtils.newTiles(2, DESERT), true);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_PRODUCING_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_LAND_TILES =
       Tuple.of(
           Array.of(TileUtils.newTile(FIELD))
               .append(TileUtils.newTile(FOREST))
@@ -261,19 +250,19 @@ public class HeadingForNewShores {
               .appendAll(TileUtils.newTiles(2, MOUNTAIN))
               .appendAll(TileUtils.newTiles(3, GOLD_FIELD)),
           false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_BARREN_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_SEA_TILES =
       Tuple.of(TileUtils.newTiles(2, SEA), true);
-  public static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
   private static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
       HashMap.of(
           "big-island-producing",
           P5_P6_BIG_ISLAND_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
           P5_P6_BIG_ISLAND_BARREN_TILES,
-          "small-island-producing",
-          P5_P6_SMALL_ISLAND_PRODUCING_TILES,
-          "small-island-barren",
-          P5_P6_SMALL_ISLAND_BARREN_TILES,
+          "small-island-land",
+          P5_P6_SMALL_ISLAND_LAND_TILES,
+          "small-island-sea",
+          P5_P6_SMALL_ISLAND_SEA_TILES,
           "harbor",
           P5_P6_HARBOR_TILES);
 
@@ -331,14 +320,14 @@ public class HeadingForNewShores {
           P5_P6_HARBOR_COORDINATES);
 
   private static final Array<Chit> P5_P6_BIG_ISLAND_PRODUCING_CHITS = Base.P5_P6_PRODUCING_CHITS;
-  private static final Array<Chit> P5_P6_SMALL_ISLAND_PRODUCING_CHITS =
-      P4_SMALL_ISLAND_PRODUCING_CHITS.append(ChitUtils.CHITS_12);
+  private static final Array<Chit> P5_P6_SMALL_ISLAND_LAND_CHITS =
+      P4_SMALL_ISLAND_LAND_CHITS.append(CHITS_12);
   private static final Map<String, Array<Chit>> P5_P6_CHITS =
       HashMap.of(
           "big-island-producing",
           P5_P6_BIG_ISLAND_PRODUCING_CHITS,
-          "small-island-producing",
-          P5_P6_SMALL_ISLAND_PRODUCING_CHITS);
+          "small-island-land",
+          P5_P6_SMALL_ISLAND_LAND_CHITS);
 
   private static final SpecificationImpl.Builder P5_P6_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -349,11 +338,10 @@ public class HeadingForNewShores {
               TileMappingUtils.newSelfReferringEntry("harbor"),
               TileMappingUtils.newEntry(
                   "big-island", "big-island-producing", TileUtils.DESERT_OR_LAKE_NAME),
-              TileMappingUtils.newEntry(
-                  "small-island", "small-island-producing", "small-island-barren")),
+              TileMappingUtils.newEntry("small-island", "small-island-land", "small-island-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-producing"),
-              TileMappingUtils.newSelfReferringEntry("small-island-producing")));
+              TileMappingUtils.newSelfReferringEntry("small-island-land")));
 
   public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.build();
@@ -362,25 +350,23 @@ public class HeadingForNewShores {
 
   private static final Tuple2<Array<Tile>, Boolean> P7_P8_BIG_ISLAND_PRODUCING_TILES =
       Base.P7_P8_PRODUCING_TILES;
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_BARREN_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_BARREN_TILES =
       Base.P7_P8_BARREN_LAND_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_PRODUCING_TILES =
-      Tuple.of(
-          P5_P6_SMALL_ISLAND_PRODUCING_TILES._1.appendAll(P5_P6_SMALL_ISLAND_PRODUCING_TILES._1),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_BARREN_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_LAND_TILES =
+      Tuple.of(P5_P6_SMALL_ISLAND_LAND_TILES._1.appendAll(P5_P6_SMALL_ISLAND_LAND_TILES._1), false);
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_SEA_TILES =
       Tuple.of(TileUtils.newTiles(10, SEA), true);
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
   private static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
       HashMap.of(
           "big-island-producing",
           P7_P8_BIG_ISLAND_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
           P7_P8_BARREN_TILES,
-          "small-island-producing",
-          P7_P8_SMALL_ISLAND_PRODUCING_TILES,
-          "small-island-barren",
-          P7_P8_SMALL_ISLAND_BARREN_TILES,
+          "small-island-land",
+          P7_P8_SMALL_ISLAND_LAND_TILES,
+          "small-island-sea",
+          P7_P8_SMALL_ISLAND_SEA_TILES,
           "harbor",
           P7_P8_HARBOR_TILES);
 
@@ -447,14 +433,14 @@ public class HeadingForNewShores {
           P7_P8_HARBOR_COORDINATES);
 
   private static final Array<Chit> P7_P8_BIG_ISLAND_PRODUCING_CHITS = Base.P7_P8_PRODUCING_CHITS;
-  private static final Array<Chit> P7_P8_SMALL_ISLAND_PRODUCING_CHITS =
-      P5_P6_SMALL_ISLAND_PRODUCING_CHITS.appendAll(P5_P6_SMALL_ISLAND_PRODUCING_CHITS);
+  private static final Array<Chit> P7_P8_SMALL_ISLAND_LAND_CHITS =
+      P5_P6_SMALL_ISLAND_LAND_CHITS.appendAll(P5_P6_SMALL_ISLAND_LAND_CHITS);
   private static final Map<String, Array<Chit>> P7_P8_CHITS =
       HashMap.of(
           "big-island-producing",
           P7_P8_BIG_ISLAND_PRODUCING_CHITS,
-          "small-island-producing",
-          P7_P8_SMALL_ISLAND_PRODUCING_CHITS);
+          "small-island-land",
+          P7_P8_SMALL_ISLAND_LAND_CHITS);
 
   private static final SpecificationImpl.Builder P7_P8_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -465,11 +451,10 @@ public class HeadingForNewShores {
               TileMappingUtils.newSelfReferringEntry("harbor"),
               TileMappingUtils.newEntry(
                   "big-island", "big-island-producing", TileUtils.DESERT_OR_LAKE_NAME),
-              TileMappingUtils.newEntry(
-                  "small-island", "small-island-producing", "small-island-barren")),
+              TileMappingUtils.newEntry("small-island", "small-island-land", "small-island-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-producing"),
-              TileMappingUtils.newSelfReferringEntry("small-island-producing")));
+              TileMappingUtils.newSelfReferringEntry("small-island-land")));
 
   public static final SpecificationImpl P7_P8_SPECIFICATION_IMPL =
       P7_P8_SPECIFICATION_BUILDER.build();
