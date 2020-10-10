@@ -2,8 +2,8 @@ package noelyap.setterforcatan;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import noelyap.setterforcatan.board.BoardRestService;
-import noelyap.setterforcatan.board.protogen.GenerateBoardRequest;
+import noelyap.setterforcatan.service.board.BoardRestService;
+import noelyap.setterforcatan.service.board.protogen.GenerateBoardRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

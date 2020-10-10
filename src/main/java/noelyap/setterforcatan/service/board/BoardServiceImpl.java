@@ -1,4 +1,4 @@
-package noelyap.setterforcatan.board;
+package noelyap.setterforcatan.service.board;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.grpc.stub.StreamObserver;
@@ -7,9 +7,6 @@ import io.vavr.Tuple2;
 import io.vavr.collection.HashSet;
 import io.vavr.control.Try;
 import net.devh.boot.grpc.server.service.GrpcService;
-import noelyap.setterforcatan.board.protogen.BoardServiceGrpc.BoardServiceImplBase;
-import noelyap.setterforcatan.board.protogen.GenerateBoardRequest;
-import noelyap.setterforcatan.board.protogen.GenerateBoardResponse;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.generator.BoardGenerator;
 import noelyap.setterforcatan.grader.CompositeGrader;
@@ -20,6 +17,9 @@ import noelyap.setterforcatan.grader.UniformOddsGrader;
 import noelyap.setterforcatan.protogen.BoardOuterClass.Board;
 import noelyap.setterforcatan.protogen.SchemaOuterClass.Schema;
 import noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification;
+import noelyap.setterforcatan.service.board.protogen.BoardServiceGrpc.BoardServiceImplBase;
+import noelyap.setterforcatan.service.board.protogen.GenerateBoardRequest;
+import noelyap.setterforcatan.service.board.protogen.GenerateBoardResponse;
 
 @GrpcService
 public class BoardServiceImpl extends BoardServiceImplBase {

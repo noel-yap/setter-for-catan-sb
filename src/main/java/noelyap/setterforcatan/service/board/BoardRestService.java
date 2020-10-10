@@ -1,12 +1,12 @@
-package noelyap.setterforcatan.board;
+package noelyap.setterforcatan.service.board;
 
 import com.google.protobuf.util.JsonFormat;
 import io.grpc.stub.StreamObserver;
 import io.vavr.control.Try;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;
-import noelyap.setterforcatan.board.protogen.GenerateBoardRequest;
-import noelyap.setterforcatan.board.protogen.GenerateBoardResponse;
+import noelyap.setterforcatan.service.board.protogen.GenerateBoardRequest;
+import noelyap.setterforcatan.service.board.protogen.GenerateBoardResponse;
 import org.springframework.stereotype.Service;
 
 @Service
