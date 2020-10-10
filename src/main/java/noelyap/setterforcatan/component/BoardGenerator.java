@@ -1,5 +1,7 @@
 package noelyap.setterforcatan.component;
 
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Face.Position.FACE_UP;
+
 import io.vavr.Tuple;
 import io.vavr.collection.Array;
 import io.vavr.collection.Stream;
@@ -24,8 +26,14 @@ public class BoardGenerator {
         Stream.range(0, attemptsCount)
             .map(attempt -> {
                   final double threshold = 1.0 - ((double) attempt / attemptsCount);
-                  final Array<Configuration> configurations = specificationImpl.toConfiguration();
-                  final Grade grade = graderStrategy.gradeConfiguration(configurations, threshold);
+                  final Array<Configuration> configurations =
+                      specificationImpl
+                          .toConfiguration();
+                  final Grade grade = graderStrategy.gradeConfiguration(
+                      configurations.filter(c ->
+                          c.getCoordinate().getFacePosition()
+                              == FACE_UP), // Filter out face-down tiles.
+                      threshold);
 
                   return Tuple.of(configurations, attempt, grade, threshold);
                 })
