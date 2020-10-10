@@ -1,4 +1,4 @@
-package noelyap.setterforcatan.component.scenario;
+package noelyap.setterforcatan.scenario;
 
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_RIGHT;

@@ -1,4 +1,4 @@
-package noelyap.setterforcatan.component.scenario.seafarers;
+package noelyap.setterforcatan.scenario.seafarers;
 
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_RIGHT;
@@ -15,6 +15,17 @@ import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.HILL;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.MOUNTAIN;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.PASTURE;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.SEA;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_10;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_11;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_12;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_2;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_2_12;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_3;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_4;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_5;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_6;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_8;
+import static noelyap.setterforcatan.util.ChitUtils.CHITS_9;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -22,18 +33,17 @@ import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import noelyap.setterforcatan.component.SpecificationImpl;
-import noelyap.setterforcatan.component.scenario.Base;
-import noelyap.setterforcatan.protogen.ChitOuterClass;
-import noelyap.setterforcatan.protogen.CoordinateOuterClass;
-import noelyap.setterforcatan.protogen.TileOuterClass;
-import noelyap.setterforcatan.util.ChitUtils;
+import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
+import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
+import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
+import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.util.CoordinateUtils;
 import noelyap.setterforcatan.util.TileMappingUtils;
 import noelyap.setterforcatan.util.TileUtils;
 
 // AKA Fog Island
 public class Oceania {
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P3_FACE_UP_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P3_FACE_UP_TILES =
       Tuple.of(
           Array.fill(2, TileUtils.newTile(FIELD))
               .appendAll(Array.fill(2, TileUtils.newTile(HILL)))
@@ -41,7 +51,7 @@ public class Oceania {
               .appendAll(Array.fill(4, TileUtils.newTile(FOREST)))
               .appendAll(Array.fill(4, TileUtils.newTile(PASTURE))),
           false);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P3_FACE_DOWN_LAND_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P3_FACE_DOWN_LAND_TILES =
       Tuple.of(
           Array.of(TileUtils.newTile(FOREST), TileUtils.newTile(PASTURE))
               .appendAll(Array.fill(2, TileUtils.newTile(FIELD)))
@@ -49,12 +59,12 @@ public class Oceania {
               .appendAll(Array.fill(2, TileUtils.newTile(HILL)))
               .appendAll(Array.fill(2, TileUtils.newTile(MOUNTAIN))),
           false);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P3_FACE_DOWN_SEA_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P3_FACE_DOWN_SEA_TILES =
       Tuple.of(Array.fill(2, TileUtils.newTile(SEA)), true);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P3_HARBOR_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P3_HARBOR_TILES =
       Tuple.of(
           TileUtils.newTiles(3, GENERIC_HARBOR).appendAll(TileUtils.TWO_FOR_ONE_HARBORS), true);
-  public static final Map<String, Tuple2<Array<TileOuterClass.Tile>, Boolean>> P3_TILES =
+  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_TILES =
       HashMap.of(
           "face-up",
           P3_FACE_UP_TILES,
@@ -65,7 +75,7 @@ public class Oceania {
           "harbor",
           P3_HARBOR_TILES);
 
-  public static final Array<CoordinateOuterClass.Coordinate> P3_FACE_UP_COORDINATES =
+  private static final Array<Coordinate> P3_FACE_UP_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(5, 1),
           CoordinateUtils.newCoordinate(4, 2),
@@ -81,7 +91,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(12, 6),
           CoordinateUtils.newCoordinate(9, 7),
           CoordinateUtils.newCoordinate(11, 7));
-  public static final Array<CoordinateOuterClass.Coordinate> P3_FACE_DOWN_COORDINATES =
+  private static final Array<Coordinate> P3_FACE_DOWN_COORDINATES =
       Array.of(
           CoordinateUtils.newFaceDownCoordinate(9, 1),
           CoordinateUtils.newFaceDownCoordinate(11, 1),
@@ -95,7 +105,7 @@ public class Oceania {
           CoordinateUtils.newFaceDownCoordinate(6, 6),
           CoordinateUtils.newFaceDownCoordinate(3, 7),
           CoordinateUtils.newFaceDownCoordinate(5, 7));
-  public static final Array<CoordinateOuterClass.Coordinate> P3_HARBOR_COORDINATES =
+  private static final Array<Coordinate> P3_HARBOR_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(3, 1, RIGHT),
           CoordinateUtils.newCoordinate(7, 1, BOTTOM_LEFT),
@@ -105,11 +115,11 @@ public class Oceania {
           CoordinateUtils.newCoordinate(14, 6, TOP_LEFT),
           CoordinateUtils.newCoordinate(13, 7, LEFT),
           CoordinateUtils.newCoordinate(10, 8, TOP_LEFT));
-  public static final Array<CoordinateOuterClass.Coordinate> P3_FISHERY_COORDINATES =
+  private static final Array<Coordinate> P3_FISHERY_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(4, 2, LEFT, TOP_LEFT),
           CoordinateUtils.newCoordinate(12, 6, RIGHT, BOTTOM_RIGHT));
-  public static final Map<String, Array<CoordinateOuterClass.Coordinate>> P3_COORDINATES =
+  private static final Map<String, Array<Coordinate>> P3_COORDINATES =
       HashMap.of(
           "face-up",
           P3_FACE_UP_COORDINATES,
@@ -118,25 +128,17 @@ public class Oceania {
           "harbor",
           P3_HARBOR_COORDINATES);
 
-  public static final Array<ChitOuterClass.Chit> P3_FACE_UP_CHITS =
-      Array.of(ChitUtils.CHITS_3, ChitUtils.CHITS_4, ChitUtils.CHITS_10, ChitUtils.CHITS_12)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_5))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_6))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_8))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_9))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_11));
-  public static final Array<ChitOuterClass.Chit> P3_FACE_DOWN_LAND_CHITS =
-      Array.of(
-              ChitUtils.CHITS_4,
-              ChitUtils.CHITS_5,
-              ChitUtils.CHITS_6,
-              ChitUtils.CHITS_8,
-              ChitUtils.CHITS_9,
-              ChitUtils.CHITS_10,
-              ChitUtils.CHITS_11,
-              ChitUtils.CHITS_12)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_3));
-  public static final Map<String, Array<ChitOuterClass.Chit>> P3_CHITS =
+  private static final Array<Chit> P3_FACE_UP_CHITS =
+      Array.of(CHITS_3, CHITS_4, CHITS_10, CHITS_12)
+          .appendAll(Array.fill(2, CHITS_5))
+          .appendAll(Array.fill(2, CHITS_6))
+          .appendAll(Array.fill(2, CHITS_8))
+          .appendAll(Array.fill(2, CHITS_9))
+          .appendAll(Array.fill(2, CHITS_11));
+  private static final Array<Chit> P3_FACE_DOWN_LAND_CHITS =
+      Array.of(CHITS_4, CHITS_5, CHITS_6, CHITS_8, CHITS_9, CHITS_10, CHITS_11, CHITS_12)
+          .appendAll(Array.fill(2, CHITS_3));
+  private static final Map<String, Array<Chit>> P3_CHITS =
       HashMap.of(
           "face-up", P3_FACE_UP_CHITS,
           "face-down-land", P3_FACE_DOWN_LAND_CHITS);
@@ -158,7 +160,7 @@ public class Oceania {
   public static final SpecificationImpl P3_FISHERMEN_SPECIFICATION_IMPL =
       P3_SPECIFICATION_BUILDER.withFisheries(P3_FISHERY_COORDINATES).build();
 
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P4_FACE_UP_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P4_FACE_UP_TILES =
       Tuple.of(
           Array.fill(3, TileUtils.newTile(FIELD))
               .appendAll(Array.fill(3, TileUtils.newTile(HILL)))
@@ -166,13 +168,11 @@ public class Oceania {
               .appendAll(Array.fill(4, TileUtils.newTile(FOREST)))
               .appendAll(Array.fill(4, TileUtils.newTile(PASTURE))),
           false);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P4_FACE_DOWN_LAND_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P4_FACE_DOWN_LAND_TILES =
       P3_FACE_DOWN_LAND_TILES;
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P4_FACE_DOWN_SEA_TILES =
-      P3_FACE_DOWN_SEA_TILES;
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P4_HARBOR_TILES =
-      Base.P3_P4_HARBOR_TILES;
-  public static final Map<String, Tuple2<Array<TileOuterClass.Tile>, Boolean>> P4_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P4_FACE_DOWN_SEA_TILES = P3_FACE_DOWN_SEA_TILES;
+  private static final Tuple2<Array<Tile>, Boolean> P4_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
+  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P4_TILES =
       HashMap.of(
           "face-up",
           P4_FACE_UP_TILES,
@@ -183,7 +183,7 @@ public class Oceania {
           "harbor",
           P4_HARBOR_TILES);
 
-  public static final Array<CoordinateOuterClass.Coordinate> P4_FACE_UP_COORDINATES =
+  private static final Array<Coordinate> P4_FACE_UP_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(3, 1),
           CoordinateUtils.newCoordinate(5, 1),
@@ -202,7 +202,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(7, 7),
           CoordinateUtils.newCoordinate(9, 7),
           CoordinateUtils.newCoordinate(11, 7));
-  public static final Array<CoordinateOuterClass.Coordinate> P4_FACE_DOWN_COORDINATES =
+  private static final Array<Coordinate> P4_FACE_DOWN_COORDINATES =
       Array.of(
           CoordinateUtils.newFaceDownCoordinate(9, 1),
           CoordinateUtils.newFaceDownCoordinate(11, 1),
@@ -216,7 +216,7 @@ public class Oceania {
           CoordinateUtils.newFaceDownCoordinate(2, 6),
           CoordinateUtils.newFaceDownCoordinate(4, 6),
           CoordinateUtils.newFaceDownCoordinate(3, 7));
-  public static final Array<CoordinateOuterClass.Coordinate> P4_HARBOR_COORDINATES =
+  private static final Array<Coordinate> P4_HARBOR_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(4, 0, BOTTOM_LEFT),
           CoordinateUtils.newCoordinate(1, 1, RIGHT),
@@ -227,13 +227,13 @@ public class Oceania {
           CoordinateUtils.newCoordinate(13, 7, LEFT),
           CoordinateUtils.newCoordinate(8, 8, TOP_LEFT),
           CoordinateUtils.newCoordinate(10, 8, TOP_RIGHT));
-  public static final Array<CoordinateOuterClass.Coordinate> P4_FISHERY_COORDINATES =
+  private static final Array<Coordinate> P4_FISHERY_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(2, 2, LEFT, TOP_LEFT),
           CoordinateUtils.newCoordinate(1, 3, BOTTOM_LEFT, LEFT),
           CoordinateUtils.newCoordinate(13, 5, TOP_RIGHT, RIGHT),
           CoordinateUtils.newCoordinate(9, 7, BOTTOM_RIGHT, BOTTOM_LEFT));
-  public static final Map<String, Array<CoordinateOuterClass.Coordinate>> P4_COORDINATES =
+  private static final Map<String, Array<Coordinate>> P4_COORDINATES =
       HashMap.of(
           "face-up",
           P4_FACE_UP_COORDINATES,
@@ -242,27 +242,19 @@ public class Oceania {
           "harbor",
           P4_HARBOR_COORDINATES);
 
-  public static final Array<ChitOuterClass.Chit> P4_FACE_UP_CHITS =
-      Array.of(ChitUtils.CHITS_2, ChitUtils.CHITS_11, ChitUtils.CHITS_12)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_3))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_4))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_5))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_6))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_8))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_9))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_10));
-  public static final Array<ChitOuterClass.Chit> P4_FACE_DOWN_LAND_CHITS =
-      Array.of(
-              ChitUtils.CHITS_3,
-              ChitUtils.CHITS_4,
-              ChitUtils.CHITS_5,
-              ChitUtils.CHITS_6,
-              ChitUtils.CHITS_8,
-              ChitUtils.CHITS_9,
-              ChitUtils.CHITS_10,
-              ChitUtils.CHITS_12)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_11));
-  public static final Map<String, Array<ChitOuterClass.Chit>> P4_CHITS =
+  private static final Array<Chit> P4_FACE_UP_CHITS =
+      Array.of(CHITS_2, CHITS_11, CHITS_12)
+          .appendAll(Array.fill(2, CHITS_3))
+          .appendAll(Array.fill(2, CHITS_4))
+          .appendAll(Array.fill(2, CHITS_5))
+          .appendAll(Array.fill(2, CHITS_6))
+          .appendAll(Array.fill(2, CHITS_8))
+          .appendAll(Array.fill(2, CHITS_9))
+          .appendAll(Array.fill(2, CHITS_10));
+  private static final Array<Chit> P4_FACE_DOWN_LAND_CHITS =
+      Array.of(CHITS_3, CHITS_4, CHITS_5, CHITS_6, CHITS_8, CHITS_9, CHITS_10, CHITS_12)
+          .appendAll(Array.fill(2, CHITS_11));
+  private static final Map<String, Array<Chit>> P4_CHITS =
       HashMap.of(
           "face-up", P4_FACE_UP_CHITS,
           "face-down-land", P4_FACE_DOWN_LAND_CHITS);
@@ -284,7 +276,7 @@ public class Oceania {
   public static final SpecificationImpl P4_FISHERMEN_SPECIFICATION_IMPL =
       P4_SPECIFICATION_BUILDER.withFisheries(P4_FISHERY_COORDINATES).build();
 
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P5_P6_FACE_UP_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FACE_UP_TILES =
       Tuple.of(
           Array.fill(4, TileUtils.newTile(MOUNTAIN))
               .appendAll(Array.fill(5, TileUtils.newTile(FIELD)))
@@ -292,36 +284,32 @@ public class Oceania {
               .appendAll(Array.fill(5, TileUtils.newTile(HILL)))
               .appendAll(Array.fill(5, TileUtils.newTile(PASTURE))),
           false);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean>
-      P5_P6_FACE_DOWN_PRODUCING_LAND_TILES =
-          Tuple.of(
-              Array.fill(2, TileUtils.newTile(FIELD))
-                  .appendAll(Array.fill(2, TileUtils.newTile(FOREST)))
-                  .appendAll(Array.fill(2, TileUtils.newTile(HILL)))
-                  .appendAll(Array.fill(2, TileUtils.newTile(PASTURE)))
-                  .appendAll(Array.fill(3, TileUtils.newTile(MOUNTAIN)))
-                  .appendAll(Array.fill(3, TileUtils.newTile(GOLD_FIELD))),
-              false);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean>
-      P5_P6_FACE_DOWN_BARREN_LAND_TILES = Tuple.of(Array.of(TileUtils.newTile(DESERT)), true);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P5_P6_FACE_DOWN_SEA_TILES =
-      Tuple.of(Array.fill(3, TileUtils.newTile(SEA)), true);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P5_P6_HARBOR_TILES =
-      Base.P5_P6_HARBOR_TILES;
-  public static final Map<String, Tuple2<Array<TileOuterClass.Tile>, Boolean>> P5_P6_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FACE_DOWN_PRODUCING_TILES =
+      Tuple.of(
+          Array.fill(2, TileUtils.newTile(FIELD))
+              .appendAll(Array.fill(2, TileUtils.newTile(FOREST)))
+              .appendAll(Array.fill(2, TileUtils.newTile(HILL)))
+              .appendAll(Array.fill(2, TileUtils.newTile(PASTURE)))
+              .appendAll(Array.fill(3, TileUtils.newTile(MOUNTAIN)))
+              .appendAll(Array.fill(3, TileUtils.newTile(GOLD_FIELD))),
+          false);
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FACE_DOWN_BARREN_TILES =
+      Tuple.of(
+          Array.of(TileUtils.newTile(DESERT)).appendAll(Array.fill(3, TileUtils.newTile(SEA))),
+          true);
+  private static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
+  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
       HashMap.of(
           "face-up",
           P5_P6_FACE_UP_TILES,
-          "face-down-producing-land",
-          P5_P6_FACE_DOWN_PRODUCING_LAND_TILES,
-          "face-down-barren-land",
-          P5_P6_FACE_DOWN_BARREN_LAND_TILES,
-          "face-down-sea",
-          P5_P6_FACE_DOWN_SEA_TILES,
+          "face-down-producing",
+          P5_P6_FACE_DOWN_PRODUCING_TILES,
+          "face-down-barren",
+          P5_P6_FACE_DOWN_BARREN_TILES,
           "harbor",
           P5_P6_HARBOR_TILES);
 
-  public static final Array<CoordinateOuterClass.Coordinate> P5_P6_FACE_UP_COORDINATES =
+  private static final Array<Coordinate> P5_P6_FACE_UP_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(3, 1),
           CoordinateUtils.newCoordinate(5, 1),
@@ -347,7 +335,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(3, 7),
           CoordinateUtils.newCoordinate(13, 7),
           CoordinateUtils.newCoordinate(15, 7));
-  public static final Array<CoordinateOuterClass.Coordinate> P5_P6_FACE_DOWN_COORDINATES =
+  private static final Array<Coordinate> P5_P6_FACE_DOWN_COORDINATES =
       Array.of(
           CoordinateUtils.newFaceDownCoordinate(9, 1),
           CoordinateUtils.newFaceDownCoordinate(11, 1),
@@ -367,7 +355,7 @@ public class Oceania {
           CoordinateUtils.newFaceDownCoordinate(10, 6),
           CoordinateUtils.newFaceDownCoordinate(7, 7),
           CoordinateUtils.newFaceDownCoordinate(9, 7));
-  public static final Array<CoordinateOuterClass.Coordinate> P5_P6_HARBOR_COORDINATES =
+  private static final Array<Coordinate> P5_P6_HARBOR_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(0, 2, RIGHT),
           CoordinateUtils.newCoordinate(6, 2, TOP_LEFT),
@@ -380,7 +368,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(18, 6, TOP_LEFT),
           CoordinateUtils.newCoordinate(1, 7, TOP_RIGHT),
           CoordinateUtils.newCoordinate(14, 8, TOP_LEFT));
-  public static final Array<CoordinateOuterClass.Coordinate> P5_P6_FISHERY_COORDINATES =
+  private static final Array<Coordinate> P5_P6_FISHERY_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(1, 1, RIGHT, BOTTOM_RIGHT),
           CoordinateUtils.newCoordinate(17, 1, BOTTOM_LEFT, LEFT),
@@ -388,7 +376,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(17, 5, TOP_RIGHT, RIGHT),
           CoordinateUtils.newCoordinate(0, 6, TOP_RIGHT, RIGHT),
           CoordinateUtils.newCoordinate(17, 7, LEFT, TOP_LEFT));
-  public static final Map<String, Array<CoordinateOuterClass.Coordinate>> P5_P6_COORDINATES =
+  private static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
       HashMap.of(
           "face-up",
           P5_P6_FACE_UP_COORDINATES,
@@ -397,33 +385,27 @@ public class Oceania {
           "harbor",
           P5_P6_HARBOR_COORDINATES);
 
-  public static final Array<ChitOuterClass.Chit> P5_P6_FACE_UP_CHITS =
-      Array.of(ChitUtils.CHITS_2)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_3))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_4))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_5))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_6))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_8))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_9))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_10))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_11))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_12));
-  public static final Array<ChitOuterClass.Chit> P5_P6_FACE_DOWN_PRODUCING_LAND_CHITS =
-      Array.of(
-              ChitUtils.CHITS_4,
-              ChitUtils.CHITS_6,
-              ChitUtils.CHITS_8,
-              ChitUtils.CHITS_9,
-              ChitUtils.CHITS_10,
-              ChitUtils.CHITS_12)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_2))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_3))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_5))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_11));
-  public static final Map<String, Array<ChitOuterClass.Chit>> P5_P6_CHITS =
+  private static final Array<Chit> P5_P6_FACE_UP_CHITS =
+      Array.of(CHITS_2)
+          .appendAll(Array.fill(2, CHITS_3))
+          .appendAll(Array.fill(3, CHITS_4))
+          .appendAll(Array.fill(2, CHITS_5))
+          .appendAll(Array.fill(3, CHITS_6))
+          .appendAll(Array.fill(3, CHITS_8))
+          .appendAll(Array.fill(3, CHITS_9))
+          .appendAll(Array.fill(3, CHITS_10))
+          .appendAll(Array.fill(2, CHITS_11))
+          .appendAll(Array.fill(2, CHITS_12));
+  private static final Array<Chit> P5_P6_FACE_DOWN_PRODUCING_CHITS =
+      Array.of(CHITS_4, CHITS_6, CHITS_8, CHITS_9, CHITS_10, CHITS_12)
+          .appendAll(Array.fill(2, CHITS_2))
+          .appendAll(Array.fill(2, CHITS_3))
+          .appendAll(Array.fill(2, CHITS_5))
+          .appendAll(Array.fill(2, CHITS_11));
+  private static final Map<String, Array<Chit>> P5_P6_CHITS =
       HashMap.of(
           "face-up", P5_P6_FACE_UP_CHITS,
-          "face-down-producing-land", P5_P6_FACE_DOWN_PRODUCING_LAND_CHITS);
+          "face-down-producing", P5_P6_FACE_DOWN_PRODUCING_CHITS);
 
   private static final SpecificationImpl.Builder P5_P6_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -433,21 +415,17 @@ public class Oceania {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("face-up"),
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry(
-                  "face-down",
-                  "face-down-producing-land",
-                  "face-down-barren-land",
-                  "face-down-sea")),
+              TileMappingUtils.newEntry("face-down", "face-down-producing", "face-down-barren")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("face-up"),
-              TileMappingUtils.newSelfReferringEntry("face-down-producing-land")));
+              TileMappingUtils.newSelfReferringEntry("face-down-producing")));
 
   public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.build();
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_FISHERY_COORDINATES).build();
 
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P7_P8_FACE_UP_PRODUCING_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_UP_PRODUCING_TILES =
       Tuple.of(
           Array.fill(5, TileUtils.newTile(MOUNTAIN))
               .appendAll(Array.fill(6, TileUtils.newTile(FOREST)))
@@ -455,9 +433,9 @@ public class Oceania {
               .appendAll(Array.fill(7, TileUtils.newTile(FIELD)))
               .appendAll(Array.fill(7, TileUtils.newTile(HILL))),
           false);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P7_P8_FACE_UP_BARREN_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_UP_BARREN_TILES =
       Base.P7_P8_BARREN_LAND_TILES;
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P7_P8_FACE_DOWN_LAND_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_DOWN_LAND_TILES =
       Tuple.of(
           Array.fill(2, TileUtils.newTile(FIELD))
               .appendAll(Array.fill(2, TileUtils.newTile(HILL)))
@@ -466,11 +444,10 @@ public class Oceania {
               .appendAll(Array.fill(5, TileUtils.newTile(FOREST)))
               .appendAll(Array.fill(5, TileUtils.newTile(PASTURE))),
           false);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P7_P8_FACE_DOWN_SEA_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_DOWN_SEA_TILES =
       Tuple.of(Array.fill(18, TileUtils.newTile(SEA)), true);
-  public static final Tuple2<Array<TileOuterClass.Tile>, Boolean> P7_P8_HARBOR_TILES =
-      Base.P7_P8_HARBOR_TILES;
-  public static final Map<String, Tuple2<Array<TileOuterClass.Tile>, Boolean>> P7_P8_TILES =
+  private static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
+  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
       HashMap.of(
           "face-up-producing",
           P7_P8_FACE_UP_PRODUCING_TILES,
@@ -483,7 +460,7 @@ public class Oceania {
           "harbor",
           P7_P8_HARBOR_TILES);
 
-  public static final Array<CoordinateOuterClass.Coordinate> P7_P8_FACE_UP_COORDINATES =
+  private static final Array<Coordinate> P7_P8_FACE_UP_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(11, 1),
           CoordinateUtils.newCoordinate(13, 1),
@@ -517,7 +494,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(13, 11),
           CoordinateUtils.newCoordinate(10, 12),
           CoordinateUtils.newCoordinate(12, 12));
-  public static final Array<CoordinateOuterClass.Coordinate> P7_P8_FACE_DOWN_COORDINATES =
+  private static final Array<Coordinate> P7_P8_FACE_DOWN_COORDINATES =
       Array.of(
           CoordinateUtils.newFaceDownCoordinate(16, 2),
           CoordinateUtils.newFaceDownCoordinate(18, 2),
@@ -557,7 +534,7 @@ public class Oceania {
           CoordinateUtils.newFaceDownCoordinate(8, 10),
           CoordinateUtils.newFaceDownCoordinate(5, 11),
           CoordinateUtils.newFaceDownCoordinate(7, 11));
-  public static final Array<CoordinateOuterClass.Coordinate> P7_P8_HARBOR_COORDINATES =
+  private static final Array<Coordinate> P7_P8_HARBOR_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(14, 0, BOTTOM_LEFT),
           CoordinateUtils.newCoordinate(10, 0, BOTTOM_RIGHT),
@@ -571,7 +548,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(15, 11, TOP_LEFT),
           CoordinateUtils.newCoordinate(9, 13, TOP_RIGHT),
           CoordinateUtils.newCoordinate(13, 13, TOP_LEFT));
-  public static final Array<CoordinateOuterClass.Coordinate> P7_P8_FISHERY_COORDINATES =
+  private static final Array<Coordinate> P7_P8_FISHERY_COORDINATES =
       Array.of(
           CoordinateUtils.newCoordinate(12, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
           CoordinateUtils.newCoordinate(10, 2, LEFT, TOP_LEFT),
@@ -581,7 +558,7 @@ public class Oceania {
           CoordinateUtils.newCoordinate(18, 10, TOP_LEFT, TOP_RIGHT),
           CoordinateUtils.newCoordinate(13, 11, RIGHT, BOTTOM_RIGHT),
           CoordinateUtils.newCoordinate(11, 13, TOP_LEFT, TOP_RIGHT));
-  public static final Map<String, Array<CoordinateOuterClass.Coordinate>> P7_P8_COORDINATES =
+  private static final Map<String, Array<Coordinate>> P7_P8_COORDINATES =
       HashMap.of(
           "face-up",
           P7_P8_FACE_UP_COORDINATES,
@@ -590,29 +567,29 @@ public class Oceania {
           "harbor",
           P7_P8_HARBOR_COORDINATES);
 
-  public static final Array<ChitOuterClass.Chit> P7_P8_FACE_UP_PRODUCING_CHITS =
-      Array.of(ChitUtils.CHITS_2_12)
-          .appendAll(Array.fill(3, ChitUtils.CHITS_2))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_3))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_4))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_5))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_6))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_8))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_9))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_10))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_11))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_12));
-  public static final Array<ChitOuterClass.Chit> P7_P8_FACE_DOWN_LAND_CHITS =
-      Array.of(ChitUtils.CHITS_2, ChitUtils.CHITS_12)
-          .appendAll(Array.fill(2, ChitUtils.CHITS_3))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_4))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_5))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_6))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_8))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_9))
-          .appendAll(Array.fill(3, ChitUtils.CHITS_10))
-          .appendAll(Array.fill(2, ChitUtils.CHITS_11));
-  public static final Map<String, Array<ChitOuterClass.Chit>> P7_P8_CHITS =
+  private static final Array<Chit> P7_P8_FACE_UP_PRODUCING_CHITS =
+      Array.of(CHITS_2_12)
+          .appendAll(Array.fill(3, CHITS_2))
+          .appendAll(Array.fill(3, CHITS_3))
+          .appendAll(Array.fill(3, CHITS_4))
+          .appendAll(Array.fill(3, CHITS_5))
+          .appendAll(Array.fill(3, CHITS_6))
+          .appendAll(Array.fill(3, CHITS_8))
+          .appendAll(Array.fill(3, CHITS_9))
+          .appendAll(Array.fill(3, CHITS_10))
+          .appendAll(Array.fill(3, CHITS_11))
+          .appendAll(Array.fill(3, CHITS_12));
+  private static final Array<Chit> P7_P8_FACE_DOWN_LAND_CHITS =
+      Array.of(CHITS_2, CHITS_12)
+          .appendAll(Array.fill(2, CHITS_3))
+          .appendAll(Array.fill(3, CHITS_4))
+          .appendAll(Array.fill(2, CHITS_5))
+          .appendAll(Array.fill(2, CHITS_6))
+          .appendAll(Array.fill(2, CHITS_8))
+          .appendAll(Array.fill(2, CHITS_9))
+          .appendAll(Array.fill(3, CHITS_10))
+          .appendAll(Array.fill(2, CHITS_11));
+  private static final Map<String, Array<Chit>> P7_P8_CHITS =
       HashMap.of(
           "face-up-producing", P7_P8_FACE_UP_PRODUCING_CHITS,
           "face-down-land", P7_P8_FACE_DOWN_LAND_CHITS);

@@ -1,12 +1,12 @@
-package noelyap.setterforcatan.component.scenario;
+package noelyap.setterforcatan.scenario.seafarers;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.junit.jupiter.api.Test;
 
-public class BaseTest {
+public class HeadingForNewShoresTest {
   @Test
   public void shouldNotHaveInvalidSpecifications() {
-    assertThatCode(Base::new).doesNotThrowAnyException();
+    assertThatCode(HeadingForNewShores::new).doesNotThrowAnyException();
   }
 }

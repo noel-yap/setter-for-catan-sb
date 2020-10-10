@@ -1,4 +1,4 @@
-package noelyap.setterforcatan.component.scenario.seafarers;
+package noelyap.setterforcatan.scenario.seafarers;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
