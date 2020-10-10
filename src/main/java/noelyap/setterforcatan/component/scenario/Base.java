@@ -1,6 +1,11 @@
 package noelyap.setterforcatan.component.scenario;
 
-import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.BRICK_HARBOR;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_RIGHT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.RIGHT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.DESERT;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.FIELD;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.FOREST;
@@ -9,7 +14,6 @@ import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.GRAIN_HAR
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.HILL;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.LUMBER_HARBOR;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.MOUNTAIN;
-import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.ORE_HARBOR;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.PASTURE;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.WOOL_HARBOR;
 
@@ -21,7 +25,6 @@ import io.vavr.collection.Map;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
-import noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import noelyap.setterforcatan.util.ChitUtils;
 import noelyap.setterforcatan.util.CoordinateUtils;
@@ -37,28 +40,22 @@ public class Base {
               .appendAll(TileUtils.newTiles(3, HILL))
               .appendAll(TileUtils.newTiles(3, MOUNTAIN)),
           false);
-  public static final Tuple2<Array<Tile>, Boolean> P3_P4_DESERT_TILES =
+  public static final Tuple2<Array<Tile>, Boolean> P3_P4_BARREN_TILES =
       Tuple.of(Array.of(TileUtils.newTile(DESERT)), true);
   public static final Tuple2<Array<Tile>, Boolean> P3_P4_HARBOR_TILES =
       Tuple.of(
-          TileUtils.newTiles(4, GENERIC_HARBOR)
-              .append(TileUtils.newTile(GRAIN_HARBOR))
-              .append(TileUtils.newTile(LUMBER_HARBOR))
-              .append(TileUtils.newTile(WOOL_HARBOR))
-              .append(TileUtils.newTile(BRICK_HARBOR))
-              .append(TileUtils.newTile(ORE_HARBOR)),
-          true);
+          TileUtils.newTiles(4, GENERIC_HARBOR).appendAll(TileUtils.TWO_FOR_ONE_HARBORS), true);
   public static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_P4_TILES =
       HashMap.of(
-          "producing-terrain",
+          "producing",
           P3_P4_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
-          P3_P4_DESERT_TILES,
+          P3_P4_BARREN_TILES,
           "harbor",
           P3_P4_HARBOR_TILES);
 
-  public static final Array<Coordinate> P3_P4_TERRAIN_COORDINATES =
-      CoordinateUtils.newCoordinates(
+  public static final Array<Coordinate> P3_P4_LAND_COORDINATES =
+      Array.of(
           CoordinateUtils.newCoordinate(3, 1),
           CoordinateUtils.newCoordinate(5, 1),
           CoordinateUtils.newCoordinate(7, 1),
@@ -79,29 +76,28 @@ public class Base {
           CoordinateUtils.newCoordinate(5, 5),
           CoordinateUtils.newCoordinate(7, 5));
   public static final Array<Coordinate> P3_P4_HARBOR_COORDINATES =
-      CoordinateUtils.newCoordinates(
-          CoordinateUtils.newCoordinate(2, 0, Edge.Position.BOTTOM_RIGHT),
-          CoordinateUtils.newCoordinate(6, 0, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(9, 1, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(0, 2, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(11, 3, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(0, 4, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(9, 5, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(6, 6, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(2, 6, Edge.Position.TOP_RIGHT));
+      Array.of(
+          CoordinateUtils.newCoordinate(2, 0, BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(6, 0, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(9, 1, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(0, 2, RIGHT),
+          CoordinateUtils.newCoordinate(11, 3, LEFT),
+          CoordinateUtils.newCoordinate(0, 4, RIGHT),
+          CoordinateUtils.newCoordinate(9, 5, TOP_LEFT),
+          CoordinateUtils.newCoordinate(6, 6, TOP_LEFT),
+          CoordinateUtils.newCoordinate(2, 6, TOP_RIGHT));
   public static final Array<Coordinate> P3_P4_FISHERY_COORDINATES =
-      CoordinateUtils.newCoordinates(
-          CoordinateUtils.newCoordinate(
-              4, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(1, 1, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
-          CoordinateUtils.newCoordinate(10, 2, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(10, 4, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(1, 5, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(4, 6, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
+      Array.of(
+          CoordinateUtils.newCoordinate(4, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(1, 1, RIGHT, BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(10, 2, BOTTOM_LEFT, LEFT),
+          CoordinateUtils.newCoordinate(10, 4, LEFT, TOP_LEFT),
+          CoordinateUtils.newCoordinate(1, 5, TOP_RIGHT, RIGHT),
+          CoordinateUtils.newCoordinate(4, 6, TOP_LEFT, TOP_RIGHT));
   public static final Map<String, Array<Coordinate>> P3_P4_COORDINATES =
-      HashMap.of("terrain", P3_P4_TERRAIN_COORDINATES, "harbor", P3_P4_HARBOR_COORDINATES);
+      HashMap.of("land", P3_P4_LAND_COORDINATES, "harbor", P3_P4_HARBOR_COORDINATES);
 
-  public static final Array<Chit> P3_P4_PRODUCING_TERRAIN_CHITS =
+  public static final Array<Chit> P3_P4_PRODUCING_CHITS =
       Array.of(ChitUtils.CHITS_2, ChitUtils.CHITS_12)
           .appendAll(Array.fill(2, ChitUtils.CHITS_3))
           .appendAll(Array.fill(2, ChitUtils.CHITS_4))
@@ -112,7 +108,7 @@ public class Base {
           .appendAll(Array.fill(2, ChitUtils.CHITS_10))
           .appendAll(Array.fill(2, ChitUtils.CHITS_11));
   public static final Map<String, Array<Chit>> P3_P4_CHITS =
-      HashMap.of("producing-terrain", P3_P4_PRODUCING_TERRAIN_CHITS);
+      HashMap.of("producing", P3_P4_PRODUCING_CHITS);
 
   private static final SpecificationImpl.Builder P3_P4_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -121,9 +117,8 @@ public class Base {
           P3_P4_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry(
-                  "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
-          HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
+              TileMappingUtils.newEntry("land", "producing", TileUtils.DESERT_OR_LAKE_NAME)),
+          HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing")));
 
   public static final SpecificationImpl P3_P4_SPECIFICATION_IMPL =
       P3_P4_SPECIFICATION_BUILDER.build();
@@ -140,7 +135,7 @@ public class Base {
               .appendAll(TileUtils.newTiles(2, HILL))
               .appendAll(TileUtils.newTiles(2, MOUNTAIN)),
           false);
-  public static final Tuple2<Array<Tile>, Boolean> P5_P6_DESERT_TILES =
+  public static final Tuple2<Array<Tile>, Boolean> P5_P6_BARREN_LAND_TILES =
       Tuple.of(TileUtils.newTiles(2, DESERT), true);
   public static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES =
       Tuple.of(
@@ -151,15 +146,15 @@ public class Base {
           true);
   public static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
       HashMap.of(
-          "producing-terrain",
+          "producing",
           P5_P6_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
-          P5_P6_DESERT_TILES,
+          P5_P6_BARREN_LAND_TILES,
           "harbor",
           P5_P6_HARBOR_TILES);
 
-  public static final Array<Coordinate> P5_P6_TERRAIN_COORDINATES =
-      CoordinateUtils.newCoordinates(
+  public static final Array<Coordinate> P5_P6_LAND_COORDINATES =
+      Array.of(
           CoordinateUtils.newCoordinate(5, 1),
           CoordinateUtils.newCoordinate(7, 1),
           CoordinateUtils.newCoordinate(9, 1),
@@ -191,34 +186,33 @@ public class Base {
           CoordinateUtils.newCoordinate(7, 7),
           CoordinateUtils.newCoordinate(9, 7));
   public static final Array<Coordinate> P5_P6_HARBOR_COORDINATES =
-      CoordinateUtils.newCoordinates(
-          CoordinateUtils.newCoordinate(4, 0, Edge.Position.BOTTOM_RIGHT),
-          CoordinateUtils.newCoordinate(8, 0, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(11, 1, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(1, 3, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(14, 4, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(1, 5, Edge.Position.TOP_RIGHT),
-          CoordinateUtils.newCoordinate(2, 6, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(12, 6, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(11, 7, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(8, 8, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(4, 8, Edge.Position.TOP_RIGHT));
+      Array.of(
+          CoordinateUtils.newCoordinate(4, 0, BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(8, 0, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(11, 1, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(1, 3, RIGHT),
+          CoordinateUtils.newCoordinate(14, 4, LEFT),
+          CoordinateUtils.newCoordinate(1, 5, TOP_RIGHT),
+          CoordinateUtils.newCoordinate(2, 6, RIGHT),
+          CoordinateUtils.newCoordinate(12, 6, TOP_LEFT),
+          CoordinateUtils.newCoordinate(11, 7, LEFT),
+          CoordinateUtils.newCoordinate(8, 8, TOP_LEFT),
+          CoordinateUtils.newCoordinate(4, 8, TOP_RIGHT));
   public static final Array<Coordinate> P5_P6_FISHERY_COORDINATES =
-      CoordinateUtils.newCoordinates(
-          CoordinateUtils.newCoordinate(
-              6, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(4, 2, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(11, 3, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(3, 5, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(13, 5, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(10, 6, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
-          CoordinateUtils.newCoordinate(3, 7, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(6, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
+      Array.of(
+          CoordinateUtils.newCoordinate(6, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(4, 2, LEFT, TOP_LEFT),
+          CoordinateUtils.newCoordinate(11, 3, TOP_RIGHT, RIGHT),
+          CoordinateUtils.newCoordinate(3, 5, BOTTOM_LEFT, LEFT),
+          CoordinateUtils.newCoordinate(13, 5, LEFT, TOP_LEFT),
+          CoordinateUtils.newCoordinate(10, 6, RIGHT, BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(3, 7, TOP_RIGHT, RIGHT),
+          CoordinateUtils.newCoordinate(6, 8, TOP_LEFT, TOP_RIGHT));
   public static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
-      HashMap.of("terrain", P5_P6_TERRAIN_COORDINATES, "harbor", P5_P6_HARBOR_COORDINATES);
+      HashMap.of("land", P5_P6_LAND_COORDINATES, "harbor", P5_P6_HARBOR_COORDINATES);
 
-  public static final Array<Chit> P5_P6_PRODUCING_TERRAIN_CHITS =
-      P3_P4_PRODUCING_TERRAIN_CHITS.appendAll(
+  public static final Array<Chit> P5_P6_PRODUCING_CHITS =
+      P3_P4_PRODUCING_CHITS.appendAll(
           Array.of(
               ChitUtils.CHITS_2,
               ChitUtils.CHITS_3,
@@ -231,7 +225,7 @@ public class Base {
               ChitUtils.CHITS_11,
               ChitUtils.CHITS_12));
   public static final Map<String, Array<Chit>> P5_P6_CHITS =
-      HashMap.of("producing-terrain", P5_P6_PRODUCING_TERRAIN_CHITS);
+      HashMap.of("producing", P5_P6_PRODUCING_CHITS);
 
   private static final SpecificationImpl.Builder P5_P6_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -240,9 +234,8 @@ public class Base {
           P5_P6_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry(
-                  "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
-          HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
+              TileMappingUtils.newEntry("land", "producing", TileUtils.DESERT_OR_LAKE_NAME)),
+          HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing")));
 
   public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.build();
@@ -251,7 +244,7 @@ public class Base {
 
   public static final Tuple2<Array<Tile>, Boolean> P7_P8_PRODUCING_TILES =
       Tuple.of(P3_P4_PRODUCING_TILES._1.appendAll(P3_P4_PRODUCING_TILES._1), false);
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_DESERT_TILES = P3_P4_DESERT_TILES;
+  public static final Tuple2<Array<Tile>, Boolean> P7_P8_BARREN_LAND_TILES = P3_P4_BARREN_TILES;
   public static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES =
       Tuple.of(
           P3_P4_HARBOR_TILES
@@ -262,15 +255,15 @@ public class Base {
           true);
   public static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
       HashMap.of(
-          "producing-terrain",
+          "producing",
           P7_P8_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
-          P7_P8_DESERT_TILES,
+          P7_P8_BARREN_LAND_TILES,
           "harbor",
           P7_P8_HARBOR_TILES);
 
-  public static final Array<Coordinate> P7_P8_TERRAIN_COORDINATES =
-      CoordinateUtils.newCoordinates(
+  public static final Array<Coordinate> P7_P8_LAND_COORDINATES =
+      Array.of(
           CoordinateUtils.newCoordinate(5, 1),
           CoordinateUtils.newCoordinate(7, 1),
           CoordinateUtils.newCoordinate(9, 1),
@@ -309,38 +302,36 @@ public class Base {
           CoordinateUtils.newCoordinate(9, 7),
           CoordinateUtils.newCoordinate(11, 7));
   public static final Array<Coordinate> P7_P8_HARBOR_COORDINATES =
-      CoordinateUtils.newCoordinates(
-          CoordinateUtils.newCoordinate(4, 0, Edge.Position.BOTTOM_RIGHT),
-          CoordinateUtils.newCoordinate(8, 0, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(10, 0, Edge.Position.BOTTOM_RIGHT),
-          CoordinateUtils.newCoordinate(13, 1, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(1, 3, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(16, 4, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(1, 5, Edge.Position.TOP_RIGHT),
-          CoordinateUtils.newCoordinate(2, 6, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(14, 6, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(13, 7, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(4, 8, Edge.Position.TOP_RIGHT),
-          CoordinateUtils.newCoordinate(10, 8, Edge.Position.TOP_LEFT));
+      Array.of(
+          CoordinateUtils.newCoordinate(4, 0, BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(8, 0, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(10, 0, BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(13, 1, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(1, 3, RIGHT),
+          CoordinateUtils.newCoordinate(16, 4, LEFT),
+          CoordinateUtils.newCoordinate(1, 5, TOP_RIGHT),
+          CoordinateUtils.newCoordinate(2, 6, RIGHT),
+          CoordinateUtils.newCoordinate(14, 6, TOP_LEFT),
+          CoordinateUtils.newCoordinate(13, 7, LEFT),
+          CoordinateUtils.newCoordinate(4, 8, TOP_RIGHT),
+          CoordinateUtils.newCoordinate(10, 8, TOP_LEFT));
   public static final Array<Coordinate> P7_P8_FISHERY_COORDINATES =
-      CoordinateUtils.newCoordinates(
-          CoordinateUtils.newCoordinate(
-              6, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(11, 1, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(2, 2, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
-          CoordinateUtils.newCoordinate(13, 3, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          CoordinateUtils.newCoordinate(3, 5, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
-          CoordinateUtils.newCoordinate(15, 5, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          CoordinateUtils.newCoordinate(
-              11, 7, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          CoordinateUtils.newCoordinate(6, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
+      Array.of(
+          CoordinateUtils.newCoordinate(6, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(11, 1, TOP_RIGHT, RIGHT),
+          CoordinateUtils.newCoordinate(2, 2, RIGHT, BOTTOM_RIGHT),
+          CoordinateUtils.newCoordinate(13, 3, TOP_RIGHT, RIGHT),
+          CoordinateUtils.newCoordinate(3, 5, BOTTOM_LEFT, LEFT),
+          CoordinateUtils.newCoordinate(15, 5, LEFT, TOP_LEFT),
+          CoordinateUtils.newCoordinate(11, 7, BOTTOM_RIGHT, BOTTOM_LEFT),
+          CoordinateUtils.newCoordinate(6, 8, TOP_LEFT, TOP_RIGHT));
   public static final Map<String, Array<Coordinate>> P7_P8_COORDINATES =
-      HashMap.of("terrain", P7_P8_TERRAIN_COORDINATES, "harbor", P7_P8_HARBOR_COORDINATES);
+      HashMap.of("land", P7_P8_LAND_COORDINATES, "harbor", P7_P8_HARBOR_COORDINATES);
 
-  public static final Array<Chit> P7_P8_PRODUCING_TERRAIN_CHITS =
-      P3_P4_PRODUCING_TERRAIN_CHITS.appendAll(P3_P4_PRODUCING_TERRAIN_CHITS);
+  public static final Array<Chit> P7_P8_PRODUCING_CHITS =
+      P3_P4_PRODUCING_CHITS.appendAll(P3_P4_PRODUCING_CHITS);
   public static final Map<String, Array<Chit>> P7_P8_CHITS =
-      HashMap.of("producing-terrain", P7_P8_PRODUCING_TERRAIN_CHITS);
+      HashMap.of("producing", P7_P8_PRODUCING_CHITS);
 
   public static final SpecificationImpl.Builder P7_P8_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -349,9 +340,8 @@ public class Base {
           P7_P8_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry(
-                  "terrain", "producing-terrain", TileUtils.DESERT_OR_LAKE_NAME)),
-          HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing-terrain")));
+              TileMappingUtils.newEntry("land", "producing", TileUtils.DESERT_OR_LAKE_NAME)),
+          HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing")));
 
   public static final SpecificationImpl P7_P8_SPECIFICATION_IMPL =
       P7_P8_SPECIFICATION_BUILDER.build();

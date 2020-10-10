@@ -1,5 +1,7 @@
 package noelyap.setterforcatan.grader;
 
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Face.*;
+
 import com.google.common.annotations.VisibleForTesting;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -43,31 +45,28 @@ public class UniformOddsGrader implements GraderStrategy {
   static Grade gradeConfiguration(
       final Array<Configuration> configurations,
       final Array<Tuple2<Integer, Integer>> validOddsRanges) {
-    final Array<Coordinate> coordinates = configurations.map(c -> c.getCoordinate());
+    final Array<Coordinate> coordinates = configurations.map(Configuration::getCoordinate);
 
     final Map<Tuple3<Integer, Integer, Vertex.Position>, Integer> coordinateOddsMap =
         HashMap.ofEntries(
             configurations
-                .map(c -> {
-                      return Tuple.of(c.getCoordinate(), ChitUtils.odds(c.getChit()));
-                    })
-                .filter(t2 -> t2._2 != 0) // Filter out chitless coordinates.
+                .map(c -> Tuple.of(c.getCoordinate(), ChitUtils.odds(c.getChit())))
+                .filter(t2 -> t2._2 > 0) // Filter out chitless coordinates.
                 .flatMap(t2 -> {
                       final Coordinate coordinate = t2._1;
                       final int odds = t2._2;
 
                       return Array.ofAll(coordinate.getVertexPositionsList())
-                          .map(vp -> {
-                                return Tuple.of(
-                                    Tuple.of(coordinate.getX(), coordinate.getY(), vp), odds);
-                              });
+                          .map(vp ->
+                                  Tuple.of(
+                                      Tuple.of(coordinate.getX(), coordinate.getY(), vp), odds));
                     }));
 
-    final Set<Integer> xs = HashSet.ofAll(coordinates.map(c -> c.getX()));
+    final Set<Integer> xs = HashSet.ofAll(coordinates.map(Coordinate::getX));
     final int minX = xs.min().get();
     final int maxX = xs.max().get();
 
-    final Set<Integer> ys = HashSet.ofAll(coordinates.map(c -> c.getY()));
+    final Set<Integer> ys = HashSet.ofAll(coordinates.map(Coordinate::getY));
     final int minY = ys.min().get();
     final int maxY = ys.max().get();
 
@@ -83,14 +82,14 @@ public class UniformOddsGrader implements GraderStrategy {
                               Tuple.of(x, y, Vertex.Position.TOP),
                               Tuple.of(x - 1, y - 1, Vertex.Position.BOTTOM_RIGHT),
                               Tuple.of(x + 1, y - 1, Vertex.Position.BOTTOM_LEFT))
-                          .map(t3 -> coordinateOddsMap.get(t3))
+                          .map(coordinateOddsMap::get)
                           .flatMap(o -> o);
                   final Array<Integer> topRightVertexContributions =
                       Array.of(
                               Tuple.of(x, y, Vertex.Position.TOP_RIGHT),
                               Tuple.of(x + 1, y - 1, Vertex.Position.BOTTOM),
                               Tuple.of(x + 2, y, Vertex.Position.TOP_LEFT))
-                          .map(t3 -> coordinateOddsMap.get(t3))
+                          .map(coordinateOddsMap::get)
                           .flatMap(o -> o);
 
                   return Array.of(topVertexContributions, topRightVertexContributions);
