@@ -14,7 +14,7 @@ import io.vavr.collection.Multimap;
 import io.vavr.collection.Set;
 import io.vavr.control.Option;
 import noelyap.setterforcatan.component.SpecificationImpl.InvalidSpecificationError;
-import noelyap.setterforcatan.matcher.HasHighOdds;
+import noelyap.setterforcatan.matcher.HasOddsGreaterThan;
 import noelyap.setterforcatan.matcher.IsTileType;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
@@ -616,7 +616,9 @@ public class SpecificationImplTest {
                 HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("single")))
             .withConfigurationMatcher(
                 IsNot.not(
-                    AllOf.allOf(IsTileType.isTileType(GOLD_FIELD), HasHighOdds.hasHighOdds())))
+                    AllOf.allOf(
+                        IsTileType.isTileType(GOLD_FIELD),
+                        HasOddsGreaterThan.hasOddsGreaterThan(4))))
             .build();
 
     final Option<Array<Configuration>> actual = specification.toConfiguration();

@@ -40,8 +40,8 @@ public class Base {
               .appendAll(TileUtils.newTiles(3, HILL))
               .appendAll(TileUtils.newTiles(3, MOUNTAIN)),
           false);
-  public static final Tuple2<Array<Tile>, Boolean> P3_P4_BARREN_TILES =
-      Tuple.of(Array.of(TileUtils.newTile(DESERT)), true);
+  public static final Tuple2<Array<Tile>, Boolean> P3_P4_UNBEARING_TILES =
+      Tuple.of(TileUtils.newTiles(DESERT), true);
   public static final Tuple2<Array<Tile>, Boolean> P3_P4_HARBOR_TILES =
       Tuple.of(
           TileUtils.newTiles(4, GENERIC_HARBOR).appendAll(TileUtils.TWO_FOR_ONE_HARBORS), true);
@@ -50,7 +50,7 @@ public class Base {
           "producing",
           P3_P4_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
-          P3_P4_BARREN_TILES,
+          P3_P4_UNBEARING_TILES,
           "harbor",
           P3_P4_HARBOR_TILES);
 
@@ -135,7 +135,7 @@ public class Base {
               .appendAll(TileUtils.newTiles(2, HILL))
               .appendAll(TileUtils.newTiles(2, MOUNTAIN)),
           false);
-  public static final Tuple2<Array<Tile>, Boolean> P5_P6_BARREN_LAND_TILES =
+  public static final Tuple2<Array<Tile>, Boolean> P5_P6_UNBEARING_LAND_TILES =
       Tuple.of(TileUtils.newTiles(2, DESERT), true);
   public static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES =
       Tuple.of(
@@ -149,7 +149,7 @@ public class Base {
           "producing",
           P5_P6_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
-          P5_P6_BARREN_LAND_TILES,
+          P5_P6_UNBEARING_LAND_TILES,
           "harbor",
           P5_P6_HARBOR_TILES);
 
@@ -244,7 +244,8 @@ public class Base {
 
   public static final Tuple2<Array<Tile>, Boolean> P7_P8_PRODUCING_TILES =
       Tuple.of(P3_P4_PRODUCING_TILES._1.appendAll(P3_P4_PRODUCING_TILES._1), false);
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_BARREN_LAND_TILES = P3_P4_BARREN_TILES;
+  public static final Tuple2<Array<Tile>, Boolean> P7_P8_UNBEARING_LAND_TILES =
+      P3_P4_UNBEARING_TILES;
   public static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES =
       Tuple.of(
           P3_P4_HARBOR_TILES
@@ -258,7 +259,7 @@ public class Base {
           "producing",
           P7_P8_PRODUCING_TILES,
           TileUtils.DESERT_OR_LAKE_NAME,
-          P7_P8_BARREN_LAND_TILES,
+          P7_P8_UNBEARING_LAND_TILES,
           "harbor",
           P7_P8_HARBOR_TILES);
 

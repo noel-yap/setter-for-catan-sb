@@ -1,11 +1,13 @@
 package noelyap.setterforcatan.grader;
 
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.GOLD_FIELD;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.LAKE;
+
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import noelyap.setterforcatan.grader.GraderStrategy.Grade;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
-import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import noelyap.setterforcatan.util.ChitUtils;
 import noelyap.setterforcatan.util.ConfigurationUtils;
 import noelyap.setterforcatan.util.CoordinateUtils;
@@ -22,15 +24,15 @@ class UniformOddsGraderTest {
     final Array<Configuration> configurations =
         Array.of(
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.GOLD_FIELD),
+                TileUtils.newTile(GOLD_FIELD),
                 CoordinateUtils.newCoordinate(1, 1),
                 ChitUtils.newChit(2)),
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.GOLD_FIELD),
+                TileUtils.newTile(GOLD_FIELD),
                 CoordinateUtils.newCoordinate(1, 3),
                 ChitUtils.newChit(4)),
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.GOLD_FIELD),
+                TileUtils.newTile(GOLD_FIELD),
                 CoordinateUtils.newCoordinate(2, 2),
                 ChitUtils.newChit(8)));
     final Array<Tuple2<Integer, Integer>> validOddsRanges =
@@ -47,15 +49,13 @@ class UniformOddsGraderTest {
     final Array<Configuration> configurations =
         Array.of(
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.LAKE),
+                TileUtils.newTile(LAKE),
                 CoordinateUtils.newCoordinate(1, 1),
                 ChitUtils.CHITS_2_3_11_12),
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.LAKE),
-                CoordinateUtils.newCoordinate(1, 3),
-                ChitUtils.CHITS_4_10),
+                TileUtils.newTile(LAKE), CoordinateUtils.newCoordinate(1, 3), ChitUtils.CHITS_4_10),
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.LAKE),
+                TileUtils.newTile(LAKE),
                 CoordinateUtils.newCoordinate(2, 2),
                 ChitUtils.CHITS_2_3_11_12));
     final Array<Tuple2<Integer, Integer>> validOddsRanges =
@@ -72,15 +72,15 @@ class UniformOddsGraderTest {
     final Array<Configuration> configurations =
         Array.of(
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.GOLD_FIELD),
+                TileUtils.newTile(GOLD_FIELD),
                 CoordinateUtils.newCoordinate(2, 2),
                 ChitUtils.CHITS_2),
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.GOLD_FIELD),
+                TileUtils.newTile(GOLD_FIELD),
                 CoordinateUtils.newCoordinate(3, 1),
                 ChitUtils.CHITS_12),
             ConfigurationUtils.newConfiguration(
-                TileUtils.newTile(Tile.Type.GOLD_FIELD),
+                TileUtils.newTile(GOLD_FIELD),
                 CoordinateUtils.newCoordinate(4, 2),
                 ChitUtils.CHITS_2));
     final Array<Tuple2<Integer, Integer>> validOddsRanges =
