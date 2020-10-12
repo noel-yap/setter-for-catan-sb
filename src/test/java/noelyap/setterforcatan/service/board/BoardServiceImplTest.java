@@ -1,14 +1,14 @@
-package noelyap.setterforcatan.board;
+package noelyap.setterforcatan.service.board;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.control.Try;
-import noelyap.setterforcatan.board.protogen.GenerateBoardResponse;
 import noelyap.setterforcatan.protogen.BoardOuterClass.Board;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tiles;
+import noelyap.setterforcatan.service.board.protogen.GenerateBoardResponse;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.Test;

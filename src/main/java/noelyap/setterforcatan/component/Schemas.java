@@ -8,6 +8,7 @@ import noelyap.setterforcatan.protogen.ScenarioOuterClass;
 import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.scenario.seafarers.HeadingForNewShores;
 import noelyap.setterforcatan.scenario.seafarers.Oceania;
+import noelyap.setterforcatan.scenario.seafarers.TheForgottenTribe;
 import noelyap.setterforcatan.scenario.seafarers.TheNIslands;
 import noelyap.setterforcatan.scenario.seafarers.ThroughTheDesert;
 import org.apache.commons.lang3.Range;
@@ -92,5 +93,19 @@ public class Schemas {
                   Range.between(7, 8),
                   Tuple.of(
                       ThroughTheDesert.P7_P8_SPECIFICATION_IMPL,
-                      ThroughTheDesert.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
+                      ThroughTheDesert.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
+              ScenarioOuterClass.Scenario.SEAFARERS_THE_FORGOTTEN_TRIBE,
+              HashMap.of(
+                  Range.between(3, 4),
+                  Tuple.of(
+                      TheForgottenTribe.P3_P4_SPECIFICATION_IMPL,
+                      TheForgottenTribe.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(5, 6),
+                  Tuple.of(
+                      TheForgottenTribe.P5_P6_SPECIFICATION_IMPL,
+                      TheForgottenTribe.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(7, 8),
+                  Tuple.of(
+                      TheForgottenTribe.P7_P8_SPECIFICATION_IMPL,
+                      TheForgottenTribe.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 }

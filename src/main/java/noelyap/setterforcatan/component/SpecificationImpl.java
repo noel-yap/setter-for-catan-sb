@@ -492,11 +492,8 @@ public class SpecificationImpl {
                       final Array<Coordinate> coordinates =
                           Array.ofAll(tileCoordinateMap.get(tile).get());
                       final Array<Chit> chits =
-                          Array.ofAll(
-                              tileChitsMap
-                                  .get(tile)
-                                  .getOrElse(
-                                      Array.fill(coordinates.length(), Chit.newBuilder().build())));
+                          Array.ofAll(tileChitsMap.get(tile).getOrElse(Array.empty()))
+                              .padTo(coordinates.length(), Chit.newBuilder().build());
 
                       return coordinates
                           .zip(chits)

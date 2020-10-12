@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ThroughTheDesertTest {
+public class TheForgottenTribeTest {
   @Test
   @DisplayName("Should not have invalid specifications.")
   public void shouldNotHaveInvalidSpecifications() {
-    assertThatCode(ThroughTheDesert::new).doesNotThrowAnyException();
+    assertThatCode(TheForgottenTribe::new).doesNotThrowAnyException();
   }
 }

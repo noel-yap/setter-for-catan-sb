@@ -15,12 +15,7 @@ public class TileUtils {
   public static final String LAKE_NAME = "«LAKE»";
 
   public static final Array<Tile> TWO_FOR_ONE_HARBORS =
-      Array.of(
-          TileUtils.newTile(GRAIN_HARBOR),
-          TileUtils.newTile(LUMBER_HARBOR),
-          TileUtils.newTile(WOOL_HARBOR),
-          TileUtils.newTile(BRICK_HARBOR),
-          TileUtils.newTile(ORE_HARBOR));
+      TileUtils.newTiles(GRAIN_HARBOR, LUMBER_HARBOR, WOOL_HARBOR, BRICK_HARBOR, ORE_HARBOR);
 
   public static Tile newTile(final Tile.Type type) {
     return Tile.newBuilder().setType(type).build();
@@ -28,5 +23,9 @@ public class TileUtils {
 
   public static Array<Tile> newTiles(final int n, final Tile.Type type) {
     return Array.fill(n, newTile(type));
+  }
+
+  public static Array<Tile> newTiles(final Tile.Type... types) {
+    return Array.of(types).map(TileUtils::newTile);
   }
 }
