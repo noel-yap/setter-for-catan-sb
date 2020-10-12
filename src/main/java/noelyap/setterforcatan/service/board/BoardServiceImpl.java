@@ -59,7 +59,14 @@ public class BoardServiceImpl extends BoardServiceImplBase {
         noelyap.setterforcatan.util.SchemaUtils.toSpecification(
             schema.getScenario(), schema.getPlayerCount(), schema.getFishermenOfCatan());
 
-    return newBoard(specificationImpl.toProto(), compositeGrader);
+    return newBoard(specificationImpl, compositeGrader);
+  }
+
+  private static Tuple2<Specification, Board> newBoard(
+      final SpecificationImpl specificationImpl, final CompositeGrader compositeGrader) {
+    final BoardGenerator boardGenerator = new BoardGenerator(specificationImpl, compositeGrader);
+
+    return Tuple.of(specificationImpl.toProto(), boardGenerator.generateBoard());
   }
 
   private static Tuple2<Specification, Board> newBoard(
