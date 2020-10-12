@@ -1,7 +1,7 @@
 package noelyap.setterforcatan.matcher;
 
+import noelyap.setterforcatan.component.Chits;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
-import noelyap.setterforcatan.util.ChitUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -18,7 +18,7 @@ public class HasOddsLessThan extends TypeSafeMatcher<Configuration> {
 
   @Override
   public boolean matchesSafely(final Configuration configuration) {
-    return ChitUtils.odds(configuration.getChit()) < oddsThreshold;
+    return Chits.odds(configuration.getChit()) < oddsThreshold;
   }
 
   @Override

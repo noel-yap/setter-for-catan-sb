@@ -1,4 +1,4 @@
-package noelyap.setterforcatan.util;
+package noelyap.setterforcatan.component;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -7,17 +7,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario;
 import org.junit.jupiter.api.Test;
 
-public class SchemaUtilsTest {
+public class SchemasTest {
   @Test
   public void shouldNotHaveInvalidSpecifications() {
-    assertThatCode(SchemaUtils::new).doesNotThrowAnyException();
+    assertThatCode(Schemas::new).doesNotThrowAnyException();
   }
 
   @Test
   public void shouldHandleUnrecognizedScenario() {
     final Scenario scenario = Scenario.UNRECOGNIZED;
 
-    assertThatThrownBy(() -> SchemaUtils.toSpecification(scenario, 3, false))
+    assertThatThrownBy(() -> Schemas.toSpecification(scenario, 3, false))
         .isInstanceOf(InternalError.class)
         .hasMessage("Unrecognized Scenario `UNRECOGNIZED`.");
   }
@@ -26,7 +26,7 @@ public class SchemaUtilsTest {
   public void shouldHandleUnimplementedScenario() {
     final Scenario scenario = Scenario.NOT_IMPLEMENTED;
 
-    assertThatThrownBy(() -> SchemaUtils.toSpecification(scenario, 3, false))
+    assertThatThrownBy(() -> Schemas.toSpecification(scenario, 3, false))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Scenario `NOT_IMPLEMENTED` not yet implemented.");
   }
@@ -35,7 +35,7 @@ public class SchemaUtilsTest {
   public void shouldHandleUnimplementedPlayerCount() {
     final Scenario scenario = Scenario.BASE;
 
-    assertThatThrownBy(() -> SchemaUtils.toSpecification(scenario, 0, false))
+    assertThatThrownBy(() -> Schemas.toSpecification(scenario, 0, false))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("0 number of players specification not found for Scenario `BASE`.");
   }
@@ -44,6 +44,6 @@ public class SchemaUtilsTest {
   public void shouldCreateScenario() {
     final Scenario scenario = Scenario.BASE;
 
-    assertThat(SchemaUtils.toSpecification(scenario, 4, true)).isNotNull();
+    assertThat(Schemas.toSpecification(scenario, 4, true)).isNotNull();
   }
 }

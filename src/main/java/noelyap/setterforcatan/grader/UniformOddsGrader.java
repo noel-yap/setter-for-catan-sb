@@ -1,7 +1,5 @@
 package noelyap.setterforcatan.grader;
 
-import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Face.*;
-
 import com.google.common.annotations.VisibleForTesting;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -12,10 +10,10 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import io.vavr.collection.Stream;
+import noelyap.setterforcatan.component.Chits;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex;
-import noelyap.setterforcatan.util.ChitUtils;
 import org.apache.commons.lang3.Range;
 
 public class UniformOddsGrader implements GraderStrategy {
@@ -49,7 +47,7 @@ public class UniformOddsGrader implements GraderStrategy {
     final Map<Tuple3<Integer, Integer, Vertex.Position>, Integer> coordinateOddsMap =
         HashMap.ofEntries(
             configurations
-                .map(c -> Tuple.of(c.getCoordinate(), ChitUtils.odds(c.getChit())))
+                .map(c -> Tuple.of(c.getCoordinate(), Chits.odds(c.getChit())))
                 .flatMap(t2 -> {
                       final Coordinate coordinate = t2._1;
                       final int odds = t2._2;

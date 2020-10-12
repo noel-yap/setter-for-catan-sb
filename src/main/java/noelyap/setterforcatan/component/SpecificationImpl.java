@@ -1,5 +1,17 @@
 package noelyap.setterforcatan.component;
 
+import static noelyap.setterforcatan.component.Chits.CHITS_2_3_11_12;
+import static noelyap.setterforcatan.component.Chits.CHITS_4_10;
+import static noelyap.setterforcatan.component.Chits.CHIT_10;
+import static noelyap.setterforcatan.component.Chits.CHIT_4;
+import static noelyap.setterforcatan.component.Chits.CHIT_5;
+import static noelyap.setterforcatan.component.Chits.CHIT_6;
+import static noelyap.setterforcatan.component.Chits.CHIT_8;
+import static noelyap.setterforcatan.component.Chits.CHIT_9;
+import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
+import static noelyap.setterforcatan.component.Tiles.FISHERY_NAME;
+import static noelyap.setterforcatan.component.Tiles.LAKE_NAME;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vavr.Function4;
@@ -26,11 +38,10 @@ import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinates;
 import noelyap.setterforcatan.protogen.MarkerOuterClass.Marker;
 import noelyap.setterforcatan.protogen.SpecificationOuterClass.ChitsTilesMapping;
 import noelyap.setterforcatan.protogen.SpecificationOuterClass.CoordinateTilesMapping;
+import noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tiles;
-import noelyap.setterforcatan.util.ChitUtils;
 import noelyap.setterforcatan.util.MersenneTwister;
-import noelyap.setterforcatan.util.TileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 
@@ -87,44 +98,37 @@ public class SpecificationImpl {
 
     public Builder withFisheries(final Array<Coordinate> fisheryCoordinates) {
       final Tile fisheryTile = Tile.newBuilder().setType(Tile.Type.FISHERY).build();
-      final Stream<Chit> fisheryChits = Stream.of(4, 10, 5, 9, 6, 8, 5, 9).map(ChitUtils::newChit);
+      final Stream<Chit> fisheryChits =
+          Stream.of(CHIT_4, CHIT_10, CHIT_5, CHIT_9, CHIT_6, CHIT_8, CHIT_5, CHIT_9);
 
       final Tile lakeTile = Tile.newBuilder().setType(Tile.Type.LAKE).build();
-      final Stream<Chit> lakeChits =
-          Stream.of(ChitUtils.newChit(2, 3, 11, 12), ChitUtils.newChit(4, 10));
+      final Stream<Chit> lakeChits = Stream.of(CHITS_2_3_11_12, CHITS_4_10);
 
-      final int desertCount =
-          tiles.get(TileUtils.DESERT_OR_LAKE_NAME).map(t2 -> t2._1.size()).getOrElse(0);
+      final int desertCount = tiles.get(DESERT_OR_LAKE_NAME).map(t2 -> t2._1.size()).getOrElse(0);
       final int fisheryCount = fisheryCoordinates.size();
 
       final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
           this.tiles
-              .filter(t2 -> !TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1))
-              .put(TileUtils.LAKE_NAME, Tuple.of(Array.fill(desertCount, lakeTile), false))
-              .filter(t2 -> desertCount > 0 || !t2._1.equals(TileUtils.LAKE_NAME))
-              .put(TileUtils.FISHERY_NAME, Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
+              .filter(t2 -> !DESERT_OR_LAKE_NAME.equals(t2._1))
+              .put(LAKE_NAME, Tuple.of(Array.fill(desertCount, lakeTile), false))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(LAKE_NAME))
+              .put(FISHERY_NAME, Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
 
       final Map<String, Array<Chit>> chits =
           this.chits
-              .put(TileUtils.LAKE_NAME, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
-              .filter(t2 -> desertCount > 0 || !t2._1.equals(TileUtils.LAKE_NAME))
-              .put(
-                  TileUtils.FISHERY_NAME, Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
+              .put(LAKE_NAME, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(LAKE_NAME))
+              .put(FISHERY_NAME, Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
       final Map<String, Array<String>> chitsTilesMap =
           this.chitsTilesMap
-              .put(TileUtils.LAKE_NAME, Array.of(TileUtils.LAKE_NAME))
-              .filter(t2 -> desertCount > 0 || !t2._1.equals(TileUtils.LAKE_NAME))
-              .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
+              .put(LAKE_NAME, Array.of(LAKE_NAME))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(LAKE_NAME))
+              .put(FISHERY_NAME, Array.of(FISHERY_NAME));
 
       final Map<String, Array<Coordinate>> coordinates =
           HashMap.ofEntries(
-                  this.coordinates.map(t2 ->
-                          Tuple.of(
-                              TileUtils.DESERT_OR_LAKE_NAME.equals(t2._1)
-                                  ? TileUtils.LAKE_NAME
-                                  : t2._1,
-                              t2._2)))
-              .put(TileUtils.FISHERY_NAME, fisheryCoordinates);
+                  this.coordinates.map(t2 -> Tuple.of(DESERT_OR_LAKE_NAME.equals(t2._1) ? LAKE_NAME : t2._1, t2._2)))
+              .put(FISHERY_NAME, fisheryCoordinates);
       final Map<String, Array<String>> coordinatesTilesMap =
           HashMap.ofEntries(
                   this.coordinatesTilesMap.map(t2 -> {
@@ -132,13 +136,10 @@ public class SpecificationImpl {
                         final Array<String> value = t2._2;
 
                         return Tuple.of(
-                            TileUtils.DESERT_OR_LAKE_NAME.equals(key) ? TileUtils.LAKE_NAME : key,
-                            value.map(v ->
-                                    TileUtils.DESERT_OR_LAKE_NAME.equals(v)
-                                        ? TileUtils.LAKE_NAME
-                                        : v));
+                            DESERT_OR_LAKE_NAME.equals(key) ? LAKE_NAME : key,
+                            value.map(v -> DESERT_OR_LAKE_NAME.equals(v) ? LAKE_NAME : v));
                       }))
-              .put(TileUtils.FISHERY_NAME, Array.of(TileUtils.FISHERY_NAME));
+              .put(FISHERY_NAME, Array.of(FISHERY_NAME));
 
       return new Builder(
           tiles,
@@ -173,9 +174,7 @@ public class SpecificationImpl {
   private final Set<Marker> markers;
   private final Matcher<Configuration> configurationMatcher;
 
-  public static Builder newBuilder(
-      final noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification that)
-      throws InvalidSpecificationError {
+  public static Builder newBuilder(final Specification that) throws InvalidSpecificationError {
     return newBuilder(
         HashSet.ofAll(that.getTilesList()),
         HashSet.ofAll(that.getCoordinatesList()),
@@ -254,8 +253,8 @@ public class SpecificationImpl {
     return this.markers;
   }
 
-  public noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification toProto() {
-    return noelyap.setterforcatan.protogen.SpecificationOuterClass.Specification.newBuilder()
+  public Specification toProto() {
+    return Specification.newBuilder()
         .addAllTiles(
             tiles.map(t2 ->
                     Tiles.newBuilder()
@@ -489,6 +488,7 @@ public class SpecificationImpl {
             tileCoordinateMap
                 .keySet()
                 .flatMap(tile -> {
+                      // FIXME: This can potentially mix up different sets of tiles.
                       final Array<Coordinate> coordinates =
                           Array.ofAll(tileCoordinateMap.get(tile).get());
                       final Array<Chit> chits =

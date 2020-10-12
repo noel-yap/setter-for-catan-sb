@@ -7,6 +7,7 @@ import io.vavr.Tuple2;
 import io.vavr.collection.HashSet;
 import io.vavr.control.Try;
 import net.devh.boot.grpc.server.service.GrpcService;
+import noelyap.setterforcatan.component.Schemas;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.generator.BoardGenerator;
 import noelyap.setterforcatan.grader.CompositeGrader;
@@ -56,7 +57,7 @@ public class BoardServiceImpl extends BoardServiceImplBase {
   private static Tuple2<Specification, Board> newBoard(
       final Schema schema, final CompositeGrader compositeGrader) {
     final SpecificationImpl specificationImpl =
-        noelyap.setterforcatan.util.SchemaUtils.toSpecification(
+        Schemas.toSpecification(
             schema.getScenario(), schema.getPlayerCount(), schema.getFishermenOfCatan());
 
     return newBoard(specificationImpl, compositeGrader);
