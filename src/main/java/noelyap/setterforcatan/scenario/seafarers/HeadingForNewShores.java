@@ -28,8 +28,6 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
@@ -42,27 +40,22 @@ import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.util.TileMappingUtils;
 
 public class HeadingForNewShores {
-  private static final Tuple2<Array<Tile>, Boolean> P3_BIG_ISLAND_LAND_TILES =
-      Tuple.of(
-          Array.fill(3, FIELD)
-              .appendAll(Array.fill(3, FOREST))
-              .appendAll(Array.fill(4, PASTURE))
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_BIG_ISLAND_HARBOR_TILES =
-      Tuple.of(Array.fill(3, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS), true);
-  private static final Tuple2<Array<Tile>, Boolean> P3_SMALL_ISLAND_LAND_TILES =
-      Tuple.of(
-          Array.of(FIELD)
-              .appendAll(Array.of(PASTURE))
-              .appendAll(Array.fill(2, GOLD_FIELD))
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_SMALL_ISLAND_SEA_TILES =
-      Tuple.of(Array.fill(5, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_TILES =
+  private static final Array<Tile> P3_BIG_ISLAND_LAND_TILES =
+      Array.fill(3, FIELD)
+          .appendAll(Array.fill(3, FOREST))
+          .appendAll(Array.fill(4, PASTURE))
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN));
+  private static final Array<Tile> P3_BIG_ISLAND_HARBOR_TILES =
+      Array.fill(3, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS);
+  private static final Array<Tile> P3_SMALL_ISLAND_LAND_TILES =
+      Array.of(FIELD)
+          .appendAll(Array.of(PASTURE))
+          .appendAll(Array.fill(2, GOLD_FIELD))
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN));
+  private static final Array<Tile> P3_SMALL_ISLAND_SEA_TILES = Array.fill(5, SEA);
+  private static final Map<String, Array<Tile>> P3_TILES =
       HashMap.of(
           "big-island-land",
           P3_BIG_ISLAND_LAND_TILES,
@@ -162,17 +155,13 @@ public class HeadingForNewShores {
   public static final SpecificationImpl P3_FISHERMEN_SPECIFICATION_IMPL =
       P3_SPECIFICATION_BUILDER.withFisheries(P3_BIG_ISLAND_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P4_BIG_ISLAND_PRODUCING_LAND_TILES =
-      Base.P3_P4_PRODUCING_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_BIG_ISLAND_UNBEARING_LAND_TILES =
-      Base.P3_P4_UNBEARING_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_BIG_ISLAND_HARBOR_TILES =
-      Base.P3_P4_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_SMALL_ISLAND_LAND_TILES =
-      Tuple.of(P3_SMALL_ISLAND_LAND_TILES._1.append(FOREST), false);
-  private static final Tuple2<Array<Tile>, Boolean> P4_SMALL_ISLAND_SEA_TILES =
-      Tuple.of(Array.fill(4, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P4_TILES =
+  private static final Array<Tile> P4_BIG_ISLAND_PRODUCING_LAND_TILES = Base.P3_P4_PRODUCING_TILES;
+  private static final Array<Tile> P4_BIG_ISLAND_UNBEARING_LAND_TILES = Base.P3_P4_UNBEARING_TILES;
+  private static final Array<Tile> P4_BIG_ISLAND_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
+  private static final Array<Tile> P4_SMALL_ISLAND_LAND_TILES =
+      P3_SMALL_ISLAND_LAND_TILES.append(FOREST);
+  private static final Array<Tile> P4_SMALL_ISLAND_SEA_TILES = Array.fill(4, SEA);
+  private static final Map<String, Array<Tile>> P4_TILES =
       HashMap.of(
           "big-island-producing-land",
           P4_BIG_ISLAND_PRODUCING_LAND_TILES,
@@ -243,24 +232,19 @@ public class HeadingForNewShores {
   public static final SpecificationImpl P4_FISHERMEN_SPECIFICATION_IMPL =
       P4_SPECIFICATION_BUILDER.withFisheries(P4_BIG_ISLAND_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_BIG_ISLAND_PRODUCING_LAND_TILES =
+  private static final Array<Tile> P5_P6_BIG_ISLAND_PRODUCING_LAND_TILES =
       Base.P5_P6_PRODUCING_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_BIG_ISLAND_UNBEARING_LAND_TILES =
-      Tuple.of(Array.fill(2, DESERT), true);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_BIG_ISLAND_HARBOR_TILES =
-      Base.P5_P6_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_LAND_TILES =
-      Tuple.of(
-          Array.of(FIELD)
-              .append(FOREST)
-              .append(PASTURE)
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN))
-              .appendAll(Array.fill(3, GOLD_FIELD)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_SEA_TILES =
-      Tuple.of(Array.fill(2, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
+  private static final Array<Tile> P5_P6_BIG_ISLAND_UNBEARING_LAND_TILES = Array.fill(2, DESERT);
+  private static final Array<Tile> P5_P6_BIG_ISLAND_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
+  private static final Array<Tile> P5_P6_SMALL_ISLAND_LAND_TILES =
+      Array.of(FIELD)
+          .append(FOREST)
+          .append(PASTURE)
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN))
+          .appendAll(Array.fill(3, GOLD_FIELD));
+  private static final Array<Tile> P5_P6_SMALL_ISLAND_SEA_TILES = Array.fill(2, SEA);
+  private static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of(
           "big-island-producing-land",
           P5_P6_BIG_ISLAND_PRODUCING_LAND_TILES,
@@ -356,17 +340,15 @@ public class HeadingForNewShores {
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_BIG_ISLAND_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_BIG_ISLAND_PRODUCING_LAND_TILES =
+  private static final Array<Tile> P7_P8_BIG_ISLAND_PRODUCING_LAND_TILES =
       Base.P7_P8_PRODUCING_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_BIG_ISLAND_UNBEARING_LAND_TILES =
+  private static final Array<Tile> P7_P8_BIG_ISLAND_UNBEARING_LAND_TILES =
       Base.P7_P8_UNBEARING_LAND_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_BIG_ISLAND_HARBOR_TILES =
-      Base.P7_P8_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_LAND_TILES =
-      Tuple.of(P5_P6_SMALL_ISLAND_LAND_TILES._1.appendAll(P5_P6_SMALL_ISLAND_LAND_TILES._1), false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_SEA_TILES =
-      Tuple.of(Array.fill(10, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
+  private static final Array<Tile> P7_P8_BIG_ISLAND_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
+  private static final Array<Tile> P7_P8_SMALL_ISLAND_LAND_TILES =
+      P5_P6_SMALL_ISLAND_LAND_TILES.appendAll(P5_P6_SMALL_ISLAND_LAND_TILES);
+  private static final Array<Tile> P7_P8_SMALL_ISLAND_SEA_TILES = Array.fill(10, SEA);
+  private static final Map<String, Array<Tile>> P7_P8_TILES =
       HashMap.of(
           "big-island-producing-land",
           P7_P8_BIG_ISLAND_PRODUCING_LAND_TILES,

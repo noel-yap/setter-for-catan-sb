@@ -54,7 +54,7 @@ public class SpecificationImpl {
   }
 
   public static class Builder {
-    private final Map<String, Tuple2<Array<Tile>, Boolean>> tiles;
+    private final Map<String, Array<Tile>> tiles;
     private final Map<String, Array<Coordinate>> coordinates;
     private final Map<String, Array<Chit>> chits;
     private final Map<String, Array<String>> coordinatesTilesMap;
@@ -64,7 +64,7 @@ public class SpecificationImpl {
     private final Matcher<Configuration> configurationMatcher;
 
     private Builder(
-        final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+        final Map<String, Array<Tile>> tiles,
         final Map<String, Array<Coordinate>> coordinates,
         final Map<String, Array<Chit>> chits,
         final Map<String, Array<String>> coordinatesTilesMap,
@@ -104,15 +104,15 @@ public class SpecificationImpl {
       final Tile lakeTile = Tile.newBuilder().setType(Tile.Type.LAKE).build();
       final Stream<Chit> lakeChits = Stream.of(CHITS_2_3_11_12, CHITS_4_10);
 
-      final int desertCount = tiles.get(DESERT_OR_LAKE_NAME).map(t2 -> t2._1.size()).getOrElse(0);
+      final int desertCount = tiles.get(DESERT_OR_LAKE_NAME).map(Traversable::size).getOrElse(0);
       final int fisheryCount = fisheryCoordinates.size();
 
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+      final Map<String, Array<Tile>> tiles =
           this.tiles
               .filter(t2 -> !DESERT_OR_LAKE_NAME.equals(t2._1))
-              .put(LAKE_NAME, Tuple.of(Array.fill(desertCount, lakeTile), false))
+              .put(LAKE_NAME, Array.fill(desertCount, lakeTile))
               .filter(t2 -> desertCount > 0 || !t2._1.equals(LAKE_NAME))
-              .put(FISHERY_NAME, Tuple.of(Array.fill(fisheryCount, fisheryTile), false));
+              .put(FISHERY_NAME, Array.fill(fisheryCount, fisheryTile));
 
       final Map<String, Array<Chit>> chits =
           this.chits
@@ -166,7 +166,7 @@ public class SpecificationImpl {
   private final MersenneTwister chitsShufflerPrng = new MersenneTwister();
   private final MersenneTwister coordinatesShufflerPrng = new MersenneTwister();
 
-  private final Map<String, Tuple2<Array<Tile>, Boolean>> tiles;
+  private final Map<String, Array<Tile>> tiles;
   private final Map<String, Array<Coordinate>> coordinates;
   private final Map<String, Array<Chit>> chits;
   private final Map<String, Array<String>> coordinatesTilesMap;
@@ -192,10 +192,7 @@ public class SpecificationImpl {
       final Set<ChitsTilesMapping> chitsTilesMap,
       final Set<Marker> markers) {
     return newBuilder(
-        HashMap.ofEntries(
-            tiles.map(t ->
-                    Tuple.of(
-                        t.getName(), Tuple.of(Array.ofAll(t.getTilesList()), t.getChitless())))),
+        HashMap.ofEntries(tiles.map(t -> Tuple.of(t.getName(), Array.ofAll(t.getTilesList())))),
         HashMap.ofEntries(coordinates.map(c -> Tuple.of(c.getName(), Array.ofAll(c.getCoordinatesList())))),
         HashMap.ofEntries(chits.map(c -> Tuple.of(c.getName(), Array.ofAll(c.getChitsList())))),
         HashMap.ofEntries(
@@ -206,7 +203,7 @@ public class SpecificationImpl {
   }
 
   public static Builder newBuilder(
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<Coordinate>> coordinates,
       final Map<String, Array<Chit>> chits,
       final Map<String, Array<String>> coordinatesTilesMap,
@@ -216,7 +213,7 @@ public class SpecificationImpl {
   }
 
   public static Builder newBuilder(
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<Coordinate>> coordinates,
       final Map<String, Array<Chit>> chits,
       final Map<String, Array<String>> coordinatesTilesMap,
@@ -233,7 +230,7 @@ public class SpecificationImpl {
   }
 
   private SpecificationImpl(
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<Coordinate>> coordinates,
       final Map<String, Array<Chit>> chits,
       final Map<String, Array<String>> coordinatesTilesMap,
@@ -255,13 +252,7 @@ public class SpecificationImpl {
 
   public Specification toProto() {
     return Specification.newBuilder()
-        .addAllTiles(
-            tiles.map(t2 ->
-                    Tiles.newBuilder()
-                        .setName(t2._1)
-                        .addAllTiles(t2._2._1)
-                        .setChitless(t2._2._2)
-                        .build()))
+        .addAllTiles(tiles.map(t2 -> Tiles.newBuilder().setName(t2._1).addAllTiles(t2._2).build()))
         .addAllCoordinates(
             coordinates.map(t2 -> Coordinates.newBuilder().setName(t2._1).addAllCoordinates(t2._2).build()))
         .addAllChits(chits.map(t2 -> Chits.newBuilder().setName(t2._1).addAllChits(t2._2).build()))
@@ -285,14 +276,13 @@ public class SpecificationImpl {
     final Array<
             Function4<
                 String,
-                Map<String, Tuple2<Array<Tile>, Boolean>>,
+                Map<String, Array<Tile>>,
                 Map<String, Array<GeneratedMessageV3>>,
                 Map<String, Array<String>>,
                 Set<String>>>
         fns =
             Array.of(
                 SpecificationImpl::checkForUndefinedTilesErrors,
-                SpecificationImpl::checkForUnreferencedTilesErrors,
                 SpecificationImpl::checkForUndefinedFeaturesErrors,
                 SpecificationImpl::checkForUnreferencedFeaturesErrors,
                 SpecificationImpl::checkForFeaturesVersusTilesCountMismatchError);
@@ -308,20 +298,13 @@ public class SpecificationImpl {
             .union(checkForEmptyFeatureMaps("chits", chits))
             .union(checkForDuplicateCoordinates(coordinates))
             .union(
+                checkForUnreferencedTilesErrors(
+                    "coordinates", this.tiles, widenFeaturesMap(coordinates), coordinatesTilesMap))
+            .union(
                 HashSet.ofAll(fns.crossProduct(args))
                     .flatMap(t2 -> {
-                          final Function4<
-                                  String,
-                                  Map<String, Tuple2<Array<Tile>, Boolean>>,
-                                  Map<String, Array<GeneratedMessageV3>>,
-                                  Map<String, Array<String>>,
-                                  Set<String>>
-                              fn = t2._1;
-                          final Tuple3<
-                                  String,
-                                  Map<String, Array<GeneratedMessageV3>>,
-                                  Map<String, Array<String>>>
-                              arg = t2._2;
+                          final var fn = t2._1;
+                          final var arg = t2._2;
 
                           return fn.apply(arg._1, this.tiles, arg._2, arg._3);
                         }));
@@ -374,7 +357,7 @@ public class SpecificationImpl {
   @VisibleForTesting
   static Set<String> checkForUndefinedTilesErrors(
       final String feature,
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<GeneratedMessageV3>> features,
       final Map<String, Array<String>> featuresTilesMap) {
     return featuresTilesMap
@@ -395,11 +378,10 @@ public class SpecificationImpl {
   @VisibleForTesting
   static Set<String> checkForUnreferencedTilesErrors(
       final String feature,
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<GeneratedMessageV3>> features,
       final Map<String, Array<String>> featuresTilesMap) {
     return tiles
-        .filter(t2 -> !t2._2._2)
         .keySet()
         .diff(featuresTilesMap.flatMap(t2 -> HashSet.ofAll(t2._2)).toSet())
         .map(key -> String.format("\"%s\" tiles is not referenced in %sTilesMap.", key, feature));
@@ -408,7 +390,7 @@ public class SpecificationImpl {
   @VisibleForTesting
   static Set<String> checkForUndefinedFeaturesErrors(
       final String feature,
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<GeneratedMessageV3>> features,
       final Map<String, Array<String>> featuresTilesMap) {
     final Set<String> featuresTilesMapKeys = featuresTilesMap.keySet();
@@ -424,7 +406,7 @@ public class SpecificationImpl {
   @VisibleForTesting
   static Set<String> checkForUnreferencedFeaturesErrors(
       final String feature,
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<GeneratedMessageV3>> features,
       final Map<String, Array<String>> featuresTilesMap) {
     final Set<String> featuresTilesMapKeys = featuresTilesMap.keySet();
@@ -439,7 +421,7 @@ public class SpecificationImpl {
   @VisibleForTesting
   static Set<String> checkForFeaturesVersusTilesCountMismatchError(
       final String feature,
-      final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+      final Map<String, Array<Tile>> tiles,
       final Map<String, Array<GeneratedMessageV3>> features,
       final Map<String, Array<String>> featuresTilesMap) {
     return featuresTilesMap
@@ -452,12 +434,7 @@ public class SpecificationImpl {
 
               final int tilesCount =
                   tilesNames
-                      .map(tileName ->
-                              tiles
-                                  .get(tileName)
-                                  .getOrElse(Tuple.of(Array.empty(), false))
-                                  ._1
-                                  .size())
+                      .map(tileName -> tiles.get(tileName).getOrElse(Array.empty()).size())
                       .sum()
                       .intValue();
 
@@ -478,10 +455,10 @@ public class SpecificationImpl {
   }
 
   public Option<Array<Configuration>> toConfiguration() {
-    final Multimap<Tile, Chit> tileChitsMap =
-        shuffleTiles(chitsShufflerPrng, tiles, chits, chitsTilesMap);
     final Multimap<Tile, Coordinate> tileCoordinateMap =
         shuffleTiles(coordinatesShufflerPrng, tiles, coordinates, coordinatesTilesMap);
+    final Multimap<Tile, Chit> tileChitsMap =
+        shuffleTiles(chitsShufflerPrng, tiles, chits, chitsTilesMap);
 
     final Array<Configuration> configurations =
         Array.ofAll(
@@ -514,7 +491,7 @@ public class SpecificationImpl {
   static <ChitsOrCoordinates extends GeneratedMessageV3>
       Multimap<Tile, ChitsOrCoordinates> shuffleTiles(
           final Random prng,
-          final Map<String, Tuple2<Array<Tile>, Boolean>> tiles,
+          final Map<String, Array<Tile>> tiles,
           final Map<String, Array<ChitsOrCoordinates>> featuresMap,
           final Map<String, Array<String>> featuresTilesMap) {
     return HashMultimap.withSeq()
@@ -523,7 +500,7 @@ public class SpecificationImpl {
                 .flatMap(featureName -> {
                       final Array<String> tilesNames = featuresTilesMap.get(featureName).get();
                       final Array<Tile> tileIds =
-                          tilesNames.flatMap(tilesName -> tiles.get(tilesName).get()._1);
+                          tilesNames.flatMap(tilesName -> tiles.get(tilesName).get());
                       final Array<ChitsOrCoordinates> chitsOrCoordinates =
                           featuresMap.get(featureName).get();
 

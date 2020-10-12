@@ -10,10 +10,22 @@ import static noelyap.setterforcatan.component.Chits.CHIT_5;
 import static noelyap.setterforcatan.component.Chits.CHIT_6;
 import static noelyap.setterforcatan.component.Chits.CHIT_8;
 import static noelyap.setterforcatan.component.Chits.CHIT_9;
+import static noelyap.setterforcatan.component.Tiles.CASTLE;
+import static noelyap.setterforcatan.component.Tiles.DESERT;
 import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
-import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.DESERT;
-import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.GOLD_FIELD;
-import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.LAKE;
+import static noelyap.setterforcatan.component.Tiles.FIELD;
+import static noelyap.setterforcatan.component.Tiles.FISHERY;
+import static noelyap.setterforcatan.component.Tiles.FOREST;
+import static noelyap.setterforcatan.component.Tiles.GLASSWORKS;
+import static noelyap.setterforcatan.component.Tiles.GOLD_FIELD;
+import static noelyap.setterforcatan.component.Tiles.HILL;
+import static noelyap.setterforcatan.component.Tiles.LAKE;
+import static noelyap.setterforcatan.component.Tiles.MOUNTAIN;
+import static noelyap.setterforcatan.component.Tiles.OASIS;
+import static noelyap.setterforcatan.component.Tiles.PASTURE;
+import static noelyap.setterforcatan.component.Tiles.QUARRY;
+import static noelyap.setterforcatan.component.Tiles.SEA;
+import static noelyap.setterforcatan.component.Tiles.SWAMP;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -28,7 +40,7 @@ import io.vavr.collection.Set;
 import io.vavr.control.Option;
 import noelyap.setterforcatan.component.SpecificationImpl.InvalidSpecificationError;
 import noelyap.setterforcatan.matcher.HasOddsGreaterThan;
-import noelyap.setterforcatan.matcher.IsTileType;
+import noelyap.setterforcatan.matcher.TileIs;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
@@ -57,14 +69,15 @@ public class SpecificationImplTest {
     final Array<Coordinate> desertOrLakeCoordinates =
         newCoordinates(Tuple.of(2, 2), Tuple.of(3, 3), Tuple.of(4, 4), Tuple.of(5, 5));
 
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles;
+    tiles =
         HashMap.of(
             "gold-field",
-            newTiles(GOLD_FIELD),
+            Array.of(GOLD_FIELD),
             "desert",
-            newChitlessTiles(DESERT),
+            Array.of(DESERT),
             DESERT_OR_LAKE_NAME,
-            newChitlessTiles(DESERT, DESERT, DESERT, DESERT));
+            Array.of(DESERT, DESERT, DESERT, DESERT));
     final Map<String, Array<Chit>> chits = HashMap.of("gold-field", Array.of(CHIT_6));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("gold-field"));
@@ -102,7 +115,7 @@ public class SpecificationImplTest {
             .get();
 
     final Set<Configuration> actualDesertConfigurations =
-        actual.filter(c -> c.getTile().getType() == DESERT).toSet();
+        actual.filter(c -> DESERT.equals(c.getTile())).toSet();
     final Array<Chit> actualDesertChits =
         Array.ofAll(actualDesertConfigurations)
             .map(Configuration::getChit)
@@ -111,14 +124,14 @@ public class SpecificationImplTest {
         actualDesertConfigurations.map(Configuration::getCoordinate);
 
     final Set<Configuration> actualLakeConfigurations =
-        actual.filter(c -> c.getTile().getType() == LAKE).toSet();
+        actual.filter(c -> LAKE.equals(c.getTile())).toSet();
     final Array<Chit> actualLakeChits =
         Array.ofAll(actualLakeConfigurations).map(Configuration::getChit);
     final Set<Coordinate> actualLakeCoordinates =
         actualLakeConfigurations.map(Configuration::getCoordinate);
 
     final Set<Configuration> actualFisheryConfigurations =
-        actual.filter(c -> c.getTile().getType() == Tile.Type.FISHERY).toSet();
+        actual.filter(c -> FISHERY.equals(c.getTile())).toSet();
     final Array<Chit> actualFisheryChits =
         Array.ofAll(actualFisheryConfigurations).map(Configuration::getChit);
 
@@ -145,20 +158,20 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should shuffle tiles with artifacts.")
   public void shouldShuffleTilesWithArtifacts(final SoftAssertions softly) {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles =
         HashMap.of(
             "desert-and-lake",
-            newTiles(DESERT, LAKE),
+            Array.of(DESERT, LAKE),
             "gold",
-            newTiles(GOLD_FIELD),
+            Array.of(GOLD_FIELD),
             "sea",
-            newTiles(Tile.Type.SEA),
+            Array.of(SEA),
             "caravans",
-            newTiles(Tile.Type.OASIS),
+            Array.of(OASIS),
             "rivers-of-catan",
-            newTiles(Tile.Type.SWAMP),
+            Array.of(SWAMP),
             "traders-and-barbarians",
-            newTiles(Tile.Type.CASTLE, Tile.Type.GLASSWORKS, Tile.Type.QUARRY));
+            Array.of(CASTLE, GLASSWORKS, QUARRY));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of(
             "desert-and-lake",
@@ -181,17 +194,7 @@ public class SpecificationImplTest {
     softly
         .assertThat(actual.keySet())
         .containsExactlyInAnyOrder(
-            newTiles(
-                    DESERT,
-                    LAKE,
-                    GOLD_FIELD,
-                    Tile.Type.SEA,
-                    Tile.Type.OASIS,
-                    Tile.Type.SWAMP,
-                    Tile.Type.CASTLE,
-                    Tile.Type.GLASSWORKS,
-                    Tile.Type.QUARRY)
-                ._1
+            Array.of(DESERT, LAKE, GOLD_FIELD, SEA, OASIS, SWAMP, CASTLE, GLASSWORKS, QUARRY)
                 .toJavaArray(Tile[]::new));
     softly
         .assertThat(actual.values())
@@ -209,19 +212,19 @@ public class SpecificationImplTest {
                 .toJavaArray(Coordinate[]::new));
 
     softly
-        .assertThat(actual.get(newTile(DESERT)).get())
+        .assertThat(actual.get(DESERT).get())
         .allSatisfy(c -> assertThat(c).isIn(newCoordinate(1, 1), newCoordinate(2, 2)));
     softly
-        .assertThat(actual.get(newTile(LAKE)).get())
+        .assertThat(actual.get(LAKE).get())
         .allSatisfy(c -> assertThat(c).isIn(newCoordinate(1, 1), newCoordinate(2, 2)));
     softly
-        .assertThat(actual.get(newTile(GOLD_FIELD)).get())
+        .assertThat(actual.get(GOLD_FIELD).get())
         .allSatisfy(c -> assertThat(c).isIn(newCoordinate(3, 3), newCoordinate(4, 4)));
     softly
-        .assertThat(actual.get(newTile(Tile.Type.SEA)).get())
+        .assertThat(actual.get(SEA).get())
         .allSatisfy(c -> assertThat(c).isIn(newCoordinate(3, 3), newCoordinate(4, 4)));
     softly
-        .assertThat(actual.get(newTile(Tile.Type.OASIS)).get())
+        .assertThat(actual.get(OASIS).get())
         .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
@@ -231,7 +234,7 @@ public class SpecificationImplTest {
                         newCoordinate(8, 8),
                         newCoordinate(9, 9)));
     softly
-        .assertThat(actual.get(newTile(Tile.Type.SWAMP)).get())
+        .assertThat(actual.get(SWAMP).get())
         .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
@@ -241,7 +244,7 @@ public class SpecificationImplTest {
                         newCoordinate(8, 8),
                         newCoordinate(9, 9)));
     softly
-        .assertThat(actual.get(newTile(Tile.Type.CASTLE)).get())
+        .assertThat(actual.get(CASTLE).get())
         .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
@@ -251,7 +254,7 @@ public class SpecificationImplTest {
                         newCoordinate(8, 8),
                         newCoordinate(9, 9)));
     softly
-        .assertThat(actual.get(newTile(Tile.Type.GLASSWORKS)).get())
+        .assertThat(actual.get(GLASSWORKS).get())
         .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
@@ -261,7 +264,7 @@ public class SpecificationImplTest {
                         newCoordinate(8, 8),
                         newCoordinate(9, 9)));
     softly
-        .assertThat(actual.get(newTile(Tile.Type.QUARRY)).get())
+        .assertThat(actual.get(QUARRY).get())
         .allSatisfy(c ->
                 assertThat(c)
                     .isIn(
@@ -275,8 +278,8 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should not dedupe tiles.")
   public void shouldNotDedupeTilesWithinSameSet() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
-        HashMap.of("gold-field", newTiles(GOLD_FIELD, GOLD_FIELD));
+    final Map<String, Array<Tile>> tiles =
+        HashMap.of("gold-field", Array.of(GOLD_FIELD, GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("gold-field", Array.of(CHIT_2, CHIT_12));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("gold-field"));
@@ -290,8 +293,8 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should not dedupe chitless tiles.")
   public void shouldNotDedupeChitlessTiles() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
-        HashMap.of("chitless", newChitlessTiles(GOLD_FIELD), "chitful", newTiles(GOLD_FIELD));
+    final Map<String, Array<Tile>> tiles =
+        HashMap.of("chitless", Array.of(GOLD_FIELD), "chitful", Array.of(GOLD_FIELD));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of(
             "chitless", newCoordinates(Tuple.of(0, 0)),
@@ -338,8 +341,7 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should validate count mismatch.")
   public void shouldValidateCountMismatch() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
-        HashMap.of("sea", newTiles(Tile.Type.SEA));
+    final Map<String, Array<Tile>> tiles = HashMap.of("sea", Array.of(SEA));
     final Map<String, Array<Chit>> chits = HashMap.of("sea", Array.of(CHIT_2, CHIT_12));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("sea"));
@@ -367,9 +369,9 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should validate undefined tiles.")
   public void shouldValidateUndefinedTiles() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles =
         HashMap.of(
-            "desert", newTiles(DESERT, DESERT), "gold-field", newTiles(GOLD_FIELD, GOLD_FIELD));
+            "desert", Array.of(DESERT, DESERT), "gold-field", Array.of(GOLD_FIELD, GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", Array.of(CHIT_2, CHIT_12));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
@@ -397,9 +399,9 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should validate unreferenced tiles.")
   public void shouldValidateUnreferencedTiles() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles =
         HashMap.of(
-            "desert", newTiles(DESERT, DESERT), "gold-field", newTiles(GOLD_FIELD, GOLD_FIELD));
+            "desert", Array.of(DESERT, DESERT), "gold-field", Array.of(GOLD_FIELD, GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", Array.of(CHIT_2, CHIT_12));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
@@ -427,9 +429,9 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should validate undefined features.")
   public void shouldValidateUndefinedFeatures() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles =
         HashMap.of(
-            "desert", newTiles(DESERT, DESERT), "gold-field", newTiles(GOLD_FIELD, GOLD_FIELD));
+            "desert", Array.of(DESERT, DESERT), "gold-field", Array.of(GOLD_FIELD, GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", Array.of(CHIT_2, CHIT_12));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
@@ -457,9 +459,9 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should validate unreferenced features.")
   public void shouldValidateUnreferencedFeatures() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles =
         HashMap.of(
-            "desert", newTiles(DESERT, DESERT), "gold-field", newTiles(GOLD_FIELD, GOLD_FIELD));
+            "desert", Array.of(DESERT, DESERT), "gold-field", Array.of(GOLD_FIELD, GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", Array.of(CHIT_2, CHIT_12));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
@@ -487,9 +489,9 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should validate.")
   public void shouldValidate() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles =
         HashMap.of(
-            "desert", newTiles(DESERT, DESERT), "gold-field", newTiles(GOLD_FIELD, GOLD_FIELD));
+            "desert", Array.of(DESERT, DESERT), "gold-field", Array.of(GOLD_FIELD, GOLD_FIELD));
     final Map<String, Array<Chit>> chits = HashMap.of("oasis", Array.of(CHIT_2, CHIT_12));
     final Map<String, Array<String>> chitsTilesMap =
         HashMap.ofEntries(TileMappingUtils.newEntry("swamp", "desert", "lake"));
@@ -519,19 +521,10 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should create configuration.")
   public void shouldCreateConfiguration(final SoftAssertions softly) {
-    final Tuple2<Array<Tile>, Boolean> producingLandTiles =
-        newTiles(
-            Tile.Type.FIELD,
-            Tile.Type.FOREST,
-            Tile.Type.HILL,
-            Tile.Type.MOUNTAIN,
-            Tile.Type.PASTURE,
-            GOLD_FIELD,
-            LAKE);
-    final Tuple2<Array<Tile>, Boolean> barrenLandTiles =
-        newChitlessTiles(DESERT, Tile.Type.SWAMP, Tile.Type.OASIS);
-    final Tuple2<Array<Tile>, Boolean> tradersAndBarbariansDestinationTiles =
-        newChitlessTiles(Tile.Type.CASTLE, Tile.Type.GLASSWORKS, Tile.Type.QUARRY);
+    final Array<Tile> producingLandTiles =
+        Array.of(FIELD, FOREST, HILL, MOUNTAIN, PASTURE, GOLD_FIELD, LAKE);
+    final Array<Tile> barrenLandTiles = Array.of(DESERT, SWAMP, OASIS);
+    final Array<Tile> tradersAndBarbariansDestinationTiles = Array.of(CASTLE, GLASSWORKS, QUARRY);
 
     final Array<Chit> producingLandChits =
         Array.of(CHITS_4_10, CHIT_2, CHIT_4, CHIT_6, CHIT_8, CHIT_10, CHIT_12);
@@ -551,7 +544,7 @@ public class SpecificationImplTest {
     final Array<Coordinate> tradersAndBarbariansDestinationCoordinates =
         newCoordinates(Tuple.of(11, 11), Tuple.of(12, 12), Tuple.of(13, 13));
 
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
+    final Map<String, Array<Tile>> tiles =
         HashMap.of(
             "producing-terrain",
             producingLandTiles,
@@ -580,11 +573,11 @@ public class SpecificationImplTest {
     final Array<Configuration> actual = specificationImpl.toConfiguration().get();
 
     final Set<Configuration> producingLandConfigurationsFromTiles =
-        actual.filter(c -> producingLandTiles._1.contains(c.getTile())).toSet();
+        actual.filter(c -> producingLandTiles.contains(c.getTile())).toSet();
     final Set<Configuration> barrenLandConfigurationsFromTiles =
-        actual.filter(c -> barrenLandTiles._1.contains(c.getTile())).toSet();
+        actual.filter(c -> barrenLandTiles.contains(c.getTile())).toSet();
     final Set<Configuration> tradersAndBarbariansDestinationConfigurationsFromTiles =
-        actual.filter(c -> tradersAndBarbariansDestinationTiles._1.contains(c.getTile())).toSet();
+        actual.filter(c -> tradersAndBarbariansDestinationTiles.contains(c.getTile())).toSet();
 
     final Set<Configuration> producingLandConfigurationsFromChits =
         actual.filter(c -> producingLandChits.contains(c.getChit())).toSet();
@@ -622,8 +615,7 @@ public class SpecificationImplTest {
   @Test
   @DisplayName("Should not pass configuration validator.")
   public void shouldNotPassConfigurationValidator() {
-    final Map<String, Tuple2<Array<Tile>, Boolean>> tiles =
-        HashMap.of("single", newTiles(GOLD_FIELD));
+    final Map<String, Array<Tile>> tiles = HashMap.of("single", Array.of(GOLD_FIELD));
     final Map<String, Array<Coordinate>> coordinates =
         HashMap.of("single", newCoordinates(Tuple.of(0, 0)));
     final Map<String, Array<Chit>> chits = HashMap.of("single", Array.of(CHITS_4_10));
@@ -638,21 +630,12 @@ public class SpecificationImplTest {
             .withConfigurationMatcher(
                 IsNot.not(
                     AllOf.allOf(
-                        IsTileType.isTileType(GOLD_FIELD),
-                        HasOddsGreaterThan.hasOddsGreaterThan(4))))
+                        TileIs.tileIs(GOLD_FIELD), HasOddsGreaterThan.hasOddsGreaterThan(4))))
             .build();
 
     final Option<Array<Configuration>> actual = specification.toConfiguration();
 
     assertThat(actual).isEmpty();
-  }
-
-  private Tile newTile(final Tile.Type tileType) {
-    return Tile.newBuilder().setType(tileType).build();
-  }
-
-  private Tuple2<Array<Tile>, Boolean> newTiles(final Tile.Type... tileTypes) {
-    return Tuple.of(Array.of(tileTypes).map(this::newTile), false);
   }
 
   private Array<Coordinate> newCoordinates(final Tuple2<Integer, Integer>... tuple2s) {
@@ -670,9 +653,5 @@ public class SpecificationImplTest {
 
   private Coordinate newCoordinate(final int x, final int y, final Vertex.Position p) {
     return Coordinate.newBuilder().setX(x).setY(y).addVertexPositions(p).build();
-  }
-
-  private Tuple2<Array<Tile>, Boolean> newChitlessTiles(final Tile.Type... tileTypes) {
-    return Tuple.of(Array.of(tileTypes).map(this::newTile), true);
   }
 }

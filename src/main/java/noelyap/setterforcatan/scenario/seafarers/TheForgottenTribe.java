@@ -32,8 +32,6 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
@@ -60,26 +58,20 @@ public class TheForgottenTribe {
               CoordinateIsIn.coordinateIsIn(P3_P4_BOUNDED_ODDS_TILES),
               HasOddsGreaterThan.hasOddsGreaterThan(3)));
 
-  private static final Tuple2<Array<Tile>, Boolean> P3_P4_MAIN_ISLAND_LAND_TILES =
-      Base.P3_P4_PRODUCING_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P3_P4_SMALL_ISLAND_LAND_TILES =
-      Tuple.of(
-          Array.of(FIELD, FOREST, PASTURE)
-              .appendAll(Array.fill(2, GOLD_FIELD))
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN))
-              .appendAll(Array.fill(3, DESERT)),
-          true);
-  private static final Tuple2<Array<Tile>, Boolean> P3_P4_SMALL_ISLAND_HARBOR_TILES =
-      Tuple.of(
-          Array.of(
-              BRICK_HARBOR, GENERIC_HARBOR, GRAIN_HARBOR, LUMBER_HARBOR, ORE_HARBOR, WOOL_HARBOR),
-          true);
-  private static final Tuple2<Array<Tile>, Boolean> P3_P4_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
-      Tuple.of(Array.fill(4, DEVELOPMENT_CARD), true);
-  private static final Tuple2<Array<Tile>, Boolean> P3_P4_SMALL_ISLAND_VICTORY_POINT_TILES =
-      Tuple.of(Array.fill(8, VICTORY_POINT), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_P4_TILES =
+  private static final Array<Tile> P3_P4_MAIN_ISLAND_LAND_TILES = Base.P3_P4_PRODUCING_TILES;
+  private static final Array<Tile> P3_P4_SMALL_ISLAND_LAND_TILES =
+      Array.of(FIELD, FOREST, PASTURE)
+          .appendAll(Array.fill(2, GOLD_FIELD))
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN))
+          .appendAll(Array.fill(3, DESERT));
+  private static final Array<Tile> P3_P4_SMALL_ISLAND_HARBOR_TILES =
+      Array.of(BRICK_HARBOR, GENERIC_HARBOR, GRAIN_HARBOR, LUMBER_HARBOR, ORE_HARBOR, WOOL_HARBOR);
+  private static final Array<Tile> P3_P4_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
+      Array.fill(4, DEVELOPMENT_CARD);
+  private static final Array<Tile> P3_P4_SMALL_ISLAND_VICTORY_POINT_TILES =
+      Array.fill(8, VICTORY_POINT);
+  private static final Map<String, Array<Tile>> P3_P4_TILES =
       HashMap.of(
           "main-island-land",
           P3_P4_MAIN_ISLAND_LAND_TILES,
@@ -187,28 +179,24 @@ public class TheForgottenTribe {
   public static final SpecificationImpl P3_P4_FISHERMEN_SPECIFICATION_IMPL =
       P3_P4_SPECIFICATION_BUILDER.withFisheries(P3_P4_MAIN_ISLAND_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_MAIN_ISLAND_LAND_TILES =
-      Tuple.of(
-          Array.fill(5, MOUNTAIN)
-              .appendAll(Array.fill(5, PASTURE))
-              .appendAll(Array.fill(6, FIELD))
-              .appendAll(Array.fill(6, HILL))
-              .appendAll(Array.fill(7, FOREST)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_LAND_TILES =
-      Tuple.of(
-          Array.of(FIELD, HILL, MOUNTAIN)
-              .appendAll(Array.fill(2, PASTURE))
-              .appendAll(Array.fill(3, GOLD_FIELD))
-              .appendAll(Array.fill(4, DESERT)),
-          true);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_HARBOR_TILES =
-      Tuple.of(P3_P4_SMALL_ISLAND_HARBOR_TILES._1.appendAll(Array.fill(2, GENERIC_HARBOR)), true);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
-      Tuple.of(Array.fill(6, DEVELOPMENT_CARD), true);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_SMALL_ISLAND_VICTORY_POINT_TILES =
-      Tuple.of(Array.fill(10, VICTORY_POINT), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
+  private static final Array<Tile> P5_P6_MAIN_ISLAND_LAND_TILES =
+      Array.fill(5, MOUNTAIN)
+          .appendAll(Array.fill(5, PASTURE))
+          .appendAll(Array.fill(6, FIELD))
+          .appendAll(Array.fill(6, HILL))
+          .appendAll(Array.fill(7, FOREST));
+  private static final Array<Tile> P5_P6_SMALL_ISLAND_LAND_TILES =
+      Array.of(FIELD, HILL, MOUNTAIN)
+          .appendAll(Array.fill(2, PASTURE))
+          .appendAll(Array.fill(3, GOLD_FIELD))
+          .appendAll(Array.fill(4, DESERT));
+  private static final Array<Tile> P5_P6_SMALL_ISLAND_HARBOR_TILES =
+      P3_P4_SMALL_ISLAND_HARBOR_TILES.appendAll(Array.fill(2, GENERIC_HARBOR));
+  private static final Array<Tile> P5_P6_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
+      Array.fill(6, DEVELOPMENT_CARD);
+  private static final Array<Tile> P5_P6_SMALL_ISLAND_VICTORY_POINT_TILES =
+      Array.fill(10, VICTORY_POINT);
+  private static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of(
           "main-island-land",
           P5_P6_MAIN_ISLAND_LAND_TILES,
@@ -342,23 +330,20 @@ public class TheForgottenTribe {
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_MAIN_ISLAND_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_MAIN_ISLAND_LAND_TILES =
-      Tuple.of(
-          Array.fill(6, PASTURE)
-              .appendAll(Array.fill(7, MOUNTAIN))
-              .appendAll(Array.fill(8, FIELD))
-              .appendAll(Array.fill(9, HILL))
-              .appendAll(Array.fill(10, FOREST)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_LAND_TILES =
-      P5_P6_SMALL_ISLAND_LAND_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_HARBOR_TILES =
-      Tuple.of(P3_P4_SMALL_ISLAND_HARBOR_TILES._1.appendAll(Array.fill(4, GENERIC_HARBOR)), true);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
-      Tuple.of(Array.fill(8, DEVELOPMENT_CARD), true);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_SMALL_ISLAND_VICTORY_POINT_TILES =
-      Tuple.of(Array.fill(12, VICTORY_POINT), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
+  private static final Array<Tile> P7_P8_MAIN_ISLAND_LAND_TILES =
+      Array.fill(6, PASTURE)
+          .appendAll(Array.fill(7, MOUNTAIN))
+          .appendAll(Array.fill(8, FIELD))
+          .appendAll(Array.fill(9, HILL))
+          .appendAll(Array.fill(10, FOREST));
+  private static final Array<Tile> P7_P8_SMALL_ISLAND_LAND_TILES = P5_P6_SMALL_ISLAND_LAND_TILES;
+  private static final Array<Tile> P7_P8_SMALL_ISLAND_HARBOR_TILES =
+      P3_P4_SMALL_ISLAND_HARBOR_TILES.appendAll(Array.fill(4, GENERIC_HARBOR));
+  private static final Array<Tile> P7_P8_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
+      Array.fill(8, DEVELOPMENT_CARD);
+  private static final Array<Tile> P7_P8_SMALL_ISLAND_VICTORY_POINT_TILES =
+      Array.fill(12, VICTORY_POINT);
+  private static final Map<String, Array<Tile>> P7_P8_TILES =
       HashMap.of(
           "main-island-land",
           P7_P8_MAIN_ISLAND_LAND_TILES,

@@ -29,8 +29,6 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
@@ -44,27 +42,22 @@ import noelyap.setterforcatan.util.TileMappingUtils;
 
 // AKA Fog Island
 public class Oceania {
-  private static final Tuple2<Array<Tile>, Boolean> P3_FACE_UP_LAND_TILES =
-      Tuple.of(
-          Array.fill(2, FIELD)
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN))
-              .appendAll(Array.fill(4, FOREST))
-              .appendAll(Array.fill(4, PASTURE)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_FACE_UP_HARBOR_TILES =
-      Tuple.of(Array.fill(3, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS), true);
-  private static final Tuple2<Array<Tile>, Boolean> P3_FACE_DOWN_LAND_TILES =
-      Tuple.of(
-          Array.of(FOREST, PASTURE)
-              .appendAll(Array.fill(2, FIELD))
-              .appendAll(Array.fill(2, GOLD_FIELD))
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_FACE_DOWN_SEA_TILES =
-      Tuple.of(Array.fill(2, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_TILES =
+  private static final Array<Tile> P3_FACE_UP_LAND_TILES =
+      Array.fill(2, FIELD)
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN))
+          .appendAll(Array.fill(4, FOREST))
+          .appendAll(Array.fill(4, PASTURE));
+  private static final Array<Tile> P3_FACE_UP_HARBOR_TILES =
+      Array.fill(3, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS);
+  private static final Array<Tile> P3_FACE_DOWN_LAND_TILES =
+      Array.of(FOREST, PASTURE)
+          .appendAll(Array.fill(2, FIELD))
+          .appendAll(Array.fill(2, GOLD_FIELD))
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN));
+  private static final Array<Tile> P3_FACE_DOWN_SEA_TILES = Array.fill(2, SEA);
+  private static final Map<String, Array<Tile>> P3_TILES =
       HashMap.of(
           "face-up-land",
           P3_FACE_UP_LAND_TILES,
@@ -158,20 +151,16 @@ public class Oceania {
   public static final SpecificationImpl P3_FISHERMEN_SPECIFICATION_IMPL =
       P3_SPECIFICATION_BUILDER.withFisheries(P3_FACE_UP_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P4_FACE_UP_LAND_TILES =
-      Tuple.of(
-          Array.fill(3, FIELD)
-              .appendAll(Array.fill(3, HILL))
-              .appendAll(Array.fill(3, MOUNTAIN))
-              .appendAll(Array.fill(4, FOREST))
-              .appendAll(Array.fill(4, PASTURE)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P4_FACE_UP_HARBOR_TILES =
-      Base.P3_P4_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_FACE_DOWN_LAND_TILES =
-      P3_FACE_DOWN_LAND_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_FACE_DOWN_SEA_TILES = P3_FACE_DOWN_SEA_TILES;
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P4_TILES =
+  private static final Array<Tile> P4_FACE_UP_LAND_TILES =
+      Array.fill(3, FIELD)
+          .appendAll(Array.fill(3, HILL))
+          .appendAll(Array.fill(3, MOUNTAIN))
+          .appendAll(Array.fill(4, FOREST))
+          .appendAll(Array.fill(4, PASTURE));
+  private static final Array<Tile> P4_FACE_UP_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
+  private static final Array<Tile> P4_FACE_DOWN_LAND_TILES = P3_FACE_DOWN_LAND_TILES;
+  private static final Array<Tile> P4_FACE_DOWN_SEA_TILES = P3_FACE_DOWN_SEA_TILES;
+  private static final Map<String, Array<Tile>> P4_TILES =
       HashMap.of(
           "face-up-land",
           P4_FACE_UP_LAND_TILES,
@@ -275,28 +264,23 @@ public class Oceania {
   public static final SpecificationImpl P4_FISHERMEN_SPECIFICATION_IMPL =
       P4_SPECIFICATION_BUILDER.withFisheries(P4_FACE_UP_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FACE_UP_LAND_TILES =
-      Tuple.of(
-          Array.fill(4, MOUNTAIN)
-              .appendAll(Array.fill(5, FIELD))
-              .appendAll(Array.fill(5, FOREST))
-              .appendAll(Array.fill(5, HILL))
-              .appendAll(Array.fill(5, PASTURE)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FACE_DOWN_PRODUCING_TILES =
-      Tuple.of(
-          Array.fill(2, FIELD)
-              .appendAll(Array.fill(2, FOREST))
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, PASTURE))
-              .appendAll(Array.fill(3, MOUNTAIN))
-              .appendAll(Array.fill(3, GOLD_FIELD)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FACE_UP_HARBOR_TILES =
-      Base.P5_P6_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FACE_DOWN_UNBEARING_TILES =
-      Tuple.of(Array.of(DESERT).appendAll(Array.fill(3, SEA)), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
+  private static final Array<Tile> P5_P6_FACE_UP_LAND_TILES =
+      Array.fill(4, MOUNTAIN)
+          .appendAll(Array.fill(5, FIELD))
+          .appendAll(Array.fill(5, FOREST))
+          .appendAll(Array.fill(5, HILL))
+          .appendAll(Array.fill(5, PASTURE));
+  private static final Array<Tile> P5_P6_FACE_DOWN_PRODUCING_TILES =
+      Array.fill(2, FIELD)
+          .appendAll(Array.fill(2, FOREST))
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, PASTURE))
+          .appendAll(Array.fill(3, MOUNTAIN))
+          .appendAll(Array.fill(3, GOLD_FIELD));
+  private static final Array<Tile> P5_P6_FACE_UP_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
+  private static final Array<Tile> P5_P6_FACE_DOWN_UNBEARING_TILES =
+      Array.of(DESERT).appendAll(Array.fill(3, SEA));
+  private static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of(
           "face-up-land",
           P5_P6_FACE_UP_LAND_TILES,
@@ -423,30 +407,23 @@ public class Oceania {
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_FACE_UP_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_UP_PRODUCING_TILES =
-      Tuple.of(
-          Array.fill(5, MOUNTAIN)
-              .appendAll(Array.fill(6, FOREST))
-              .appendAll(Array.fill(6, PASTURE))
-              .appendAll(Array.fill(7, FIELD))
-              .appendAll(Array.fill(7, HILL)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_UP_UNBEARING_TILES =
-      Base.P7_P8_UNBEARING_LAND_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_DOWN_LAND_TILES =
-      Tuple.of(
-          Array.fill(2, FIELD)
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN))
-              .appendAll(Array.fill(4, GOLD_FIELD))
-              .appendAll(Array.fill(5, FOREST))
-              .appendAll(Array.fill(5, PASTURE)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_DOWN_SEA_TILES =
-      Tuple.of(Array.fill(18, SEA), true);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FACE_UP_HARBOR_TILES =
-      Base.P7_P8_HARBOR_TILES;
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
+  private static final Array<Tile> P7_P8_FACE_UP_PRODUCING_TILES =
+      Array.fill(5, MOUNTAIN)
+          .appendAll(Array.fill(6, FOREST))
+          .appendAll(Array.fill(6, PASTURE))
+          .appendAll(Array.fill(7, FIELD))
+          .appendAll(Array.fill(7, HILL));
+  private static final Array<Tile> P7_P8_FACE_UP_UNBEARING_TILES = Base.P7_P8_UNBEARING_LAND_TILES;
+  private static final Array<Tile> P7_P8_FACE_DOWN_LAND_TILES =
+      Array.fill(2, FIELD)
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN))
+          .appendAll(Array.fill(4, GOLD_FIELD))
+          .appendAll(Array.fill(5, FOREST))
+          .appendAll(Array.fill(5, PASTURE));
+  private static final Array<Tile> P7_P8_FACE_DOWN_SEA_TILES = Array.fill(18, SEA);
+  private static final Array<Tile> P7_P8_FACE_UP_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
+  private static final Map<String, Array<Tile>> P7_P8_TILES =
       HashMap.of(
           "face-up-producing",
           P7_P8_FACE_UP_PRODUCING_TILES,

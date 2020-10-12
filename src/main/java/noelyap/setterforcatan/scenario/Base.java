@@ -29,8 +29,6 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
@@ -42,19 +40,16 @@ import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import noelyap.setterforcatan.util.TileMappingUtils;
 
 public class Base {
-  public static final Tuple2<Array<Tile>, Boolean> P3_P4_PRODUCING_TILES =
-      Tuple.of(
-          Array.fill(4, FIELD)
-              .appendAll(Array.fill(4, FOREST))
-              .appendAll(Array.fill(4, PASTURE))
-              .appendAll(Array.fill(3, HILL))
-              .appendAll(Array.fill(3, MOUNTAIN)),
-          false);
-  public static final Tuple2<Array<Tile>, Boolean> P3_P4_UNBEARING_TILES =
-      Tuple.of(Array.of(DESERT), true);
-  public static final Tuple2<Array<Tile>, Boolean> P3_P4_HARBOR_TILES =
-      Tuple.of(Array.fill(4, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS), true);
-  public static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_P4_TILES =
+  public static final Array<Tile> P3_P4_PRODUCING_TILES =
+      Array.fill(4, FIELD)
+          .appendAll(Array.fill(4, FOREST))
+          .appendAll(Array.fill(4, PASTURE))
+          .appendAll(Array.fill(3, HILL))
+          .appendAll(Array.fill(3, MOUNTAIN));
+  public static final Array<Tile> P3_P4_UNBEARING_TILES = Array.of(DESERT);
+  public static final Array<Tile> P3_P4_HARBOR_TILES =
+      Array.fill(4, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS);
+  public static final Map<String, Array<Tile>> P3_P4_TILES =
       HashMap.of(
           "producing",
           P3_P4_PRODUCING_TILES,
@@ -134,21 +129,17 @@ public class Base {
   public static final SpecificationImpl P3_P4_FISHERMEN_SPECIFICATION_IMPL =
       P3_P4_SPECIFICATION_BUILDER.withFisheries(P3_P4_FISHERY_COORDINATES).build();
 
-  public static final Tuple2<Array<Tile>, Boolean> P5_P6_PRODUCING_TILES =
-      Tuple.of(
-          P3_P4_PRODUCING_TILES
-              ._1
-              .appendAll(Array.fill(2, FIELD))
-              .appendAll(Array.fill(2, FOREST))
-              .appendAll(Array.fill(2, PASTURE))
-              .appendAll(Array.fill(2, HILL))
-              .appendAll(Array.fill(2, MOUNTAIN)),
-          false);
-  public static final Tuple2<Array<Tile>, Boolean> P5_P6_UNBEARING_LAND_TILES =
-      Tuple.of(Array.fill(2, DESERT), true);
-  public static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES =
-      Tuple.of(P3_P4_HARBOR_TILES._1.append(GENERIC_HARBOR).append(WOOL_HARBOR), true);
-  public static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
+  public static final Array<Tile> P5_P6_PRODUCING_TILES =
+      P3_P4_PRODUCING_TILES
+          .appendAll(Array.fill(2, FIELD))
+          .appendAll(Array.fill(2, FOREST))
+          .appendAll(Array.fill(2, PASTURE))
+          .appendAll(Array.fill(2, HILL))
+          .appendAll(Array.fill(2, MOUNTAIN));
+  public static final Array<Tile> P5_P6_UNBEARING_LAND_TILES = Array.fill(2, DESERT);
+  public static final Array<Tile> P5_P6_HARBOR_TILES =
+      P3_P4_HARBOR_TILES.append(GENERIC_HARBOR).append(WOOL_HARBOR);
+  public static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of(
           "producing",
           P5_P6_PRODUCING_TILES,
@@ -237,15 +228,12 @@ public class Base {
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_FISHERY_COORDINATES).build();
 
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_PRODUCING_TILES =
-      Tuple.of(P3_P4_PRODUCING_TILES._1.appendAll(P3_P4_PRODUCING_TILES._1), false);
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_UNBEARING_LAND_TILES =
-      P3_P4_UNBEARING_TILES;
-  public static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES =
-      Tuple.of(
-          P3_P4_HARBOR_TILES._1.append(GRAIN_HARBOR).append(LUMBER_HARBOR).append(WOOL_HARBOR),
-          true);
-  public static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
+  public static final Array<Tile> P7_P8_PRODUCING_TILES =
+      P3_P4_PRODUCING_TILES.appendAll(P3_P4_PRODUCING_TILES);
+  public static final Array<Tile> P7_P8_UNBEARING_LAND_TILES = P3_P4_UNBEARING_TILES;
+  public static final Array<Tile> P7_P8_HARBOR_TILES =
+      P3_P4_HARBOR_TILES.append(GRAIN_HARBOR).append(LUMBER_HARBOR).append(WOOL_HARBOR);
+  public static final Map<String, Array<Tile>> P7_P8_TILES =
       HashMap.of(
           "producing",
           P7_P8_PRODUCING_TILES,

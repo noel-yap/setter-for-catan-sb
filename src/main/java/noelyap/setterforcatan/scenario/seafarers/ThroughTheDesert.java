@@ -27,14 +27,13 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import noelyap.setterforcatan.component.Coordinates;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.matcher.HasOddsGreaterThan;
+import noelyap.setterforcatan.matcher.TileIs;
 import noelyap.setterforcatan.protogen.ChitOuterClass;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
@@ -43,36 +42,30 @@ import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.util.TileMappingUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.AllOf;
-import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNot;
 
 public class ThroughTheDesert {
   private static final Matcher<Configuration> CONFIGURATION_MATCHER =
       IsNot.not(
-          AllOf.<Configuration>allOf(Is.is(GOLD_FIELD), HasOddsGreaterThan.hasOddsGreaterThan(4)));
+          AllOf.<Configuration>allOf(
+              TileIs.tileIs(GOLD_FIELD), HasOddsGreaterThan.hasOddsGreaterThan(4)));
 
-  private static final Tuple2<Array<Tile>, Boolean> P3_INDIGENOUS_LAND_TILES =
-      Tuple.of(
-          Array.fill(2, FIELD)
-              .appendAll(Array.fill(2, MOUNTAIN))
-              .appendAll(Array.fill(3, HILL))
-              .appendAll(Array.fill(3, PASTURE))
-              .appendAll(Array.fill(4, FOREST)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_INDIGENOUS_HARBOR_TILES =
-      Tuple.of(Array.fill(3, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS), true);
-  private static final Tuple2<Array<Tile>, Boolean> P3_DESERT_TILES =
-      Tuple.of(Array.fill(3, DESERT), true);
-  private static final Tuple2<Array<Tile>, Boolean> P3_FOREIGN_LAND_TILES =
-      Tuple.of(
-          Array.of(FOREST, PASTURE)
-              .appendAll(Array.fill(2, FIELD))
-              .appendAll(Array.fill(2, GOLD_FIELD))
-              .appendAll(Array.fill(2, MOUNTAIN)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_FOREIGN_SEA_TILES =
-      Tuple.of(Array.fill(2, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_TILES =
+  private static final Array<Tile> P3_INDIGENOUS_LAND_TILES =
+      Array.fill(2, FIELD)
+          .appendAll(Array.fill(2, MOUNTAIN))
+          .appendAll(Array.fill(3, HILL))
+          .appendAll(Array.fill(3, PASTURE))
+          .appendAll(Array.fill(4, FOREST));
+  private static final Array<Tile> P3_INDIGENOUS_HARBOR_TILES =
+      Array.fill(3, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS);
+  private static final Array<Tile> P3_DESERT_TILES = Array.fill(3, DESERT);
+  private static final Array<Tile> P3_FOREIGN_LAND_TILES =
+      Array.of(FOREST, PASTURE)
+          .appendAll(Array.fill(2, FIELD))
+          .appendAll(Array.fill(2, GOLD_FIELD))
+          .appendAll(Array.fill(2, MOUNTAIN));
+  private static final Array<Tile> P3_FOREIGN_SEA_TILES = Array.fill(2, SEA);
+  private static final Map<String, Array<Tile>> P3_TILES =
       HashMap.of(
           "indigenous-land",
           P3_INDIGENOUS_LAND_TILES,
@@ -171,26 +164,21 @@ public class ThroughTheDesert {
   public static final SpecificationImpl P3_FISHERMEN_SPECIFICATION_IMPL =
       P3_SPECIFICATION_BUILDER.withFisheries(P3_INDIGENOUS_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P4_INDIGENOUS_LAND_TILES =
-      Tuple.of(
-          Array.fill(2, FIELD)
-              .appendAll(Array.fill(2, MOUNTAIN))
-              .appendAll(Array.fill(4, HILL))
-              .appendAll(Array.fill(4, PASTURE))
-              .appendAll(Array.fill(5, FOREST)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P4_INDIGENOUS_HARBOR_TILES =
-      Base.P3_P4_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_DESERT_TILES = P3_DESERT_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P4_FOREIGN_LAND_TILES =
-      Tuple.of(
-          Array.of(HILL, PASTURE)
-              .appendAll(Array.fill(2, GOLD_FIELD))
-              .appendAll(Array.fill(3, FIELD))
-              .appendAll(Array.fill(3, MOUNTAIN)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P4_FOREIGN_SEA_TILES = P3_FOREIGN_SEA_TILES;
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P4_TILES =
+  private static final Array<Tile> P4_INDIGENOUS_LAND_TILES =
+      Array.fill(2, FIELD)
+          .appendAll(Array.fill(2, MOUNTAIN))
+          .appendAll(Array.fill(4, HILL))
+          .appendAll(Array.fill(4, PASTURE))
+          .appendAll(Array.fill(5, FOREST));
+  private static final Array<Tile> P4_INDIGENOUS_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
+  private static final Array<Tile> P4_DESERT_TILES = P3_DESERT_TILES;
+  private static final Array<Tile> P4_FOREIGN_LAND_TILES =
+      Array.of(HILL, PASTURE)
+          .appendAll(Array.fill(2, GOLD_FIELD))
+          .appendAll(Array.fill(3, FIELD))
+          .appendAll(Array.fill(3, MOUNTAIN));
+  private static final Array<Tile> P4_FOREIGN_SEA_TILES = P3_FOREIGN_SEA_TILES;
+  private static final Map<String, Array<Tile>> P4_TILES =
       HashMap.of(
           "indigenous-land",
           P4_INDIGENOUS_LAND_TILES,
@@ -298,30 +286,23 @@ public class ThroughTheDesert {
   public static final SpecificationImpl P4_FISHERMEN_SPECIFICATION_IMPL =
       P4_SPECIFICATION_BUILDER.withFisheries(P4_INDIGENOUS_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_INDIGENOUS_LAND_TILES =
-      Tuple.of(
-          Array.fill(4, FIELD)
-              .appendAll(Array.fill(4, FOREST))
-              .appendAll(Array.fill(4, MOUNTAIN))
-              .appendAll(Array.fill(4, PASTURE))
-              .appendAll(Array.fill(5, HILL)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_INDIGENOUS_HARBOR_TILES =
-      Base.P5_P6_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_DESERT_TILES =
-      Tuple.of(Array.fill(5, DESERT), true);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FOREIGN_LAND_TILES =
-      Tuple.of(
-          Array.fill(2, HILL)
-              .appendAll(Array.fill(3, GOLD_FIELD))
-              .appendAll(Array.fill(3, FIELD))
-              .appendAll(Array.fill(3, FOREST))
-              .appendAll(Array.fill(3, MOUNTAIN))
-              .appendAll(Array.fill(3, PASTURE)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_FOREIGN_SEA_TILES =
-      Tuple.of(Array.fill(5, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
+  private static final Array<Tile> P5_P6_INDIGENOUS_LAND_TILES =
+      Array.fill(4, FIELD)
+          .appendAll(Array.fill(4, FOREST))
+          .appendAll(Array.fill(4, MOUNTAIN))
+          .appendAll(Array.fill(4, PASTURE))
+          .appendAll(Array.fill(5, HILL));
+  private static final Array<Tile> P5_P6_INDIGENOUS_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
+  private static final Array<Tile> P5_P6_DESERT_TILES = Array.fill(5, DESERT);
+  private static final Array<Tile> P5_P6_FOREIGN_LAND_TILES =
+      Array.fill(2, HILL)
+          .appendAll(Array.fill(3, GOLD_FIELD))
+          .appendAll(Array.fill(3, FIELD))
+          .appendAll(Array.fill(3, FOREST))
+          .appendAll(Array.fill(3, MOUNTAIN))
+          .appendAll(Array.fill(3, PASTURE));
+  private static final Array<Tile> P5_P6_FOREIGN_SEA_TILES = Array.fill(5, SEA);
+  private static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of(
           "indigenous-land",
           P5_P6_INDIGENOUS_LAND_TILES,
@@ -459,30 +440,23 @@ public class ThroughTheDesert {
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_INDIGENOUS_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_INDIGENOUS_LAND_TILES =
-      Tuple.of(
-          Array.fill(5, FIELD)
-              .appendAll(Array.fill(5, FOREST))
-              .appendAll(Array.fill(5, MOUNTAIN))
-              .appendAll(Array.fill(5, PASTURE))
-              .appendAll(Array.fill(6, HILL)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_INDIGENOUS_HARBOR_TILES =
-      Base.P7_P8_HARBOR_TILES;
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_DESERT_TILES =
-      Tuple.of(Array.fill(7, DESERT), true);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FOREIGN_LAND_TILES =
-      Tuple.of(
-          Array.fill(4, HILL)
-              .appendAll(Array.fill(4, PASTURE))
-              .appendAll(Array.fill(5, FIELD))
-              .appendAll(Array.fill(5, FOREST))
-              .appendAll(Array.fill(5, MOUNTAIN))
-              .appendAll(Array.fill(5, GOLD_FIELD)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_FOREIGN_SEA_TILES =
-      Tuple.of(Array.fill(8, SEA), true);
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
+  private static final Array<Tile> P7_P8_INDIGENOUS_LAND_TILES =
+      Array.fill(5, FIELD)
+          .appendAll(Array.fill(5, FOREST))
+          .appendAll(Array.fill(5, MOUNTAIN))
+          .appendAll(Array.fill(5, PASTURE))
+          .appendAll(Array.fill(6, HILL));
+  private static final Array<Tile> P7_P8_INDIGENOUS_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
+  private static final Array<Tile> P7_P8_DESERT_TILES = Array.fill(7, DESERT);
+  private static final Array<Tile> P7_P8_FOREIGN_LAND_TILES =
+      Array.fill(4, HILL)
+          .appendAll(Array.fill(4, PASTURE))
+          .appendAll(Array.fill(5, FIELD))
+          .appendAll(Array.fill(5, FOREST))
+          .appendAll(Array.fill(5, MOUNTAIN))
+          .appendAll(Array.fill(5, GOLD_FIELD));
+  private static final Array<Tile> P7_P8_FOREIGN_SEA_TILES = Array.fill(8, SEA);
+  private static final Map<String, Array<Tile>> P7_P8_TILES =
       HashMap.of(
           "indigenous-land",
           P7_P8_INDIGENOUS_LAND_TILES,

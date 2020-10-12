@@ -23,8 +23,6 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
@@ -37,10 +35,10 @@ import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.util.TileMappingUtils;
 
 public class TheNIslands {
-  private static final Tuple2<Array<Tile>, Boolean> P3_ISLAND_TILES =
-      Tuple.of(Base.P3_P4_PRODUCING_TILES._1.append(HILL).append(MOUNTAIN), false);
-  private static final Tuple2<Array<Tile>, Boolean> P3_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P3_TILES =
+  private static final Array<Tile> P3_ISLAND_TILES =
+      Base.P3_P4_PRODUCING_TILES.append(HILL).append(MOUNTAIN);
+  private static final Array<Tile> P3_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
+  private static final Map<String, Array<Tile>> P3_TILES =
       HashMap.of("island", P3_ISLAND_TILES, "harbor", P3_HARBOR_TILES);
 
   private static final Array<Coordinate> P3_ISLAND_COORDINATES =
@@ -103,10 +101,10 @@ public class TheNIslands {
   public static final SpecificationImpl P3_FISHERMEN_SPECIFICATION_IMPL =
       P3_SPECIFICATION_BUILDER.withFisheries(P3_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P4_ISLAND_TILES =
-      Tuple.of(P3_ISLAND_TILES._1.append(FIELD).append(PASTURE).append(FOREST), false);
-  private static final Tuple2<Array<Tile>, Boolean> P4_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P4_TILES =
+  private static final Array<Tile> P4_ISLAND_TILES =
+      P3_ISLAND_TILES.append(FIELD).append(PASTURE).append(FOREST);
+  private static final Array<Tile> P4_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
+  private static final Map<String, Array<Tile>> P4_TILES =
       HashMap.of("island", P4_ISLAND_TILES, "harbor", P4_HARBOR_TILES);
 
   private static final Array<Coordinate> P4_ISLAND_COORDINATES =
@@ -174,16 +172,14 @@ public class TheNIslands {
   public static final SpecificationImpl P4_FISHERMEN_SPECIFICATION_IMPL =
       P4_SPECIFICATION_BUILDER.withFisheries(P4_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_ISLAND_TILES =
-      Tuple.of(
-          Array.fill(6, FIELD)
-              .appendAll(Array.fill(6, HILL))
-              .appendAll(Array.fill(6, MOUNTAIN))
-              .appendAll(Array.fill(7, PASTURE))
-              .appendAll(Array.fill(7, FOREST)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P5_P6_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P5_P6_TILES =
+  private static final Array<Tile> P5_P6_ISLAND_TILES =
+      Array.fill(6, FIELD)
+          .appendAll(Array.fill(6, HILL))
+          .appendAll(Array.fill(6, MOUNTAIN))
+          .appendAll(Array.fill(7, PASTURE))
+          .appendAll(Array.fill(7, FOREST));
+  private static final Array<Tile> P5_P6_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
+  private static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of("island", P5_P6_ISLAND_TILES, "harbor", P5_P6_HARBOR_TILES);
 
   private static final Array<Coordinate> P5_P6_ISLAND_COORDINATES =
@@ -273,16 +269,14 @@ public class TheNIslands {
   public static final SpecificationImpl P5_P6_FISHERMEN_SPECIFICATION_IMPL =
       P5_P6_SPECIFICATION_BUILDER.withFisheries(P5_P6_FISHERY_COORDINATES).build();
 
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_ISLAND_TILES =
-      Tuple.of(
-          Array.fill(8, HILL)
-              .appendAll(Array.fill(8, MOUNTAIN))
-              .appendAll(Array.fill(8, PASTURE))
-              .appendAll(Array.fill(9, FIELD))
-              .appendAll(Array.fill(9, FOREST)),
-          false);
-  private static final Tuple2<Array<Tile>, Boolean> P7_P8_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
-  private static final Map<String, Tuple2<Array<Tile>, Boolean>> P7_P8_TILES =
+  private static final Array<Tile> P7_P8_ISLAND_TILES =
+      Array.fill(8, HILL)
+          .appendAll(Array.fill(8, MOUNTAIN))
+          .appendAll(Array.fill(8, PASTURE))
+          .appendAll(Array.fill(9, FIELD))
+          .appendAll(Array.fill(9, FOREST));
+  private static final Array<Tile> P7_P8_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
+  private static final Map<String, Array<Tile>> P7_P8_TILES =
       HashMap.of("island", P7_P8_ISLAND_TILES, "harbor", P7_P8_HARBOR_TILES);
 
   private static final Array<Coordinate> P7_P8_ISLAND_COORDINATES =

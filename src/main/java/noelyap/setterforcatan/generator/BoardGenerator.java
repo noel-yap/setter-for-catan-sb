@@ -20,7 +20,7 @@ public class BoardGenerator {
   }
 
   public Board generateBoard() {
-    final int attemptsCount = ArithmeticUtils.pow(6, 6);
+    final int attemptsCount = ArithmeticUtils.pow(7, 7);
     final Array<Configuration> boardConfigurations =
         Stream.range(0, attemptsCount)
             .map(attempt -> Tuple.of(attempt, specificationImpl.toConfiguration()))
