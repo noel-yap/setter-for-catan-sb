@@ -455,32 +455,42 @@ public class SpecificationImpl {
   }
 
   public Option<Array<Configuration>> toConfiguration() {
-    final Multimap<Tile, Coordinate> tileCoordinateMap =
+    final Array<Tuple2<Tuple2<String, Tile>, Coordinate>> tilesCoordinates =
         shuffleTiles(coordinatesShufflerPrng, tiles, coordinates, coordinatesTilesMap);
-    final Multimap<Tile, Chit> tileChitsMap =
+    final Array<Tuple2<Tuple2<String, Tile>, Chit>> tilesChits =
         shuffleTiles(chitsShufflerPrng, tiles, chits, chitsTilesMap);
 
-    final Array<Configuration> configurations =
-        Array.ofAll(
-            tileCoordinateMap
-                .keySet()
-                .flatMap(tile -> {
-                      // FIXME: This can potentially mix up different sets of tiles.
-                      final Array<Coordinate> coordinates =
-                          Array.ofAll(tileCoordinateMap.get(tile).get());
-                      final Array<Chit> chits =
-                          Array.ofAll(tileChitsMap.get(tile).getOrElse(Array.empty()))
-                              .padTo(coordinates.length(), Chit.newBuilder().build());
+    final var tilesCoordinatesMap = tilesCoordinates.groupBy(Tuple2::_1);
+    final var tilesChitsMap = tilesChits.groupBy(Tuple2::_1);
 
-                      return coordinates
-                          .zip(chits)
-                          .map(t2 ->
-                                  Configuration.newBuilder()
-                                      .setTile(tile)
-                                      .setCoordinate(t2._1)
-                                      .setChit(t2._2)
-                                      .build());
-                    }));
+    final Array<Configuration> configurations =
+        tilesCoordinatesMap
+            .toArray()
+            .flatMap(entry -> {
+                  final var tileId = entry._1;
+
+                  final Tile tile = tileId._2;
+                  final Array<Coordinate> coordinates = entry._2.map(Tuple2::_2);
+                  final Array<Chit> chits =
+                      tilesChitsMap
+                          .get(tileId)
+                          .getOrElse(
+                              Array.fill(
+                                  coordinates.length(),
+                                  Tuple.of(tileId, noelyap.setterforcatan.component.Chits.empty())))
+                          .map(Tuple2::_2);
+
+                  return coordinates
+                      .zip(chits)
+                      .map(t2 ->
+                        Configuration
+                            .newBuilder()
+                            .setTile(tile)
+                            .setCoordinate(t2._1)
+                            .setChit(t2._2)
+                            .build()
+                      );
+                });
 
     return configurations.forAll(this::validateConfiguration)
         ? Option.of(configurations)
@@ -489,23 +499,22 @@ public class SpecificationImpl {
 
   @VisibleForTesting
   static <ChitsOrCoordinates extends GeneratedMessageV3>
-      Multimap<Tile, ChitsOrCoordinates> shuffleTiles(
+      Array<Tuple2<Tuple2<String, Tile>, ChitsOrCoordinates>> shuffleTiles(
           final Random prng,
           final Map<String, Array<Tile>> tiles,
           final Map<String, Array<ChitsOrCoordinates>> featuresMap,
           final Map<String, Array<String>> featuresTilesMap) {
-    return HashMultimap.withSeq()
-        .ofEntries(
-            Array.ofAll(featuresTilesMap.keySet()) // prevent dedupe
-                .flatMap(featureName -> {
-                      final Array<String> tilesNames = featuresTilesMap.get(featureName).get();
-                      final Array<Tile> tileIds =
-                          tilesNames.flatMap(tilesName -> tiles.get(tilesName).get());
-                      final Array<ChitsOrCoordinates> chitsOrCoordinates =
-                          featuresMap.get(featureName).get();
+    return Array.ofAll(featuresTilesMap.keySet()) // prevent dedupe
+        .flatMap(featureName -> {
+              final Array<String> tilesNames = featuresTilesMap.get(featureName).get();
+              final Array<Tuple2<String, Tile>> tileIds =
+                  tilesNames.flatMap(tilesName ->
+                          tiles.get(tilesName).get().map(tile -> Tuple.of(tilesName, tile)));
+              final Array<ChitsOrCoordinates> chitsOrCoordinates =
+                  featuresMap.get(featureName).get();
 
-                      return tileIds.zip(chitsOrCoordinates.shuffle(prng));
-                    }));
+              return tileIds.zip(chitsOrCoordinates.shuffle(prng));
+            });
   }
 
   public boolean validateConfiguration(final Configuration configuration) {
