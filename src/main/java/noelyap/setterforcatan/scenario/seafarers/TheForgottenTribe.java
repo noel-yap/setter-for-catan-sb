@@ -103,7 +103,9 @@ public class TheForgottenTribe {
               Coordinates.of(7, 5),
               Coordinates.of(9, 5)));
   private static final Array<Coordinate> P3_P4_MAIN_ISLAND_FISHERY_COORDINATES =
-      Array.of(Coordinates.of(1, 3, BOTTOM_LEFT, LEFT), Coordinates.of(1, 5, LEFT, TOP_LEFT));
+      Array.of(
+          Coordinates.withEdges(1, 3, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(1, 5, LEFT, TOP_LEFT));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(3, 1),
@@ -134,14 +136,14 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(15, 7, RIGHT, LEFT));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
       Array.of(
-          Coordinates.of(4, 0, BOTTOM_LEFT),
-          Coordinates.of(10, 0, BOTTOM_LEFT),
-          Coordinates.of(14, 0, BOTTOM_LEFT),
-          Coordinates.of(17, 3, LEFT),
-          Coordinates.of(17, 5, LEFT),
-          Coordinates.of(4, 8, TOP_LEFT),
-          Coordinates.of(8, 8, TOP_RIGHT),
-          Coordinates.of(14, 8, TOP_LEFT));
+          Coordinates.withEdges(4, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(14, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(17, 3, LEFT),
+          Coordinates.withEdges(17, 5, LEFT),
+          Coordinates.withEdges(4, 8, TOP_LEFT),
+          Coordinates.withEdges(8, 8, TOP_RIGHT),
+          Coordinates.withEdges(14, 8, TOP_LEFT));
   private static final Map<String, Array<Coordinate>> P3_P4_COORDINATES =
       HashMap.of(
           "main-island-land",
@@ -241,7 +243,9 @@ public class TheForgottenTribe {
           Coordinates.of(17, 5),
           Coordinates.of(19, 5));
   private static final Array<Coordinate> P5_P6_MAIN_ISLAND_FISHERY_COORDINATES =
-      Array.of(Coordinates.of(19, 3, RIGHT, BOTTOM_RIGHT), Coordinates.of(19, 5, TOP_RIGHT, RIGHT));
+      Array.of(
+          Coordinates.withEdges(19, 3, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(19, 5, TOP_RIGHT, RIGHT));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(3, 1),
@@ -276,16 +280,16 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(8, 8, TOP_RIGHT, BOTTOM_LEFT));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
       Array.of(
-          Coordinates.of(2, 0, BOTTOM_RIGHT),
-          Coordinates.of(4, 0, BOTTOM_RIGHT),
-          Coordinates.of(10, 0, BOTTOM_RIGHT),
-          Coordinates.of(10, 0, BOTTOM_LEFT),
-          Coordinates.of(16, 0, BOTTOM_LEFT),
-          Coordinates.of(6, 8, TOP_LEFT),
-          Coordinates.of(10, 8, TOP_RIGHT),
-          Coordinates.of(10, 8, TOP_LEFT),
-          Coordinates.of(16, 8, TOP_LEFT),
-          Coordinates.of(18, 8, TOP_LEFT));
+          Coordinates.withEdges(2, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(4, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(10, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(16, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(6, 8, TOP_LEFT),
+          Coordinates.withEdges(10, 8, TOP_RIGHT),
+          Coordinates.withEdges(10, 8, TOP_LEFT),
+          Coordinates.withEdges(16, 8, TOP_LEFT),
+          Coordinates.withEdges(18, 8, TOP_LEFT));
   private static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
       HashMap.of(
           "main-island-land",
@@ -400,10 +404,10 @@ public class TheForgottenTribe {
           Coordinates.of(27, 5));
   private static final Array<Coordinate> P7_P8_MAIN_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.of(1, 3, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(29, 3, BOTTOM_LEFT, LEFT),
-          Coordinates.of(1, 5, TOP_RIGHT, RIGHT),
-          Coordinates.of(29, 5, LEFT, TOP_LEFT));
+          Coordinates.withEdges(1, 3, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(29, 3, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(1, 5, TOP_RIGHT, RIGHT),
+          Coordinates.withEdges(29, 5, LEFT, TOP_LEFT));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(5, 1),
@@ -442,18 +446,18 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(27, 7, RIGHT, LEFT));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
       Array.of(
-          Coordinates.of(6, 0, BOTTOM_LEFT),
-          Coordinates.of(8, 0, BOTTOM_RIGHT),
-          Coordinates.of(14, 0, BOTTOM_LEFT),
-          Coordinates.of(16, 0, BOTTOM_RIGHT),
-          Coordinates.of(22, 0, BOTTOM_LEFT),
-          Coordinates.of(24, 0, BOTTOM_RIGHT),
-          Coordinates.of(4, 8, TOP_RIGHT),
-          Coordinates.of(10, 8, TOP_LEFT),
-          Coordinates.of(12, 8, TOP_RIGHT),
-          Coordinates.of(18, 8, TOP_LEFT),
-          Coordinates.of(20, 8, TOP_RIGHT),
-          Coordinates.of(26, 8, TOP_LEFT));
+          Coordinates.withEdges(6, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(8, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(14, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(16, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(22, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(24, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(4, 8, TOP_RIGHT),
+          Coordinates.withEdges(10, 8, TOP_LEFT),
+          Coordinates.withEdges(12, 8, TOP_RIGHT),
+          Coordinates.withEdges(18, 8, TOP_LEFT),
+          Coordinates.withEdges(20, 8, TOP_RIGHT),
+          Coordinates.withEdges(26, 8, TOP_LEFT));
   private static final Map<String, Array<Coordinate>> P7_P8_COORDINATES =
       HashMap.of(
           "main-island-land",

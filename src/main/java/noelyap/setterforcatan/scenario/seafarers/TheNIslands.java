@@ -65,21 +65,21 @@ public class TheNIslands {
           Coordinates.of(6, 6));
   private static final Array<Coordinate> P3_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.of(8, 0, BOTTOM_RIGHT),
-          Coordinates.of(1, 1, BOTTOM_RIGHT),
-          Coordinates.of(13, 1, BOTTOM_LEFT),
-          Coordinates.of(6, 2, TOP_LEFT),
-          Coordinates.of(5, 3, BOTTOM_LEFT),
-          Coordinates.of(11, 3, TOP_RIGHT),
-          Coordinates.of(8, 4, BOTTOM_RIGHT),
-          Coordinates.of(13, 5, TOP_LEFT),
-          Coordinates.of(2, 6, TOP_RIGHT));
+          Coordinates.withEdges(8, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(1, 1, BOTTOM_RIGHT),
+          Coordinates.withEdges(13, 1, BOTTOM_LEFT),
+          Coordinates.withEdges(6, 2, TOP_LEFT),
+          Coordinates.withEdges(5, 3, BOTTOM_LEFT),
+          Coordinates.withEdges(11, 3, TOP_RIGHT),
+          Coordinates.withEdges(8, 4, BOTTOM_RIGHT),
+          Coordinates.withEdges(13, 5, TOP_LEFT),
+          Coordinates.withEdges(2, 6, TOP_RIGHT));
   private static final Array<Coordinate> P3_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.of(4, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.of(3, 3, TOP_LEFT, TOP_RIGHT),
-          Coordinates.of(11, 3, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.of(10, 6, TOP_LEFT, TOP_RIGHT));
+          Coordinates.withEdges(4, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.withEdges(3, 3, TOP_LEFT, TOP_RIGHT),
+          Coordinates.withEdges(11, 3, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.withEdges(10, 6, TOP_LEFT, TOP_RIGHT));
   private static final Map<String, Array<Coordinate>> P3_COORDINATES =
       HashMap.of("island", P3_ISLAND_COORDINATES, "harbor", P3_HARBOR_COORDINATES);
 
@@ -134,23 +134,23 @@ public class TheNIslands {
           Coordinates.of(10, 6));
   private static final Array<Coordinate> P4_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.of(12, 0, LEFT),
-          Coordinates.of(1, 1, BOTTOM_RIGHT),
-          Coordinates.of(13, 1, BOTTOM_LEFT),
-          Coordinates.of(8, 2, TOP_RIGHT),
-          Coordinates.of(3, 3, TOP_LEFT),
-          Coordinates.of(11, 3, BOTTOM_RIGHT),
-          Coordinates.of(2, 4, BOTTOM_RIGHT),
-          Coordinates.of(8, 4, TOP_LEFT),
-          Coordinates.of(13, 5, LEFT));
+          Coordinates.withEdges(12, 0, LEFT),
+          Coordinates.withEdges(1, 1, BOTTOM_RIGHT),
+          Coordinates.withEdges(13, 1, BOTTOM_LEFT),
+          Coordinates.withEdges(8, 2, TOP_RIGHT),
+          Coordinates.withEdges(3, 3, TOP_LEFT),
+          Coordinates.withEdges(11, 3, BOTTOM_RIGHT),
+          Coordinates.withEdges(2, 4, BOTTOM_RIGHT),
+          Coordinates.withEdges(8, 4, TOP_LEFT),
+          Coordinates.withEdges(13, 5, LEFT));
   private static final Array<Coordinate> P4_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.of(2, 0, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(2, 2, BOTTOM_LEFT, LEFT),
-          Coordinates.of(4, 2, TOP_RIGHT, RIGHT),
-          Coordinates.of(10, 4, BOTTOM_LEFT, LEFT),
-          Coordinates.of(12, 4, TOP_RIGHT, RIGHT),
-          Coordinates.of(12, 6, LEFT, TOP_LEFT));
+          Coordinates.withEdges(2, 0, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(2, 2, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(4, 2, TOP_RIGHT, RIGHT),
+          Coordinates.withEdges(10, 4, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(12, 4, TOP_RIGHT, RIGHT),
+          Coordinates.withEdges(12, 6, LEFT, TOP_LEFT));
   private static final Map<String, Array<Coordinate>> P4_COORDINATES =
       HashMap.of("island", P4_ISLAND_COORDINATES, "harbor", P4_HARBOR_COORDINATES);
 
@@ -218,25 +218,25 @@ public class TheNIslands {
           Coordinates.of(15, 7));
   private static final Array<Coordinate> P5_P6_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.of(6, 0, BOTTOM_LEFT),
-          Coordinates.of(11, 1, BOTTOM_LEFT),
-          Coordinates.of(0, 2, RIGHT),
-          Coordinates.of(12, 2, TOP_RIGHT),
-          Coordinates.of(18, 2, LEFT),
-          Coordinates.of(16, 4, BOTTOM_LEFT),
-          Coordinates.of(5, 5, BOTTOM_LEFT),
-          Coordinates.of(13, 5, BOTTOM_RIGHT),
-          Coordinates.of(2, 8, TOP_RIGHT),
-          Coordinates.of(8, 8, TOP_RIGHT),
-          Coordinates.of(14, 8, TOP_RIGHT));
+          Coordinates.withEdges(6, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(11, 1, BOTTOM_LEFT),
+          Coordinates.withEdges(0, 2, RIGHT),
+          Coordinates.withEdges(12, 2, TOP_RIGHT),
+          Coordinates.withEdges(18, 2, LEFT),
+          Coordinates.withEdges(16, 4, BOTTOM_LEFT),
+          Coordinates.withEdges(5, 5, BOTTOM_LEFT),
+          Coordinates.withEdges(13, 5, BOTTOM_RIGHT),
+          Coordinates.withEdges(2, 8, TOP_RIGHT),
+          Coordinates.withEdges(8, 8, TOP_RIGHT),
+          Coordinates.withEdges(14, 8, TOP_RIGHT));
   private static final Array<Coordinate> P5_P6_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.of(14, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.of(3, 1, LEFT, TOP_LEFT),
-          Coordinates.of(17, 1, BOTTOM_LEFT, LEFT),
-          Coordinates.of(16, 6, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(1, 7, TOP_RIGHT, RIGHT),
-          Coordinates.of(4, 8, TOP_LEFT, TOP_RIGHT));
+          Coordinates.withEdges(14, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.withEdges(3, 1, LEFT, TOP_LEFT),
+          Coordinates.withEdges(17, 1, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(16, 6, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(1, 7, TOP_RIGHT, RIGHT),
+          Coordinates.withEdges(4, 8, TOP_LEFT, TOP_RIGHT));
   private static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
       HashMap.of("island", P5_P6_ISLAND_COORDINATES, "harbor", P5_P6_HARBOR_COORDINATES);
 
@@ -325,28 +325,28 @@ public class TheNIslands {
           Coordinates.of(23, 7));
   private static final Array<Coordinate> P7_P8_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.of(2, 0, BOTTOM_RIGHT),
-          Coordinates.of(10, 0, BOTTOM_LEFT),
-          Coordinates.of(16, 0, BOTTOM_RIGHT),
-          Coordinates.of(26, 0, BOTTOM_LEFT),
-          Coordinates.of(0, 2, RIGHT),
-          Coordinates.of(26, 2, LEFT),
-          Coordinates.of(0, 6, RIGHT),
-          Coordinates.of(26, 6, LEFT),
-          Coordinates.of(2, 8, TOP_RIGHT),
-          Coordinates.of(10, 8, TOP_LEFT),
-          Coordinates.of(16, 8, TOP_RIGHT),
-          Coordinates.of(24, 8, TOP_LEFT));
+          Coordinates.withEdges(2, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(16, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(26, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(0, 2, RIGHT),
+          Coordinates.withEdges(26, 2, LEFT),
+          Coordinates.withEdges(0, 6, RIGHT),
+          Coordinates.withEdges(26, 6, LEFT),
+          Coordinates.withEdges(2, 8, TOP_RIGHT),
+          Coordinates.withEdges(10, 8, TOP_LEFT),
+          Coordinates.withEdges(16, 8, TOP_RIGHT),
+          Coordinates.withEdges(24, 8, TOP_LEFT));
   private static final Array<Coordinate> P7_P8_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.of(24, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.of(1, 1, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(15, 1, LEFT, TOP_LEFT),
-          Coordinates.of(25, 1, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(1, 7, TOP_RIGHT, RIGHT),
-          Coordinates.of(11, 7, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(25, 7, LEFT, TOP_LEFT),
-          Coordinates.of(4, 8, TOP_LEFT, TOP_RIGHT));
+          Coordinates.withEdges(24, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.withEdges(1, 1, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(15, 1, LEFT, TOP_LEFT),
+          Coordinates.withEdges(25, 1, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(1, 7, TOP_RIGHT, RIGHT),
+          Coordinates.withEdges(11, 7, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(25, 7, LEFT, TOP_LEFT),
+          Coordinates.withEdges(4, 8, TOP_LEFT, TOP_RIGHT));
   private static final Map<String, Array<Coordinate>> P7_P8_COORDINATES =
       HashMap.of("island", P7_P8_ISLAND_COORDINATES, "harbor", P7_P8_HARBOR_COORDINATES);
 

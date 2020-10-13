@@ -84,20 +84,20 @@ public class HeadingForNewShores {
           Coordinates.of(5, 5));
   private static final Array<Coordinate> P3_BIG_ISLAND_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.of(4, 0, BOTTOM_RIGHT),
-          Coordinates.of(1, 1, RIGHT),
-          Coordinates.of(7, 1, LEFT),
-          Coordinates.of(0, 2, BOTTOM_RIGHT),
-          Coordinates.of(0, 4, TOP_RIGHT),
-          Coordinates.of(8, 4, TOP_LEFT),
-          Coordinates.of(1, 5, RIGHT),
-          Coordinates.of(7, 5, LEFT));
+          Coordinates.withEdges(4, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(1, 1, RIGHT),
+          Coordinates.withEdges(7, 1, LEFT),
+          Coordinates.withEdges(0, 2, BOTTOM_RIGHT),
+          Coordinates.withEdges(0, 4, TOP_RIGHT),
+          Coordinates.withEdges(8, 4, TOP_LEFT),
+          Coordinates.withEdges(1, 5, RIGHT),
+          Coordinates.withEdges(7, 5, LEFT));
   private static final Array<Coordinate> P3_BIG_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.of(2, 2, LEFT, TOP_LEFT),
-          Coordinates.of(8, 2, BOTTOM_LEFT, LEFT),
-          Coordinates.of(6, 4, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(4, 6, TOP_LEFT, TOP_RIGHT));
+          Coordinates.withEdges(2, 2, LEFT, TOP_LEFT),
+          Coordinates.withEdges(8, 2, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(6, 4, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(4, 6, TOP_LEFT, TOP_RIGHT));
   private static final Array<Coordinate> P3_SMALL_ISLAND_COORDINATES =
       Array.of(
           Coordinates.of(9, 1),
@@ -266,27 +266,27 @@ public class HeadingForNewShores {
                   .build());
   private static final Array<Coordinate> P5_P6_BIG_ISLAND_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.of(6, 0, BOTTOM_RIGHT),
-          Coordinates.of(10, 0, BOTTOM_LEFT),
-          Coordinates.of(13, 1, BOTTOM_LEFT),
-          Coordinates.of(4, 2, RIGHT),
-          Coordinates.of(3, 3, BOTTOM_RIGHT),
-          Coordinates.of(15, 3, BOTTOM_LEFT),
-          Coordinates.of(3, 5, RIGHT),
-          Coordinates.of(15, 5, LEFT),
-          Coordinates.of(5, 7, TOP_RIGHT),
-          Coordinates.of(13, 7, TOP_LEFT),
-          Coordinates.of(8, 8, TOP_RIGHT));
+          Coordinates.withEdges(6, 0, BOTTOM_RIGHT),
+          Coordinates.withEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.withEdges(13, 1, BOTTOM_LEFT),
+          Coordinates.withEdges(4, 2, RIGHT),
+          Coordinates.withEdges(3, 3, BOTTOM_RIGHT),
+          Coordinates.withEdges(15, 3, BOTTOM_LEFT),
+          Coordinates.withEdges(3, 5, RIGHT),
+          Coordinates.withEdges(15, 5, LEFT),
+          Coordinates.withEdges(5, 7, TOP_RIGHT),
+          Coordinates.withEdges(13, 7, TOP_LEFT),
+          Coordinates.withEdges(8, 8, TOP_RIGHT));
   private static final Array<Coordinate> P5_P6_BIG_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.of(5, 1, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(14, 2, BOTTOM_LEFT, LEFT),
-          Coordinates.of(5, 3, LEFT, TOP_LEFT),
-          Coordinates.of(4, 4, BOTTOM_LEFT, LEFT),
-          Coordinates.of(14, 4, RIGHT, BOTTOM_RIGHT),
-          Coordinates.of(14, 6, LEFT, TOP_LEFT),
-          Coordinates.of(4, 6, TOP_RIGHT, RIGHT),
-          Coordinates.of(11, 7, RIGHT, BOTTOM_RIGHT));
+          Coordinates.withEdges(5, 1, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(14, 2, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(5, 3, LEFT, TOP_LEFT),
+          Coordinates.withEdges(4, 4, BOTTOM_LEFT, LEFT),
+          Coordinates.withEdges(14, 4, RIGHT, BOTTOM_RIGHT),
+          Coordinates.withEdges(14, 6, LEFT, TOP_LEFT),
+          Coordinates.withEdges(4, 6, TOP_RIGHT, RIGHT),
+          Coordinates.withEdges(11, 7, RIGHT, BOTTOM_RIGHT));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_COORDINATES =
       Array.of(
           Coordinates.of(3, 1),

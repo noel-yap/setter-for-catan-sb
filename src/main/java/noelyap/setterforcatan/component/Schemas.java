@@ -6,6 +6,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import noelyap.setterforcatan.protogen.ScenarioOuterClass;
 import noelyap.setterforcatan.scenario.Base;
+import noelyap.setterforcatan.scenario.seafarers.ClothForCatan;
 import noelyap.setterforcatan.scenario.seafarers.HeadingForNewShores;
 import noelyap.setterforcatan.scenario.seafarers.Oceania;
 import noelyap.setterforcatan.scenario.seafarers.TheForgottenTribe;
@@ -107,7 +108,21 @@ public class Schemas {
                   Range.between(7, 8),
                   Tuple.of(
                       TheForgottenTribe.P7_P8_SPECIFICATION_IMPL,
-                      TheForgottenTribe.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
+                      TheForgottenTribe.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
+              ScenarioOuterClass.Scenario.SEAFARERS_CLOTH_FOR_CATAN,
+              HashMap.of(
+                  Range.between(3, 4),
+                  Tuple.of(
+                      ClothForCatan.P3_P4_SPECIFICATION_IMPL,
+                      ClothForCatan.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(5, 6),
+                  Tuple.of(
+                      ClothForCatan.P5_P6_SPECIFICATION_IMPL,
+                      ClothForCatan.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(7, 8),
+                  Tuple.of(
+                      ClothForCatan.P7_P8_SPECIFICATION_IMPL,
+                      ClothForCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 
   public static SpecificationImpl toSpecification(
       final ScenarioOuterClass.Scenario scenario,

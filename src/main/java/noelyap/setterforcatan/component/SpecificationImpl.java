@@ -29,6 +29,7 @@ import io.vavr.collection.Stream;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
 import java.util.Random;
+import lombok.extern.slf4j.Slf4j;
 import noelyap.setterforcatan.matcher.PassThroughMatcher;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chits;
@@ -45,6 +46,7 @@ import noelyap.setterforcatan.util.MersenneTwister;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 
+@Slf4j
 public class SpecificationImpl {
   @SuppressWarnings("serial")
   public static class InvalidSpecificationError extends RuntimeException {
@@ -483,18 +485,18 @@ public class SpecificationImpl {
                   return coordinates
                       .zip(chits)
                       .map(t2 ->
-                        Configuration
-                            .newBuilder()
-                            .setTile(tile)
-                            .setCoordinate(t2._1)
-                            .setChit(t2._2)
-                            .build()
-                      );
+                              Configuration.newBuilder()
+                                  .setTile(tile)
+                                  .setCoordinate(t2._1)
+                                  .setChit(t2._2)
+                                  .build());
                 });
 
-    return configurations.forAll(this::validateConfiguration)
-        ? Option.of(configurations)
-        : Option.none();
+    final boolean isValid = configurations.forAll(this::validateConfiguration);
+
+    log.debug("Configuration is " + (isValid ? "valid" : "INVALID"));
+
+    return isValid ? Option.of(configurations) : Option.none();
   }
 
   @VisibleForTesting

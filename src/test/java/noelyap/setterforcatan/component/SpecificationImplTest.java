@@ -66,7 +66,8 @@ public class SpecificationImplTest {
     final Array<Coordinate> goldFieldCoordinates = Array.of(Coordinates.of(6, 6));
     final Array<Coordinate> desertCoordinates = Array.of(Coordinates.of(1, 1));
     final Array<Coordinate> desertOrLakeCoordinates =
-        Array.of(Coordinates.of(2, 2), Coordinates.of(3, 3), Coordinates.of(4, 4), Coordinates.of(5, 5));
+        Array.of(
+            Coordinates.of(2, 2), Coordinates.of(3, 3), Coordinates.of(4, 4), Coordinates.of(5, 5));
 
     final Map<String, Array<Tile>> tiles;
     tiles =
@@ -179,7 +180,11 @@ public class SpecificationImplTest {
             Array.of(Coordinates.of(3, 3), Coordinates.of(4, 4)),
             "traders-and-barbarians",
             Array.of(
-                Coordinates.of(5, 5), Coordinates.of(6, 6), Coordinates.of(7, 7), Coordinates.of(8, 8), Coordinates.of(9, 9)));
+                Coordinates.of(5, 5),
+                Coordinates.of(6, 6),
+                Coordinates.of(7, 7),
+                Coordinates.of(8, 8),
+                Coordinates.of(9, 9)));
     final Map<String, Array<String>> coordinatesTilesMap =
         HashMap.ofEntries(
             TileMappingUtils.newSelfReferringEntry("desert-and-lake"),
@@ -229,58 +234,63 @@ public class SpecificationImplTest {
         .allSatisfy(c -> assertThat(c).isIn(Coordinates.of(3, 3), Coordinates.of(4, 4)));
     softly
         .assertThat(actual.filter(t2 -> t2._1.equals(Tuple.of("caravans", OASIS))).map(Tuple2::_2))
-        .allSatisfy(c -> assertThat(c)
-            .isIn(
-                Coordinates.of(5, 5),
-                Coordinates.of(6, 6),
-                Coordinates.of(7, 7),
-                Coordinates.of(8, 8),
-                Coordinates.of(9, 9)));
+        .allSatisfy(c ->
+                assertThat(c)
+                    .isIn(
+                        Coordinates.of(5, 5),
+                        Coordinates.of(6, 6),
+                        Coordinates.of(7, 7),
+                        Coordinates.of(8, 8),
+                        Coordinates.of(9, 9)));
     softly
         .assertThat(actual.filter(t2 -> t2._1.equals(Tuple.of("rivers-of-catan", OASIS))).map(Tuple2::_2))
-        .allSatisfy(c -> assertThat(c)
-            .isIn(
-                Coordinates.of(5, 5),
-                Coordinates.of(6, 6),
-                Coordinates.of(7, 7),
-                Coordinates.of(8, 8),
-                Coordinates.of(9, 9)));
+        .allSatisfy(c ->
+                assertThat(c)
+                    .isIn(
+                        Coordinates.of(5, 5),
+                        Coordinates.of(6, 6),
+                        Coordinates.of(7, 7),
+                        Coordinates.of(8, 8),
+                        Coordinates.of(9, 9)));
     softly
         .assertThat(
             actual
                 .filter(t2 -> t2._1.equals(Tuple.of("traders-and-barbarians", CASTLE)))
                 .map(Tuple2::_2))
-        .allSatisfy(c -> assertThat(c)
-            .isIn(
-                Coordinates.of(5, 5),
-                Coordinates.of(6, 6),
-                Coordinates.of(7, 7),
-                Coordinates.of(8, 8),
-                Coordinates.of(9, 9)));
+        .allSatisfy(c ->
+                assertThat(c)
+                    .isIn(
+                        Coordinates.of(5, 5),
+                        Coordinates.of(6, 6),
+                        Coordinates.of(7, 7),
+                        Coordinates.of(8, 8),
+                        Coordinates.of(9, 9)));
     softly
         .assertThat(
             actual
                 .filter(t2 -> t2._1.equals(Tuple.of("traders-and-barbarians", GLASSWORKS)))
                 .map(Tuple2::_2))
-        .allSatisfy(c -> assertThat(c)
-            .isIn(
-                Coordinates.of(5, 5),
-                Coordinates.of(6, 6),
-                Coordinates.of(7, 7),
-                Coordinates.of(8, 8),
-                Coordinates.of(9, 9)));
+        .allSatisfy(c ->
+                assertThat(c)
+                    .isIn(
+                        Coordinates.of(5, 5),
+                        Coordinates.of(6, 6),
+                        Coordinates.of(7, 7),
+                        Coordinates.of(8, 8),
+                        Coordinates.of(9, 9)));
     softly
         .assertThat(
             actual
                 .filter(t2 -> t2._1.equals(Tuple.of("traders-and-barbarians", QUARRY)))
                 .map(Tuple2::_2))
-        .allSatisfy(c -> assertThat(c)
-            .isIn(
-                Coordinates.of(5, 5),
-                Coordinates.of(6, 6),
-                Coordinates.of(7, 7),
-                Coordinates.of(8, 8),
-                Coordinates.of(9, 9)));
+        .allSatisfy(c ->
+                assertThat(c)
+                    .isIn(
+                        Coordinates.of(5, 5),
+                        Coordinates.of(6, 6),
+                        Coordinates.of(7, 7),
+                        Coordinates.of(8, 8),
+                        Coordinates.of(9, 9)));
   }
 
   @Test
@@ -338,15 +348,23 @@ public class SpecificationImplTest {
 
     final Set<String> actual = SpecificationImpl.checkForDuplicateCoordinates(coordinates);
 
-    final var edgePositions = "edge_positions: TOP_RIGHT\nedge_positions: RIGHT\nedge_positions: BOTTOM_RIGHT\nedge_positions: BOTTOM_LEFT\nedge_positions: LEFT\nedge_positions: TOP_LEFT\n";
-    final var vertexPositions = "vertex_positions: BOTTOM_LEFT\nvertex_positions: BOTTOM\nvertex_positions: TOP\nvertex_positions: TOP_LEFT\nvertex_positions: BOTTOM_RIGHT\nvertex_positions: TOP_RIGHT\n";
+    final var edgePositions =
+        "edge_positions: TOP_RIGHT\nedge_positions: RIGHT\nedge_positions: BOTTOM_RIGHT\nedge_positions: BOTTOM_LEFT\nedge_positions: LEFT\nedge_positions: TOP_LEFT\n";
+    final var vertexPositions =
+        "vertex_positions: TOP\nvertex_positions: TOP_RIGHT\nvertex_positions: BOTTOM_RIGHT\nvertex_positions: BOTTOM\nvertex_positions: BOTTOM_LEFT\nvertex_positions: TOP_LEFT\n";
 
     softly.assertThat(actual).hasSize(2);
     softly
         .assertThat(actual)
         .containsExactlyInAnyOrder(
-            "Coordinate `x: 1\ny: 2\n" + edgePositions + vertexPositions + "` referenced more than once in [key-1]",
-            "Coordinate `x: 3\ny: 5\n" + edgePositions + vertexPositions + "` referenced more than once across [key-1, key-2]");
+            "Coordinate `x: 1\ny: 2\n"
+                + edgePositions
+                + vertexPositions
+                + "` referenced more than once in [key-1]",
+            "Coordinate `x: 3\ny: 5\n"
+                + edgePositions
+                + vertexPositions
+                + "` referenced more than once across [key-1, key-2]");
   }
 
   @Test

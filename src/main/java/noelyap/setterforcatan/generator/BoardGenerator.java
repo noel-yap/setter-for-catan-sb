@@ -3,6 +3,7 @@ package noelyap.setterforcatan.generator;
 import io.vavr.Tuple;
 import io.vavr.collection.Array;
 import io.vavr.collection.Stream;
+import lombok.extern.slf4j.Slf4j;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.grader.GraderStrategy;
 import noelyap.setterforcatan.grader.GraderStrategy.Grade;
@@ -10,12 +11,14 @@ import noelyap.setterforcatan.protogen.BoardOuterClass.Board;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import org.apache.commons.math3.util.ArithmeticUtils;
 
+@Slf4j
 public class BoardGenerator {
   private final SpecificationImpl specificationImpl;
   private final GraderStrategy graderStrategy;
 
-  public BoardGenerator(final SpecificationImpl specfication, final GraderStrategy graderStrategy) {
-    this.specificationImpl = specfication;
+  public BoardGenerator(
+      final SpecificationImpl specification, final GraderStrategy graderStrategy) {
+    this.specificationImpl = specification;
     this.graderStrategy = graderStrategy;
   }
 
@@ -23,7 +26,11 @@ public class BoardGenerator {
     final int attemptsCount = ArithmeticUtils.pow(7, 7);
     final Array<Configuration> boardConfigurations =
         Stream.range(0, attemptsCount)
-            .map(attempt -> Tuple.of(attempt, specificationImpl.toConfiguration()))
+            .map(attempt -> {
+                  log.debug("Generating board at attempt " + attempt);
+
+                  return Tuple.of(attempt, specificationImpl.toConfiguration());
+                })
             .filter(t2 -> !t2._2.isEmpty())
             .map(t2 -> {
                   final int attempt = t2._1;
@@ -45,6 +52,8 @@ public class BoardGenerator {
                   return currentBestScore >= nextScore ? currentBest : next;
                 })
             ._1;
+
+    log.debug("Building board with " + boardConfigurations);
 
     return Board.newBuilder()
         .addAllConfigurations(boardConfigurations)
