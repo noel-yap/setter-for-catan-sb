@@ -1,5 +1,7 @@
 package noelyap.setterforcatan.grader;
 
+import static noelyap.setterforcatan.component.Chits.CHITS_2_3_11_12;
+import static noelyap.setterforcatan.component.Chits.CHITS_4_10;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Face.Position.FACE_DOWN;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.GOLD_FIELD;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.LAKE;
@@ -9,7 +11,6 @@ import io.vavr.collection.Array;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
-import noelyap.setterforcatan.util.ChitUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ public class GraderStrategyTest {
         Configuration.newBuilder()
             .setTile(Tile.newBuilder().setType(GOLD_FIELD).build())
             .setCoordinate(CoordinateOuterClass.Coordinate.newBuilder().setX(2).setY(2).build())
-            .setChit(ChitUtils.CHITS_2_3_11_12)
+            .setChit(CHITS_2_3_11_12)
             .build();
     final var expectedConfigurations = Array.of(expectedConfiguration);
 
@@ -51,7 +52,7 @@ public class GraderStrategyTest {
         Configuration.newBuilder()
             .setTile(Tile.newBuilder().setType(GOLD_FIELD).build())
             .setCoordinate(CoordinateOuterClass.Coordinate.newBuilder().setX(2).setY(2).build())
-            .setChit(ChitUtils.CHITS_2_3_11_12)
+            .setChit(CHITS_2_3_11_12)
             .build();
     final var expectedConfigurations = Array.of(expectedConfiguration);
 
@@ -61,7 +62,7 @@ public class GraderStrategyTest {
                 .setTile(Tile.newBuilder().setType(LAKE).build())
                 .setCoordinate(
                     CoordinateOuterClass.Coordinate.newBuilder().setFacePosition(FACE_DOWN).build())
-                .setChit(ChitUtils.CHITS_4_10)
+                .setChit(CHITS_4_10)
                 .build(),
             expectedConfiguration),
         .5);

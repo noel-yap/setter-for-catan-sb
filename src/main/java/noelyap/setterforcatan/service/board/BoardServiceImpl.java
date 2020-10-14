@@ -6,7 +6,9 @@ import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.HashSet;
 import io.vavr.control.Try;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
+import noelyap.setterforcatan.component.Schemas;
 import noelyap.setterforcatan.component.SpecificationImpl;
 import noelyap.setterforcatan.generator.BoardGenerator;
 import noelyap.setterforcatan.grader.CompositeGrader;
@@ -22,6 +24,7 @@ import noelyap.setterforcatan.service.board.protogen.GenerateBoardRequest;
 import noelyap.setterforcatan.service.board.protogen.GenerateBoardResponse;
 
 @GrpcService
+@Slf4j
 public class BoardServiceImpl extends BoardServiceImplBase {
   @Override
   public void generateBoard(
@@ -56,8 +59,10 @@ public class BoardServiceImpl extends BoardServiceImplBase {
   private static Tuple2<Specification, Board> newBoard(
       final Schema schema, final CompositeGrader compositeGrader) {
     final SpecificationImpl specificationImpl =
-        noelyap.setterforcatan.util.SchemaUtils.toSpecification(
+        Schemas.toSpecification(
             schema.getScenario(), schema.getPlayerCount(), schema.getFishermenOfCatan());
+
+    log.info("Generating board with " + specificationImpl.toProto());
 
     return newBoard(specificationImpl, compositeGrader);
   }
@@ -66,7 +71,11 @@ public class BoardServiceImpl extends BoardServiceImplBase {
       final SpecificationImpl specificationImpl, final CompositeGrader compositeGrader) {
     final BoardGenerator boardGenerator = new BoardGenerator(specificationImpl, compositeGrader);
 
-    return Tuple.of(specificationImpl.toProto(), boardGenerator.generateBoard());
+    final Board board = boardGenerator.generateBoard();
+
+    log.info("Generated board is " + board);
+
+    return Tuple.of(specificationImpl.toProto(), board);
   }
 
   private static Tuple2<Specification, Board> newBoard(
