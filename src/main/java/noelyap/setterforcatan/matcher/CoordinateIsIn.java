@@ -1,19 +1,19 @@
 package noelyap.setterforcatan.matcher;
 
-import io.vavr.collection.Array;
+import io.vavr.collection.Traversable;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 public class CoordinateIsIn extends TypeSafeMatcher<Configuration> {
-  final Array<Coordinate> coordinates;
+  final Traversable<Coordinate> coordinates;
 
-  public static CoordinateIsIn coordinateIsIn(final Array<Coordinate> coordinates) {
+  public static CoordinateIsIn coordinateIsIn(final Traversable<Coordinate> coordinates) {
     return new CoordinateIsIn(coordinates);
   }
 
-  public CoordinateIsIn(final Array<Coordinate> coordinates) {
+  public CoordinateIsIn(final Traversable<Coordinate> coordinates) {
     this.coordinates = coordinates;
   }
 

@@ -86,18 +86,18 @@ public class Oceania {
           Coordinates.of(11, 7));
   private static final Array<Coordinate> P3_FACE_UP_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(3, 1, RIGHT),
-          Coordinates.withEdges(7, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(2, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(1, 3, BOTTOM_RIGHT),
-          Coordinates.withEdges(14, 4, LEFT),
-          Coordinates.withEdges(14, 6, TOP_LEFT),
-          Coordinates.withEdges(13, 7, LEFT),
-          Coordinates.withEdges(10, 8, TOP_LEFT));
+          Coordinates.onEdges(3, 1, RIGHT),
+          Coordinates.onEdges(7, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(2, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(1, 3, BOTTOM_RIGHT),
+          Coordinates.onEdges(14, 4, LEFT),
+          Coordinates.onEdges(14, 6, TOP_LEFT),
+          Coordinates.onEdges(13, 7, LEFT),
+          Coordinates.onEdges(10, 8, TOP_LEFT));
   private static final Array<Coordinate> P3_FACE_UP_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 2, LEFT, TOP_LEFT),
-          Coordinates.withEdges(12, 6, RIGHT, BOTTOM_RIGHT));
+          Coordinates.onEdges(4, 2, LEFT, TOP_LEFT),
+          Coordinates.onEdges(12, 6, RIGHT, BOTTOM_RIGHT));
   private static final Array<Coordinate> P3_FACE_DOWN_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(9, 1),
@@ -194,21 +194,21 @@ public class Oceania {
           Coordinates.of(11, 7));
   private static final Array<Coordinate> P4_FACE_UP_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(1, 1, RIGHT),
-          Coordinates.withEdges(0, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(0, 4, RIGHT),
-          Coordinates.withEdges(14, 4, TOP_LEFT),
-          Coordinates.withEdges(14, 6, TOP_LEFT),
-          Coordinates.withEdges(13, 7, LEFT),
-          Coordinates.withEdges(8, 8, TOP_LEFT),
-          Coordinates.withEdges(10, 8, TOP_RIGHT));
+          Coordinates.onEdges(4, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(1, 1, RIGHT),
+          Coordinates.onEdges(0, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(0, 4, RIGHT),
+          Coordinates.onEdges(14, 4, TOP_LEFT),
+          Coordinates.onEdges(14, 6, TOP_LEFT),
+          Coordinates.onEdges(13, 7, LEFT),
+          Coordinates.onEdges(8, 8, TOP_LEFT),
+          Coordinates.onEdges(10, 8, TOP_RIGHT));
   private static final Array<Coordinate> P4_FACE_UP_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(2, 2, LEFT, TOP_LEFT),
-          Coordinates.withEdges(1, 3, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(13, 5, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(9, 7, BOTTOM_RIGHT, BOTTOM_LEFT));
+          Coordinates.onEdges(2, 2, LEFT, TOP_LEFT),
+          Coordinates.onEdges(1, 3, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(13, 5, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(9, 7, BOTTOM_RIGHT, BOTTOM_LEFT));
   private static final Array<Coordinate> P4_FACE_DOWN_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(9, 1),
@@ -280,7 +280,7 @@ public class Oceania {
           .appendAll(Array.fill(3, MOUNTAIN))
           .appendAll(Array.fill(3, GOLD_FIELD));
   private static final Array<Tile> P5_P6_FACE_UP_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
-  private static final Array<Tile> P5_P6_FACE_DOWN_UNBEARING_TILES =
+  private static final Array<Tile> P5_P6_FACE_DOWN_NON_PRODUCING_TILES =
       Array.of(DESERT).appendAll(Array.fill(3, SEA));
   private static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of(
@@ -288,8 +288,8 @@ public class Oceania {
           P5_P6_FACE_UP_LAND_TILES,
           "face-down-producing",
           P5_P6_FACE_DOWN_PRODUCING_TILES,
-          "face-down-unbearing",
-          P5_P6_FACE_DOWN_UNBEARING_TILES,
+          "face-down-non-producing",
+          P5_P6_FACE_DOWN_NON_PRODUCING_TILES,
           "face-up-harbor",
           P5_P6_FACE_UP_HARBOR_TILES);
 
@@ -321,25 +321,25 @@ public class Oceania {
           Coordinates.of(15, 7));
   private static final Array<Coordinate> P5_P6_FACE_UP_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(0, 2, RIGHT),
-          Coordinates.withEdges(6, 2, TOP_LEFT),
-          Coordinates.withEdges(14, 2, RIGHT),
-          Coordinates.withEdges(18, 2, BOTTOM_LEFT),
-          Coordinates.withEdges(0, 4, RIGHT),
-          Coordinates.withEdges(18, 4, TOP_LEFT),
-          Coordinates.withEdges(5, 5, LEFT),
-          Coordinates.withEdges(13, 5, BOTTOM_RIGHT),
-          Coordinates.withEdges(18, 6, TOP_LEFT),
-          Coordinates.withEdges(1, 7, TOP_RIGHT),
-          Coordinates.withEdges(14, 8, TOP_LEFT));
+          Coordinates.onEdges(0, 2, RIGHT),
+          Coordinates.onEdges(6, 2, TOP_LEFT),
+          Coordinates.onEdges(14, 2, RIGHT),
+          Coordinates.onEdges(18, 2, BOTTOM_LEFT),
+          Coordinates.onEdges(0, 4, RIGHT),
+          Coordinates.onEdges(18, 4, TOP_LEFT),
+          Coordinates.onEdges(5, 5, LEFT),
+          Coordinates.onEdges(13, 5, BOTTOM_RIGHT),
+          Coordinates.onEdges(18, 6, TOP_LEFT),
+          Coordinates.onEdges(1, 7, TOP_RIGHT),
+          Coordinates.onEdges(14, 8, TOP_LEFT));
   private static final Array<Coordinate> P5_P6_FACE_UP_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(1, 1, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(17, 1, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(1, 3, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(17, 5, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(0, 6, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(17, 7, LEFT, TOP_LEFT));
+          Coordinates.onEdges(1, 1, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(17, 1, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(1, 3, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(17, 5, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(0, 6, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(17, 7, LEFT, TOP_LEFT));
   private static final Array<Coordinate> P5_P6_FACE_DOWN_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(9, 1),
@@ -399,7 +399,8 @@ public class Oceania {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("face-up-land"),
               TileMappingUtils.newSelfReferringEntry("face-up-harbor"),
-              TileMappingUtils.newEntry("face-down", "face-down-producing", "face-down-unbearing")),
+              TileMappingUtils.newEntry(
+                  "face-down", "face-down-producing", "face-down-non-producing")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("face-up-land"),
               TileMappingUtils.newSelfReferringEntry("face-down-producing")));
@@ -415,7 +416,8 @@ public class Oceania {
           .appendAll(Array.fill(6, PASTURE))
           .appendAll(Array.fill(7, FIELD))
           .appendAll(Array.fill(7, HILL));
-  private static final Array<Tile> P7_P8_FACE_UP_UNBEARING_TILES = Base.P7_P8_UNBEARING_LAND_TILES;
+  private static final Array<Tile> P7_P8_FACE_UP_NON_PRODUCING_TILES =
+      Base.P7_P8_NON_PRODUCING_LAND_TILES;
   private static final Array<Tile> P7_P8_FACE_DOWN_LAND_TILES =
       Array.fill(2, FIELD)
           .appendAll(Array.fill(2, HILL))
@@ -430,7 +432,7 @@ public class Oceania {
           "face-up-producing",
           P7_P8_FACE_UP_PRODUCING_TILES,
           DESERT_OR_LAKE_NAME,
-          P7_P8_FACE_UP_UNBEARING_TILES,
+          P7_P8_FACE_UP_NON_PRODUCING_TILES,
           "face-up-harbor",
           P7_P8_FACE_UP_HARBOR_TILES,
           "face-down-land",
@@ -474,28 +476,28 @@ public class Oceania {
           Coordinates.of(12, 12));
   private static final Array<Coordinate> P7_P8_FACE_UP_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(14, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(10, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(8, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(3, 3, BOTTOM_LEFT),
-          Coordinates.withEdges(7, 3, BOTTOM_LEFT),
-          Coordinates.withEdges(0, 4, BOTTOM_RIGHT),
-          Coordinates.withEdges(23, 9, TOP_LEFT),
-          Coordinates.withEdges(16, 10, TOP_RIGHT),
-          Coordinates.withEdges(20, 10, TOP_RIGHT),
-          Coordinates.withEdges(15, 11, TOP_LEFT),
-          Coordinates.withEdges(9, 13, TOP_RIGHT),
-          Coordinates.withEdges(13, 13, TOP_LEFT));
+          Coordinates.onEdges(14, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(10, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(8, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(3, 3, BOTTOM_LEFT),
+          Coordinates.onEdges(7, 3, BOTTOM_LEFT),
+          Coordinates.onEdges(0, 4, BOTTOM_RIGHT),
+          Coordinates.onEdges(23, 9, TOP_LEFT),
+          Coordinates.onEdges(16, 10, TOP_RIGHT),
+          Coordinates.onEdges(20, 10, TOP_RIGHT),
+          Coordinates.onEdges(15, 11, TOP_LEFT),
+          Coordinates.onEdges(9, 13, TOP_RIGHT),
+          Coordinates.onEdges(13, 13, TOP_LEFT));
   private static final Array<Coordinate> P7_P8_FACE_UP_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(12, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.withEdges(10, 2, LEFT, TOP_LEFT),
-          Coordinates.withEdges(2, 4, LEFT, TOP_LEFT),
-          Coordinates.withEdges(5, 3, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.withEdges(21, 9, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(18, 10, TOP_LEFT, TOP_RIGHT),
-          Coordinates.withEdges(13, 11, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(11, 13, TOP_LEFT, TOP_RIGHT));
+          Coordinates.onEdges(12, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.onEdges(10, 2, LEFT, TOP_LEFT),
+          Coordinates.onEdges(2, 4, LEFT, TOP_LEFT),
+          Coordinates.onEdges(5, 3, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.onEdges(21, 9, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(18, 10, TOP_LEFT, TOP_RIGHT),
+          Coordinates.onEdges(13, 11, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(11, 13, TOP_LEFT, TOP_RIGHT));
   private static final Array<Coordinate> P7_P8_FACE_DOWN_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(16, 2),

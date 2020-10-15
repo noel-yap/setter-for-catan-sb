@@ -46,7 +46,7 @@ public class Base {
           .appendAll(Array.fill(4, PASTURE))
           .appendAll(Array.fill(3, HILL))
           .appendAll(Array.fill(3, MOUNTAIN));
-  public static final Array<Tile> P3_P4_UNBEARING_TILES = Array.of(DESERT);
+  public static final Array<Tile> P3_P4_NON_PRODUCING_TILES = Array.of(DESERT);
   public static final Array<Tile> P3_P4_HARBOR_TILES =
       Array.fill(4, GENERIC_HARBOR).appendAll(TWO_FOR_ONE_HARBORS);
   public static final Map<String, Array<Tile>> P3_P4_TILES =
@@ -54,7 +54,7 @@ public class Base {
           "producing",
           P3_P4_PRODUCING_TILES,
           DESERT_OR_LAKE_NAME,
-          P3_P4_UNBEARING_TILES,
+          P3_P4_NON_PRODUCING_TILES,
           "harbor",
           P3_P4_HARBOR_TILES);
 
@@ -81,23 +81,23 @@ public class Base {
           Coordinates.of(7, 5));
   public static final Array<Coordinate> P3_P4_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(2, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(6, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(9, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(0, 2, RIGHT),
-          Coordinates.withEdges(11, 3, LEFT),
-          Coordinates.withEdges(0, 4, RIGHT),
-          Coordinates.withEdges(9, 5, TOP_LEFT),
-          Coordinates.withEdges(6, 6, TOP_LEFT),
-          Coordinates.withEdges(2, 6, TOP_RIGHT));
+          Coordinates.onEdges(2, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(6, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(9, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(0, 2, RIGHT),
+          Coordinates.onEdges(11, 3, LEFT),
+          Coordinates.onEdges(0, 4, RIGHT),
+          Coordinates.onEdges(9, 5, TOP_LEFT),
+          Coordinates.onEdges(6, 6, TOP_LEFT),
+          Coordinates.onEdges(2, 6, TOP_RIGHT));
   public static final Array<Coordinate> P3_P4_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.withEdges(1, 1, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(10, 2, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(10, 4, LEFT, TOP_LEFT),
-          Coordinates.withEdges(1, 5, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(4, 6, TOP_LEFT, TOP_RIGHT));
+          Coordinates.onEdges(4, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.onEdges(1, 1, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(10, 2, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(10, 4, LEFT, TOP_LEFT),
+          Coordinates.onEdges(1, 5, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(4, 6, TOP_LEFT, TOP_RIGHT));
   public static final Map<String, Array<Coordinate>> P3_P4_COORDINATES =
       HashMap.of("land", P3_P4_LAND_COORDINATES, "harbor", P3_P4_HARBOR_COORDINATES);
 
@@ -136,7 +136,7 @@ public class Base {
           .appendAll(Array.fill(2, PASTURE))
           .appendAll(Array.fill(2, HILL))
           .appendAll(Array.fill(2, MOUNTAIN));
-  public static final Array<Tile> P5_P6_UNBEARING_LAND_TILES = Array.fill(2, DESERT);
+  public static final Array<Tile> P5_P6_NON_PRODUCING_LAND_TILES = Array.fill(2, DESERT);
   public static final Array<Tile> P5_P6_HARBOR_TILES =
       P3_P4_HARBOR_TILES.append(GENERIC_HARBOR).append(WOOL_HARBOR);
   public static final Map<String, Array<Tile>> P5_P6_TILES =
@@ -144,7 +144,7 @@ public class Base {
           "producing",
           P5_P6_PRODUCING_TILES,
           DESERT_OR_LAKE_NAME,
-          P5_P6_UNBEARING_LAND_TILES,
+          P5_P6_NON_PRODUCING_LAND_TILES,
           "harbor",
           P5_P6_HARBOR_TILES);
 
@@ -182,27 +182,27 @@ public class Base {
           Coordinates.of(9, 7));
   public static final Array<Coordinate> P5_P6_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(8, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(11, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(1, 3, RIGHT),
-          Coordinates.withEdges(14, 4, LEFT),
-          Coordinates.withEdges(1, 5, TOP_RIGHT),
-          Coordinates.withEdges(2, 6, RIGHT),
-          Coordinates.withEdges(12, 6, TOP_LEFT),
-          Coordinates.withEdges(11, 7, LEFT),
-          Coordinates.withEdges(8, 8, TOP_LEFT),
-          Coordinates.withEdges(4, 8, TOP_RIGHT));
+          Coordinates.onEdges(4, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(8, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(11, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(1, 3, RIGHT),
+          Coordinates.onEdges(14, 4, LEFT),
+          Coordinates.onEdges(1, 5, TOP_RIGHT),
+          Coordinates.onEdges(2, 6, RIGHT),
+          Coordinates.onEdges(12, 6, TOP_LEFT),
+          Coordinates.onEdges(11, 7, LEFT),
+          Coordinates.onEdges(8, 8, TOP_LEFT),
+          Coordinates.onEdges(4, 8, TOP_RIGHT));
   public static final Array<Coordinate> P5_P6_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(6, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.withEdges(4, 2, LEFT, TOP_LEFT),
-          Coordinates.withEdges(11, 3, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(3, 5, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(13, 5, LEFT, TOP_LEFT),
-          Coordinates.withEdges(10, 6, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(3, 7, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(6, 8, TOP_LEFT, TOP_RIGHT));
+          Coordinates.onEdges(6, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.onEdges(4, 2, LEFT, TOP_LEFT),
+          Coordinates.onEdges(11, 3, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(3, 5, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(13, 5, LEFT, TOP_LEFT),
+          Coordinates.onEdges(10, 6, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(3, 7, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(6, 8, TOP_LEFT, TOP_RIGHT));
   public static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
       HashMap.of("land", P5_P6_LAND_COORDINATES, "harbor", P5_P6_HARBOR_COORDINATES);
 
@@ -230,7 +230,7 @@ public class Base {
 
   public static final Array<Tile> P7_P8_PRODUCING_TILES =
       P3_P4_PRODUCING_TILES.appendAll(P3_P4_PRODUCING_TILES);
-  public static final Array<Tile> P7_P8_UNBEARING_LAND_TILES = P3_P4_UNBEARING_TILES;
+  public static final Array<Tile> P7_P8_NON_PRODUCING_LAND_TILES = P3_P4_NON_PRODUCING_TILES;
   public static final Array<Tile> P7_P8_HARBOR_TILES =
       P3_P4_HARBOR_TILES.append(GRAIN_HARBOR).append(LUMBER_HARBOR).append(WOOL_HARBOR);
   public static final Map<String, Array<Tile>> P7_P8_TILES =
@@ -238,7 +238,7 @@ public class Base {
           "producing",
           P7_P8_PRODUCING_TILES,
           DESERT_OR_LAKE_NAME,
-          P7_P8_UNBEARING_LAND_TILES,
+          P7_P8_NON_PRODUCING_LAND_TILES,
           "harbor",
           P7_P8_HARBOR_TILES);
 
@@ -283,28 +283,28 @@ public class Base {
           Coordinates.of(11, 7));
   public static final Array<Coordinate> P7_P8_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(8, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(10, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(13, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(1, 3, RIGHT),
-          Coordinates.withEdges(16, 4, LEFT),
-          Coordinates.withEdges(1, 5, TOP_RIGHT),
-          Coordinates.withEdges(2, 6, RIGHT),
-          Coordinates.withEdges(14, 6, TOP_LEFT),
-          Coordinates.withEdges(13, 7, LEFT),
-          Coordinates.withEdges(4, 8, TOP_RIGHT),
-          Coordinates.withEdges(10, 8, TOP_LEFT));
+          Coordinates.onEdges(4, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(8, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(10, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(13, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(1, 3, RIGHT),
+          Coordinates.onEdges(16, 4, LEFT),
+          Coordinates.onEdges(1, 5, TOP_RIGHT),
+          Coordinates.onEdges(2, 6, RIGHT),
+          Coordinates.onEdges(14, 6, TOP_LEFT),
+          Coordinates.onEdges(13, 7, LEFT),
+          Coordinates.onEdges(4, 8, TOP_RIGHT),
+          Coordinates.onEdges(10, 8, TOP_LEFT));
   public static final Array<Coordinate> P7_P8_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(6, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.withEdges(11, 1, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(2, 2, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(13, 3, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(3, 5, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(15, 5, LEFT, TOP_LEFT),
-          Coordinates.withEdges(11, 7, BOTTOM_RIGHT, BOTTOM_LEFT),
-          Coordinates.withEdges(6, 8, TOP_LEFT, TOP_RIGHT));
+          Coordinates.onEdges(6, 0, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.onEdges(11, 1, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(2, 2, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(13, 3, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(3, 5, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(15, 5, LEFT, TOP_LEFT),
+          Coordinates.onEdges(11, 7, BOTTOM_RIGHT, BOTTOM_LEFT),
+          Coordinates.onEdges(6, 8, TOP_LEFT, TOP_RIGHT));
   public static final Map<String, Array<Coordinate>> P7_P8_COORDINATES =
       HashMap.of("land", P7_P8_LAND_COORDINATES, "harbor", P7_P8_HARBOR_COORDINATES);
 

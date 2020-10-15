@@ -84,20 +84,20 @@ public class HeadingForNewShores {
           Coordinates.of(5, 5));
   private static final Array<Coordinate> P3_BIG_ISLAND_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(1, 1, RIGHT),
-          Coordinates.withEdges(7, 1, LEFT),
-          Coordinates.withEdges(0, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(0, 4, TOP_RIGHT),
-          Coordinates.withEdges(8, 4, TOP_LEFT),
-          Coordinates.withEdges(1, 5, RIGHT),
-          Coordinates.withEdges(7, 5, LEFT));
+          Coordinates.onEdges(4, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(1, 1, RIGHT),
+          Coordinates.onEdges(7, 1, LEFT),
+          Coordinates.onEdges(0, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(0, 4, TOP_RIGHT),
+          Coordinates.onEdges(8, 4, TOP_LEFT),
+          Coordinates.onEdges(1, 5, RIGHT),
+          Coordinates.onEdges(7, 5, LEFT));
   private static final Array<Coordinate> P3_BIG_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(2, 2, LEFT, TOP_LEFT),
-          Coordinates.withEdges(8, 2, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(6, 4, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(4, 6, TOP_LEFT, TOP_RIGHT));
+          Coordinates.onEdges(2, 2, LEFT, TOP_LEFT),
+          Coordinates.onEdges(8, 2, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(6, 4, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(4, 6, TOP_LEFT, TOP_RIGHT));
   private static final Array<Coordinate> P3_SMALL_ISLAND_COORDINATES =
       Array.of(
           Coordinates.of(9, 1),
@@ -156,7 +156,8 @@ public class HeadingForNewShores {
       P3_SPECIFICATION_BUILDER.withFisheries(P3_BIG_ISLAND_FISHERY_COORDINATES).build();
 
   private static final Array<Tile> P4_BIG_ISLAND_PRODUCING_LAND_TILES = Base.P3_P4_PRODUCING_TILES;
-  private static final Array<Tile> P4_BIG_ISLAND_UNBEARING_LAND_TILES = Base.P3_P4_UNBEARING_TILES;
+  private static final Array<Tile> P4_BIG_ISLAND_NON_PRODUCING_LAND_TILES =
+      Base.P3_P4_NON_PRODUCING_TILES;
   private static final Array<Tile> P4_BIG_ISLAND_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
   private static final Array<Tile> P4_SMALL_ISLAND_LAND_TILES =
       P3_SMALL_ISLAND_LAND_TILES.append(FOREST);
@@ -166,7 +167,7 @@ public class HeadingForNewShores {
           "big-island-producing-land",
           P4_BIG_ISLAND_PRODUCING_LAND_TILES,
           DESERT_OR_LAKE_NAME,
-          P4_BIG_ISLAND_UNBEARING_LAND_TILES,
+          P4_BIG_ISLAND_NON_PRODUCING_LAND_TILES,
           "big-island-harbor",
           P4_BIG_ISLAND_HARBOR_TILES,
           "small-island-land",
@@ -234,7 +235,8 @@ public class HeadingForNewShores {
 
   private static final Array<Tile> P5_P6_BIG_ISLAND_PRODUCING_LAND_TILES =
       Base.P5_P6_PRODUCING_TILES;
-  private static final Array<Tile> P5_P6_BIG_ISLAND_UNBEARING_LAND_TILES = Array.fill(2, DESERT);
+  private static final Array<Tile> P5_P6_BIG_ISLAND_NON_PRODUCING_LAND_TILES =
+      Array.fill(2, DESERT);
   private static final Array<Tile> P5_P6_BIG_ISLAND_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
   private static final Array<Tile> P5_P6_SMALL_ISLAND_LAND_TILES =
       Array.of(FIELD)
@@ -249,7 +251,7 @@ public class HeadingForNewShores {
           "big-island-producing-land",
           P5_P6_BIG_ISLAND_PRODUCING_LAND_TILES,
           DESERT_OR_LAKE_NAME,
-          P5_P6_BIG_ISLAND_UNBEARING_LAND_TILES,
+          P5_P6_BIG_ISLAND_NON_PRODUCING_LAND_TILES,
           "big-island-harbor",
           P5_P6_BIG_ISLAND_HARBOR_TILES,
           "small-island-land",
@@ -266,27 +268,27 @@ public class HeadingForNewShores {
                   .build());
   private static final Array<Coordinate> P5_P6_BIG_ISLAND_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(6, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(10, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(13, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(4, 2, RIGHT),
-          Coordinates.withEdges(3, 3, BOTTOM_RIGHT),
-          Coordinates.withEdges(15, 3, BOTTOM_LEFT),
-          Coordinates.withEdges(3, 5, RIGHT),
-          Coordinates.withEdges(15, 5, LEFT),
-          Coordinates.withEdges(5, 7, TOP_RIGHT),
-          Coordinates.withEdges(13, 7, TOP_LEFT),
-          Coordinates.withEdges(8, 8, TOP_RIGHT));
+          Coordinates.onEdges(6, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(13, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(4, 2, RIGHT),
+          Coordinates.onEdges(3, 3, BOTTOM_RIGHT),
+          Coordinates.onEdges(15, 3, BOTTOM_LEFT),
+          Coordinates.onEdges(3, 5, RIGHT),
+          Coordinates.onEdges(15, 5, LEFT),
+          Coordinates.onEdges(5, 7, TOP_RIGHT),
+          Coordinates.onEdges(13, 7, TOP_LEFT),
+          Coordinates.onEdges(8, 8, TOP_RIGHT));
   private static final Array<Coordinate> P5_P6_BIG_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(5, 1, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(14, 2, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(5, 3, LEFT, TOP_LEFT),
-          Coordinates.withEdges(4, 4, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(14, 4, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(14, 6, LEFT, TOP_LEFT),
-          Coordinates.withEdges(4, 6, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(11, 7, RIGHT, BOTTOM_RIGHT));
+          Coordinates.onEdges(5, 1, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(14, 2, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(5, 3, LEFT, TOP_LEFT),
+          Coordinates.onEdges(4, 4, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(14, 4, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(14, 6, LEFT, TOP_LEFT),
+          Coordinates.onEdges(4, 6, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(11, 7, RIGHT, BOTTOM_RIGHT));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_COORDINATES =
       Array.of(
           Coordinates.of(3, 1),
@@ -342,8 +344,8 @@ public class HeadingForNewShores {
 
   private static final Array<Tile> P7_P8_BIG_ISLAND_PRODUCING_LAND_TILES =
       Base.P7_P8_PRODUCING_TILES;
-  private static final Array<Tile> P7_P8_BIG_ISLAND_UNBEARING_LAND_TILES =
-      Base.P7_P8_UNBEARING_LAND_TILES;
+  private static final Array<Tile> P7_P8_BIG_ISLAND_NON_PRODUCING_LAND_TILES =
+      Base.P7_P8_NON_PRODUCING_LAND_TILES;
   private static final Array<Tile> P7_P8_BIG_ISLAND_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
   private static final Array<Tile> P7_P8_SMALL_ISLAND_LAND_TILES =
       P5_P6_SMALL_ISLAND_LAND_TILES.appendAll(P5_P6_SMALL_ISLAND_LAND_TILES);
@@ -353,7 +355,7 @@ public class HeadingForNewShores {
           "big-island-producing-land",
           P7_P8_BIG_ISLAND_PRODUCING_LAND_TILES,
           DESERT_OR_LAKE_NAME,
-          P7_P8_BIG_ISLAND_UNBEARING_LAND_TILES,
+          P7_P8_BIG_ISLAND_NON_PRODUCING_LAND_TILES,
           "big-island-harbor",
           P7_P8_BIG_ISLAND_HARBOR_TILES,
           "small-island-land",

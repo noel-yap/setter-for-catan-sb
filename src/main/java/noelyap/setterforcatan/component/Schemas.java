@@ -12,6 +12,7 @@ import noelyap.setterforcatan.scenario.seafarers.Oceania;
 import noelyap.setterforcatan.scenario.seafarers.TheForgottenTribe;
 import noelyap.setterforcatan.scenario.seafarers.TheNIslands;
 import noelyap.setterforcatan.scenario.seafarers.ThroughTheDesert;
+import noelyap.setterforcatan.scenario.seafarers.WondersOfCatan;
 import org.apache.commons.lang3.Range;
 
 public class Schemas {
@@ -122,7 +123,21 @@ public class Schemas {
                   Range.between(7, 8),
                   Tuple.of(
                       ClothForCatan.P7_P8_SPECIFICATION_IMPL,
-                      ClothForCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
+                      ClothForCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
+              ScenarioOuterClass.Scenario.SEAFARERS_WONDERS_OF_CATAN,
+              HashMap.of(
+                  Range.between(3, 4),
+                  Tuple.of(
+                      WondersOfCatan.P3_P4_SPECIFICATION_IMPL,
+                      WondersOfCatan.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(5, 6),
+                  Tuple.of(
+                      WondersOfCatan.P5_P6_SPECIFICATION_IMPL,
+                      WondersOfCatan.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(7, 8),
+                  Tuple.of(
+                      WondersOfCatan.P7_P8_SPECIFICATION_IMPL,
+                      WondersOfCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 
   public static SpecificationImpl toSpecification(
       final ScenarioOuterClass.Scenario scenario,

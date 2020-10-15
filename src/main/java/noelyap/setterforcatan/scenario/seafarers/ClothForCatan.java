@@ -93,42 +93,42 @@ public class ClothForCatan {
           Coordinates.of(11, 7));
   private static final Array<Coordinate> P3_P4_MAIN_ISLAND_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(8, 0, Edge.Position.BOTTOM_RIGHT),
-          Coordinates.withEdges(0, 2, Edge.Position.RIGHT),
-          Coordinates.withEdges(14, 2, Edge.Position.LEFT),
-          Coordinates.withEdges(15, 5, Edge.Position.LEFT),
-          Coordinates.withEdges(0, 6, Edge.Position.RIGHT),
-          Coordinates.withEdges(13, 7, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(4, 8, Edge.Position.TOP_RIGHT),
-          Coordinates.withEdges(10, 8, Edge.Position.TOP_LEFT));
+          Coordinates.onEdges(4, 0, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(8, 0, Edge.Position.BOTTOM_RIGHT),
+          Coordinates.onEdges(0, 2, Edge.Position.RIGHT),
+          Coordinates.onEdges(14, 2, Edge.Position.LEFT),
+          Coordinates.onEdges(15, 5, Edge.Position.LEFT),
+          Coordinates.onEdges(0, 6, Edge.Position.RIGHT),
+          Coordinates.onEdges(13, 7, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(4, 8, Edge.Position.TOP_RIGHT),
+          Coordinates.onEdges(10, 8, Edge.Position.TOP_LEFT));
   private static final Array<Coordinate> P3_P4_MAIN_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(6, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(13, 1, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
-          Coordinates.withEdges(1, 3, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(14, 6, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(1, 7, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          Coordinates.withEdges(8, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
+          Coordinates.onEdges(6, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(13, 1, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
+          Coordinates.onEdges(1, 3, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(14, 6, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(1, 7, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
+          Coordinates.onEdges(8, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(7, 3), Coordinates.of(4, 4), Coordinates.of(10, 4), Coordinates.of(7, 5));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_3_11_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(7, 3, Vertex.Position.TOP),
-          Coordinates.withVertices(7, 5, Vertex.Position.BOTTOM));
+          Coordinates.onVertices(7, 3, Vertex.Position.TOP),
+          Coordinates.onVertices(7, 5, Vertex.Position.BOTTOM));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_4_10_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(4, 4, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(10, 4, Vertex.Position.BOTTOM));
+          Coordinates.onVertices(4, 4, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(10, 4, Vertex.Position.BOTTOM));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_5_9_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(4, 4, Vertex.Position.TOP),
-          Coordinates.withVertices(10, 4, Vertex.Position.TOP));
+          Coordinates.onVertices(4, 4, Vertex.Position.TOP),
+          Coordinates.onVertices(10, 4, Vertex.Position.TOP));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_6_8_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(7, 3, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(7, 5, Vertex.Position.TOP));
+          Coordinates.onVertices(7, 3, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(7, 5, Vertex.Position.TOP));
   private static final Map<String, Array<Coordinate>> P3_P4_COORDINATES =
       HashMap.of(
           "main-island-land",
@@ -251,27 +251,27 @@ public class ClothForCatan {
           Coordinates.of(15, 7));
   private static final Array<Coordinate> P5_P6_MAIN_ISLAND_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(8, 0, Edge.Position.BOTTOM_RIGHT),
-          Coordinates.withEdges(12, 0, Edge.Position.BOTTOM_RIGHT),
-          Coordinates.withEdges(0, 2, Edge.Position.RIGHT),
-          Coordinates.withEdges(18, 2, Edge.Position.LEFT),
-          Coordinates.withEdges(19, 5, Edge.Position.LEFT),
-          Coordinates.withEdges(0, 6, Edge.Position.RIGHT),
-          Coordinates.withEdges(17, 7, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(4, 8, Edge.Position.TOP_RIGHT),
-          Coordinates.withEdges(8, 8, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(14, 8, Edge.Position.TOP_LEFT));
+          Coordinates.onEdges(4, 0, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(8, 0, Edge.Position.BOTTOM_RIGHT),
+          Coordinates.onEdges(12, 0, Edge.Position.BOTTOM_RIGHT),
+          Coordinates.onEdges(0, 2, Edge.Position.RIGHT),
+          Coordinates.onEdges(18, 2, Edge.Position.LEFT),
+          Coordinates.onEdges(19, 5, Edge.Position.LEFT),
+          Coordinates.onEdges(0, 6, Edge.Position.RIGHT),
+          Coordinates.onEdges(17, 7, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(4, 8, Edge.Position.TOP_RIGHT),
+          Coordinates.onEdges(8, 8, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(14, 8, Edge.Position.TOP_LEFT));
   private static final Array<Coordinate> P5_P6_MAIN_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(6, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(10, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(1, 1, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
-          Coordinates.withEdges(17, 1, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
-          Coordinates.withEdges(18, 6, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(1, 7, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          Coordinates.withEdges(6, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT),
-          Coordinates.withEdges(12, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
+          Coordinates.onEdges(6, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(10, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(1, 1, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
+          Coordinates.onEdges(17, 1, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
+          Coordinates.onEdges(18, 6, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(1, 7, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
+          Coordinates.onEdges(6, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT),
+          Coordinates.onEdges(12, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(7, 3),
@@ -282,24 +282,24 @@ public class ClothForCatan {
           Coordinates.of(11, 5));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_2_12_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(7, 3, Vertex.Position.TOP),
-          Coordinates.withVertices(7, 5, Vertex.Position.BOTTOM));
+          Coordinates.onVertices(7, 3, Vertex.Position.TOP),
+          Coordinates.onVertices(7, 5, Vertex.Position.BOTTOM));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_4_10_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(11, 3, Vertex.Position.TOP),
-          Coordinates.withVertices(4, 4, Vertex.Position.TOP),
-          Coordinates.withVertices(14, 4, Vertex.Position.TOP),
-          Coordinates.withVertices(11, 5, Vertex.Position.BOTTOM));
+          Coordinates.onVertices(11, 3, Vertex.Position.TOP),
+          Coordinates.onVertices(4, 4, Vertex.Position.TOP),
+          Coordinates.onVertices(14, 4, Vertex.Position.TOP),
+          Coordinates.onVertices(11, 5, Vertex.Position.BOTTOM));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_5_9_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(7, 3, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(4, 4, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(14, 4, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(11, 5, Vertex.Position.TOP));
+          Coordinates.onVertices(7, 3, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(4, 4, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(14, 4, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(11, 5, Vertex.Position.TOP));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_6_8_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(11, 3, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(7, 5, Vertex.Position.TOP));
+          Coordinates.onVertices(11, 3, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(7, 5, Vertex.Position.TOP));
   private static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
       HashMap.of(
           "main-island-land",
@@ -433,28 +433,28 @@ public class ClothForCatan {
           Coordinates.of(21, 7));
   private static final Array<Coordinate> P7_P8_MAIN_ISLAND_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, Edge.Position.BOTTOM_RIGHT),
-          Coordinates.withEdges(10, 0, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(14, 0, Edge.Position.BOTTOM_RIGHT),
-          Coordinates.withEdges(20, 0, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(0, 2, Edge.Position.RIGHT),
-          Coordinates.withEdges(24, 2, Edge.Position.LEFT),
-          Coordinates.withEdges(0, 6, Edge.Position.RIGHT),
-          Coordinates.withEdges(24, 6, Edge.Position.LEFT),
-          Coordinates.withEdges(4, 8, Edge.Position.TOP_RIGHT),
-          Coordinates.withEdges(10, 8, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(14, 8, Edge.Position.TOP_RIGHT),
-          Coordinates.withEdges(20, 8, Edge.Position.TOP_LEFT));
+          Coordinates.onEdges(4, 0, Edge.Position.BOTTOM_RIGHT),
+          Coordinates.onEdges(10, 0, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(14, 0, Edge.Position.BOTTOM_RIGHT),
+          Coordinates.onEdges(20, 0, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(0, 2, Edge.Position.RIGHT),
+          Coordinates.onEdges(24, 2, Edge.Position.LEFT),
+          Coordinates.onEdges(0, 6, Edge.Position.RIGHT),
+          Coordinates.onEdges(24, 6, Edge.Position.LEFT),
+          Coordinates.onEdges(4, 8, Edge.Position.TOP_RIGHT),
+          Coordinates.onEdges(10, 8, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(14, 8, Edge.Position.TOP_RIGHT),
+          Coordinates.onEdges(20, 8, Edge.Position.TOP_LEFT));
   private static final Array<Coordinate> P7_P8_MAIN_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(8, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(16, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
-          Coordinates.withEdges(1, 1, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
-          Coordinates.withEdges(23, 1, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
-          Coordinates.withEdges(1, 7, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
-          Coordinates.withEdges(23, 7, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
-          Coordinates.withEdges(8, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT),
-          Coordinates.withEdges(16, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
+          Coordinates.onEdges(8, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(16, 0, Edge.Position.BOTTOM_RIGHT, Edge.Position.BOTTOM_LEFT),
+          Coordinates.onEdges(1, 1, Edge.Position.RIGHT, Edge.Position.BOTTOM_RIGHT),
+          Coordinates.onEdges(23, 1, Edge.Position.BOTTOM_LEFT, Edge.Position.LEFT),
+          Coordinates.onEdges(1, 7, Edge.Position.TOP_RIGHT, Edge.Position.RIGHT),
+          Coordinates.onEdges(23, 7, Edge.Position.LEFT, Edge.Position.TOP_LEFT),
+          Coordinates.onEdges(8, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT),
+          Coordinates.onEdges(16, 8, Edge.Position.TOP_LEFT, Edge.Position.TOP_RIGHT));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(7, 3),
@@ -467,28 +467,28 @@ public class ClothForCatan {
           Coordinates.of(17, 5));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_2_12_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(4, 4, Vertex.Position.TOP),
-          Coordinates.withVertices(4, 4, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(20, 4, Vertex.Position.TOP),
-          Coordinates.withVertices(20, 4, Vertex.Position.BOTTOM));
+          Coordinates.onVertices(4, 4, Vertex.Position.TOP),
+          Coordinates.onVertices(4, 4, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(20, 4, Vertex.Position.TOP),
+          Coordinates.onVertices(20, 4, Vertex.Position.BOTTOM));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_4_10_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(7, 3, Vertex.Position.TOP_RIGHT),
-          Coordinates.withVertices(17, 3, Vertex.Position.TOP_LEFT),
-          Coordinates.withVertices(7, 5, Vertex.Position.TOP_LEFT),
-          Coordinates.withVertices(17, 5, Vertex.Position.TOP_RIGHT));
+          Coordinates.onVertices(7, 3, Vertex.Position.TOP_RIGHT),
+          Coordinates.onVertices(17, 3, Vertex.Position.TOP_LEFT),
+          Coordinates.onVertices(7, 5, Vertex.Position.TOP_LEFT),
+          Coordinates.onVertices(17, 5, Vertex.Position.TOP_RIGHT));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_5_9_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(7, 3, Vertex.Position.BOTTOM_LEFT),
-          Coordinates.withVertices(17, 3, Vertex.Position.BOTTOM_RIGHT),
-          Coordinates.withVertices(7, 5, Vertex.Position.BOTTOM_RIGHT),
-          Coordinates.withVertices(17, 5, Vertex.Position.BOTTOM_LEFT));
+          Coordinates.onVertices(7, 3, Vertex.Position.BOTTOM_LEFT),
+          Coordinates.onVertices(17, 3, Vertex.Position.BOTTOM_RIGHT),
+          Coordinates.onVertices(7, 5, Vertex.Position.BOTTOM_RIGHT),
+          Coordinates.onVertices(17, 5, Vertex.Position.BOTTOM_LEFT));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_6_8_CHIT_COORDINATES =
       Array.of(
-          Coordinates.withVertices(10, 4, Vertex.Position.TOP),
-          Coordinates.withVertices(10, 4, Vertex.Position.BOTTOM),
-          Coordinates.withVertices(14, 4, Vertex.Position.TOP),
-          Coordinates.withVertices(14, 4, Vertex.Position.BOTTOM));
+          Coordinates.onVertices(10, 4, Vertex.Position.TOP),
+          Coordinates.onVertices(10, 4, Vertex.Position.BOTTOM),
+          Coordinates.onVertices(14, 4, Vertex.Position.TOP),
+          Coordinates.onVertices(14, 4, Vertex.Position.BOTTOM));
   private static final Map<String, Array<Coordinate>> P7_P8_COORDINATES =
       HashMap.of(
           "main-island-land",
