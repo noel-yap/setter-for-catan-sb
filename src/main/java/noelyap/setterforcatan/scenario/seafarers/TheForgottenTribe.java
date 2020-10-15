@@ -58,24 +58,22 @@ public class TheForgottenTribe {
           .appendAll(Array.fill(2, HILL))
           .appendAll(Array.fill(2, MOUNTAIN))
           .appendAll(Array.fill(3, DESERT));
-  private static final Array<Tile> P3_P4_SMALL_ISLAND_HARBOR_TILES =
+  private static final Array<Tile> P3_P4_HARBOR_TILES =
       Array.of(BRICK_HARBOR, GENERIC_HARBOR, GRAIN_HARBOR, LUMBER_HARBOR, ORE_HARBOR, WOOL_HARBOR);
-  private static final Array<Tile> P3_P4_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
-      Array.fill(4, DEVELOPMENT_CARD);
-  private static final Array<Tile> P3_P4_SMALL_ISLAND_VICTORY_POINT_TILES =
-      Array.fill(8, VICTORY_POINT);
+  private static final Array<Tile> P3_P4_DEVELOPMENT_CARD_TILES = Array.fill(4, DEVELOPMENT_CARD);
+  private static final Array<Tile> P3_P4_VICTORY_POINT_TILES = Array.fill(8, VICTORY_POINT);
   private static final Map<String, Array<Tile>> P3_P4_TILES =
       HashMap.of(
           "main-island-land",
           P3_P4_MAIN_ISLAND_LAND_TILES,
           "small-island-land",
           P3_P4_SMALL_ISLAND_LAND_TILES,
-          "small-island-harbor",
-          P3_P4_SMALL_ISLAND_HARBOR_TILES,
-          "small-island-development-card",
-          P3_P4_SMALL_ISLAND_DEVELOPMENT_CARD_TILES,
-          "small-island-victory-point",
-          P3_P4_SMALL_ISLAND_VICTORY_POINT_TILES);
+          "harbor",
+          P3_P4_HARBOR_TILES,
+          "development-card",
+          P3_P4_DEVELOPMENT_CARD_TILES,
+          "victory-point",
+          P3_P4_VICTORY_POINT_TILES);
 
   private static final Array<Coordinate> P3_P4_MAIN_ISLAND_LAND_COORDINATES =
       Array.of(
@@ -114,7 +112,7 @@ public class TheForgottenTribe {
           Coordinates.of(9, 7),
           Coordinates.of(11, 7),
           Coordinates.of(13, 7));
-  private static final Array<Coordinate> P3_P4_SMALL_ISLAND_HARBOR_COORDINATES =
+  private static final Array<Coordinate> P3_P4_HARBOR_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(2, 0, BOTTOM_RIGHT),
           Coordinates.faceDownOf(8, 0, BOTTOM_RIGHT),
@@ -122,13 +120,13 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(2, 8, TOP_RIGHT),
           Coordinates.faceDownOf(10, 8, TOP_LEFT),
           Coordinates.faceDownOf(16, 6, TOP_LEFT));
-  private static final Array<Coordinate> P3_P4_SMALL_ISLAND_DEVELOPMENT_CARD_COORDINATES =
+  private static final Array<Coordinate> P3_P4_DEVELOPMENT_CARD_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(1, 1, RIGHT, LEFT),
           Coordinates.faceDownOf(15, 1, RIGHT, LEFT),
           Coordinates.faceDownOf(1, 7, RIGHT, LEFT),
           Coordinates.faceDownOf(15, 7, RIGHT, LEFT));
-  private static final Array<Coordinate> P3_P4_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
+  private static final Array<Coordinate> P3_P4_VICTORY_POINT_COORDINATES =
       Array.of(
           Coordinates.onEdges(4, 0, BOTTOM_LEFT),
           Coordinates.onEdges(10, 0, BOTTOM_LEFT),
@@ -144,12 +142,12 @@ public class TheForgottenTribe {
           P3_P4_MAIN_ISLAND_LAND_COORDINATES,
           "small-island-land",
           P3_P4_SMALL_ISLAND_LAND_COORDINATES,
-          "small-island-harbor",
-          P3_P4_SMALL_ISLAND_HARBOR_COORDINATES,
-          "small-island-development-card",
-          P3_P4_SMALL_ISLAND_DEVELOPMENT_CARD_COORDINATES,
-          "small-island-victory-point",
-          P3_P4_SMALL_ISLAND_VICTORY_POINT_COORDINATES);
+          "harbor",
+          P3_P4_HARBOR_COORDINATES,
+          "development-card",
+          P3_P4_DEVELOPMENT_CARD_COORDINATES,
+          "victory-point",
+          P3_P4_VICTORY_POINT_COORDINATES);
 
   private static final Array<ChitOuterClass.Chit> P3_P4_MAIN_ISLAND_LAND_CHITS =
       Base.P3_P4_PRODUCING_CHITS;
@@ -184,9 +182,9 @@ public class TheForgottenTribe {
               HashMap.ofEntries(
                   TileMappingUtils.newSelfReferringEntry("main-island-land"),
                   TileMappingUtils.newSelfReferringEntry("small-island-land"),
-                  TileMappingUtils.newSelfReferringEntry("small-island-harbor"),
-                  TileMappingUtils.newSelfReferringEntry("small-island-development-card"),
-                  TileMappingUtils.newSelfReferringEntry("small-island-victory-point")),
+                  TileMappingUtils.newSelfReferringEntry("harbor"),
+                  TileMappingUtils.newSelfReferringEntry("development-card"),
+                  TileMappingUtils.newSelfReferringEntry("victory-point")),
               HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("main-island-land")))
           .withConfigurationMatcher(P3_P4_CONFIGURATION_MATCHER);
 
@@ -206,24 +204,22 @@ public class TheForgottenTribe {
           .appendAll(Array.fill(2, PASTURE))
           .appendAll(Array.fill(3, GOLD_FIELD))
           .appendAll(Array.fill(4, DESERT));
-  private static final Array<Tile> P5_P6_SMALL_ISLAND_HARBOR_TILES =
-      P3_P4_SMALL_ISLAND_HARBOR_TILES.appendAll(Array.fill(2, GENERIC_HARBOR));
-  private static final Array<Tile> P5_P6_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
-      Array.fill(6, DEVELOPMENT_CARD);
-  private static final Array<Tile> P5_P6_SMALL_ISLAND_VICTORY_POINT_TILES =
-      Array.fill(10, VICTORY_POINT);
+  private static final Array<Tile> P5_P6_HARBOR_TILES =
+      P3_P4_HARBOR_TILES.appendAll(Array.fill(2, GENERIC_HARBOR));
+  private static final Array<Tile> P5_P6_DEVELOPMENT_CARD_TILES = Array.fill(6, DEVELOPMENT_CARD);
+  private static final Array<Tile> P5_P6_VICTORY_POINT_TILES = Array.fill(10, VICTORY_POINT);
   private static final Map<String, Array<Tile>> P5_P6_TILES =
       HashMap.of(
           "main-island-land",
           P5_P6_MAIN_ISLAND_LAND_TILES,
           "small-island-land",
           P5_P6_SMALL_ISLAND_LAND_TILES,
-          "small-island-harbor",
-          P5_P6_SMALL_ISLAND_HARBOR_TILES,
-          "small-island-development-card",
-          P5_P6_SMALL_ISLAND_DEVELOPMENT_CARD_TILES,
-          "small-island-victory-point",
-          P5_P6_SMALL_ISLAND_VICTORY_POINT_TILES);
+          "harbor",
+          P5_P6_HARBOR_TILES,
+          "development-card",
+          P5_P6_DEVELOPMENT_CARD_TILES,
+          "victory-point",
+          P5_P6_VICTORY_POINT_TILES);
 
   private static final Array<Coordinate> P5_P6_MAIN_ISLAND_LAND_COORDINATES =
       Array.of(
@@ -274,7 +270,7 @@ public class TheForgottenTribe {
           Coordinates.of(11, 7),
           Coordinates.of(15, 7),
           Coordinates.of(17, 7));
-  private static final Array<Coordinate> P5_P6_SMALL_ISLAND_HARBOR_COORDINATES =
+  private static final Array<Coordinate> P5_P6_HARBOR_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(6, 0, BOTTOM_LEFT),
           Coordinates.faceDownOf(8, 0, BOTTOM_RIGHT),
@@ -284,7 +280,7 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(4, 8, TOP_RIGHT),
           Coordinates.faceDownOf(12, 8, TOP_LEFT),
           Coordinates.faceDownOf(14, 8, TOP_RIGHT));
-  private static final Array<Coordinate> P5_P6_SMALL_ISLAND_DEVELOPMENT_CARD_COORDINATES =
+  private static final Array<Coordinate> P5_P6_DEVELOPMENT_CARD_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(12, 0, TOP_RIGHT, BOTTOM_LEFT),
           Coordinates.faceDownOf(1, 1, RIGHT, LEFT),
@@ -292,7 +288,7 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(1, 7, RIGHT, LEFT),
           Coordinates.faceDownOf(19, 7, RIGHT, LEFT),
           Coordinates.faceDownOf(8, 8, TOP_RIGHT, BOTTOM_LEFT));
-  private static final Array<Coordinate> P5_P6_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
+  private static final Array<Coordinate> P5_P6_VICTORY_POINT_COORDINATES =
       Array.of(
           Coordinates.onEdges(2, 0, BOTTOM_RIGHT),
           Coordinates.onEdges(4, 0, BOTTOM_RIGHT),
@@ -310,12 +306,12 @@ public class TheForgottenTribe {
           P5_P6_MAIN_ISLAND_LAND_COORDINATES,
           "small-island-land",
           P5_P6_SMALL_ISLAND_LAND_COORDINATES,
-          "small-island-harbor",
-          P5_P6_SMALL_ISLAND_HARBOR_COORDINATES,
-          "small-island-development-card",
-          P5_P6_SMALL_ISLAND_DEVELOPMENT_CARD_COORDINATES,
-          "small-island-victory-point",
-          P5_P6_SMALL_ISLAND_VICTORY_POINT_COORDINATES);
+          "harbor",
+          P5_P6_HARBOR_COORDINATES,
+          "development-card",
+          P5_P6_DEVELOPMENT_CARD_COORDINATES,
+          "victory-point",
+          P5_P6_VICTORY_POINT_COORDINATES);
 
   private static final Array<ChitOuterClass.Chit> P5_P6_MAIN_ISLAND_LAND_CHITS =
       Array.of(CHIT_2, CHIT_12)
@@ -338,9 +334,9 @@ public class TheForgottenTribe {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("main-island-land"),
               TileMappingUtils.newSelfReferringEntry("small-island-land"),
-              TileMappingUtils.newSelfReferringEntry("small-island-harbor"),
-              TileMappingUtils.newSelfReferringEntry("small-island-development-card"),
-              TileMappingUtils.newSelfReferringEntry("small-island-victory-point")),
+              TileMappingUtils.newSelfReferringEntry("harbor"),
+              TileMappingUtils.newSelfReferringEntry("development-card"),
+              TileMappingUtils.newSelfReferringEntry("victory-point")),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("main-island-land")));
 
   public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =
@@ -355,24 +351,22 @@ public class TheForgottenTribe {
           .appendAll(Array.fill(9, HILL))
           .appendAll(Array.fill(10, FOREST));
   private static final Array<Tile> P7_P8_SMALL_ISLAND_LAND_TILES = P5_P6_SMALL_ISLAND_LAND_TILES;
-  private static final Array<Tile> P7_P8_SMALL_ISLAND_HARBOR_TILES =
-      P3_P4_SMALL_ISLAND_HARBOR_TILES.appendAll(Array.fill(4, GENERIC_HARBOR));
-  private static final Array<Tile> P7_P8_SMALL_ISLAND_DEVELOPMENT_CARD_TILES =
-      Array.fill(8, DEVELOPMENT_CARD);
-  private static final Array<Tile> P7_P8_SMALL_ISLAND_VICTORY_POINT_TILES =
-      Array.fill(12, VICTORY_POINT);
+  private static final Array<Tile> P7_P8_HARBOR_TILES =
+      P3_P4_HARBOR_TILES.appendAll(Array.fill(4, GENERIC_HARBOR));
+  private static final Array<Tile> P7_P8_DEVELOPMENT_CARD_TILES = Array.fill(8, DEVELOPMENT_CARD);
+  private static final Array<Tile> P7_P8_VICTORY_POINT_TILES = Array.fill(12, VICTORY_POINT);
   private static final Map<String, Array<Tile>> P7_P8_TILES =
       HashMap.of(
           "main-island-land",
           P7_P8_MAIN_ISLAND_LAND_TILES,
           "small-island-land",
           P7_P8_SMALL_ISLAND_LAND_TILES,
-          "small-island-harbor",
-          P7_P8_SMALL_ISLAND_HARBOR_TILES,
-          "small-island-development-card",
-          P7_P8_SMALL_ISLAND_DEVELOPMENT_CARD_TILES,
-          "small-island-victory-point",
-          P7_P8_SMALL_ISLAND_VICTORY_POINT_TILES);
+          "harbor",
+          P7_P8_HARBOR_TILES,
+          "development-card",
+          P7_P8_DEVELOPMENT_CARD_TILES,
+          "victory-point",
+          P7_P8_VICTORY_POINT_TILES);
 
   private static final Array<Coordinate> P7_P8_MAIN_ISLAND_LAND_COORDINATES =
       Array.of(
@@ -436,7 +430,7 @@ public class TheForgottenTribe {
           Coordinates.of(17, 7),
           Coordinates.of(21, 7),
           Coordinates.of(25, 7));
-  private static final Array<Coordinate> P7_P8_SMALL_ISLAND_HARBOR_COORDINATES =
+  private static final Array<Coordinate> P7_P8_HARBOR_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(4, 0, BOTTOM_RIGHT),
           Coordinates.faceDownOf(10, 0, BOTTOM_LEFT),
@@ -448,7 +442,7 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(16, 8, TOP_RIGHT),
           Coordinates.faceDownOf(22, 8, TOP_LEFT),
           Coordinates.faceDownOf(24, 8, TOP_RIGHT));
-  private static final Array<Coordinate> P7_P8_SMALL_ISLAND_DEVELOPMENT_CARD_COORDINATES =
+  private static final Array<Coordinate> P7_P8_DEVELOPMENT_CARD_COORDINATES =
       Array.of(
           Coordinates.faceDownOf(3, 1, RIGHT, LEFT),
           Coordinates.faceDownOf(11, 1, RIGHT, LEFT),
@@ -458,7 +452,7 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(11, 7, RIGHT, LEFT),
           Coordinates.faceDownOf(19, 7, RIGHT, LEFT),
           Coordinates.faceDownOf(27, 7, RIGHT, LEFT));
-  private static final Array<Coordinate> P7_P8_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
+  private static final Array<Coordinate> P7_P8_VICTORY_POINT_COORDINATES =
       Array.of(
           Coordinates.onEdges(6, 0, BOTTOM_LEFT),
           Coordinates.onEdges(8, 0, BOTTOM_RIGHT),
@@ -478,12 +472,12 @@ public class TheForgottenTribe {
           P7_P8_MAIN_ISLAND_LAND_COORDINATES,
           "small-island-land",
           P7_P8_SMALL_ISLAND_LAND_COORDINATES,
-          "small-island-harbor",
-          P7_P8_SMALL_ISLAND_HARBOR_COORDINATES,
-          "small-island-development-card",
-          P7_P8_SMALL_ISLAND_DEVELOPMENT_CARD_COORDINATES,
-          "small-island-victory-point",
-          P7_P8_SMALL_ISLAND_VICTORY_POINT_COORDINATES);
+          "harbor",
+          P7_P8_HARBOR_COORDINATES,
+          "development-card",
+          P7_P8_DEVELOPMENT_CARD_COORDINATES,
+          "victory-point",
+          P7_P8_VICTORY_POINT_COORDINATES);
 
   private static final Array<ChitOuterClass.Chit> P7_P8_MAIN_ISLAND_LAND_CHITS =
       Base.P7_P8_PRODUCING_CHITS.appendAll(Array.fill(2, CHIT_2)).appendAll(Array.fill(2, CHIT_12));
@@ -498,9 +492,9 @@ public class TheForgottenTribe {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("main-island-land"),
               TileMappingUtils.newSelfReferringEntry("small-island-land"),
-              TileMappingUtils.newSelfReferringEntry("small-island-harbor"),
-              TileMappingUtils.newSelfReferringEntry("small-island-development-card"),
-              TileMappingUtils.newSelfReferringEntry("small-island-victory-point")),
+              TileMappingUtils.newSelfReferringEntry("harbor"),
+              TileMappingUtils.newSelfReferringEntry("development-card"),
+              TileMappingUtils.newSelfReferringEntry("victory-point")),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("main-island-land")));
 
   public static final SpecificationImpl P7_P8_SPECIFICATION_IMPL =
