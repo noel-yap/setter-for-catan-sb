@@ -7,4 +7,4 @@ grpc:
 
 logging:
   level:
-    root: DEBUG
+    noelyap.setterforcatan: DEBUG
