@@ -1,4 +1,4 @@
-package noelyap.setterforcatan.scenario.seafarers;
+package noelyap.setterforcatan.scenario.tradersandbarbarians;
 
 import static noelyap.setterforcatan.component.Chits.CHITS_2_12;
 import static noelyap.setterforcatan.component.Chits.CHIT_10;
@@ -42,7 +42,7 @@ public class RiversOfCatan {
           .appendAll(Array.fill(2, PASTURE))
           .appendAll(Array.fill(4, FIELD))
           .appendAll(Array.fill(4, FOREST));
-  private static final Array<Tile> P3_P4_NON_RIVER_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
+  private static final Array<Tile> P3_P4_HARBOR_TILES = Base.P3_P4_HARBOR_TILES;
   private static final Array<Tile> P3_P4_RIVER_MOUNTAIN_TILES = Array.fill(2, MOUNTAIN);
   private static final Array<Tile> P3_P4_RIVER_HILL_TILES = Array.fill(2, HILL);
   private static final Array<Tile> P3_P4_RIVER_PASTURE_TILES = Array.of(PASTURE);
@@ -52,8 +52,8 @@ public class RiversOfCatan {
       HashMap.of(
           "non-river-land",
           P3_P4_NON_RIVER_LAND_TILES,
-          "non-river-harbor",
-          P3_P4_NON_RIVER_HARBOR_TILES,
+          "harbor",
+          P3_P4_HARBOR_TILES,
           "river-mountain",
           P3_P4_RIVER_MOUNTAIN_TILES,
           "river-hill",
@@ -79,8 +79,7 @@ public class RiversOfCatan {
           Coordinates.of(3, 5),
           Coordinates.of(5, 5),
           Coordinates.of(7, 5));
-  private static final Array<Coordinate> P3_P4_NON_RIVER_HARBOR_COORDINATES =
-      Base.P3_P4_HARBOR_COORDINATES;
+  private static final Array<Coordinate> P3_P4_HARBOR_COORDINATES = Base.P3_P4_HARBOR_COORDINATES;
   private static final Array<Coordinate> P3_P4_NON_RIVER_FISHERY_COORDINATES =
       Base.P3_P4_FISHERY_COORDINATES;
   private static final Array<Coordinate> P3_P4_RIVER_MOUNTAIN_COORDINATES =
@@ -104,8 +103,8 @@ public class RiversOfCatan {
       HashMap.of(
           "non-river-land",
           P3_P4_NON_RIVER_LAND_COORDINATES,
-          "non-river-harbor",
-          P3_P4_NON_RIVER_HARBOR_COORDINATES,
+          "harbor",
+          P3_P4_HARBOR_COORDINATES,
           "river-mountain",
           P3_P4_RIVER_MOUNTAIN_COORDINATES,
           "river-hill",
@@ -137,7 +136,7 @@ public class RiversOfCatan {
           P3_P4_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("non-river-land"),
-              TileMappingUtils.newSelfReferringEntry("non-river-harbor"),
+              TileMappingUtils.newSelfReferringEntry("harbor"),
               TileMappingUtils.newSelfReferringEntry("river-mountain"),
               TileMappingUtils.newSelfReferringEntry("river-hill"),
               TileMappingUtils.newSelfReferringEntry("river-pasture"),
@@ -158,7 +157,7 @@ public class RiversOfCatan {
           .appendAll(Array.fill(3, PASTURE))
           .appendAll(Array.fill(6, FIELD))
           .appendAll(Array.fill(6, FOREST));
-  private static final Array<Tile> P5_P6_NON_RIVER_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
+  private static final Array<Tile> P5_P6_HARBOR_TILES = Base.P5_P6_HARBOR_TILES;
   private static final Array<Tile> P5_P6_RIVER_MOUNTAIN_TILES = Array.fill(3, MOUNTAIN);
   private static final Array<Tile> P5_P6_RIVER_HILL_TILES = Array.fill(2, HILL);
   private static final Array<Tile> P5_P6_RIVER_PASTURE_TILES = Array.fill(3, PASTURE);
@@ -168,8 +167,8 @@ public class RiversOfCatan {
       HashMap.of(
           "non-river-land",
           P5_P6_NON_RIVER_LAND_TILES,
-          "non-river-harbor",
-          P5_P6_NON_RIVER_HARBOR_TILES,
+          "harbor",
+          P5_P6_HARBOR_TILES,
           "river-mountain",
           P5_P6_RIVER_MOUNTAIN_TILES,
           "river-hill",
@@ -203,8 +202,7 @@ public class RiversOfCatan {
           Coordinates.of(10, 6),
           Coordinates.of(5, 7),
           Coordinates.of(9, 7));
-  private static final Array<Coordinate> P5_P6_NON_RIVER_HARBOR_COORDINATES =
-      Base.P5_P6_HARBOR_COORDINATES;
+  private static final Array<Coordinate> P5_P6_HARBOR_COORDINATES = Base.P5_P6_HARBOR_COORDINATES;
   private static final Array<Coordinate> P5_P6_NON_RIVER_FISHERY_COORDINATES =
       Base.P5_P6_FISHERY_COORDINATES;
   private static final Array<Coordinate> P5_P6_RIVER_MOUNTAIN_COORDINATES =
@@ -231,8 +229,8 @@ public class RiversOfCatan {
       HashMap.of(
           "non-river-land",
           P5_P6_NON_RIVER_LAND_COORDINATES,
-          "non-river-harbor",
-          P5_P6_NON_RIVER_HARBOR_COORDINATES,
+          "harbor",
+          P5_P6_HARBOR_COORDINATES,
           "river-mountain",
           P5_P6_RIVER_MOUNTAIN_COORDINATES,
           "river-hill",
@@ -255,7 +253,7 @@ public class RiversOfCatan {
           P5_P6_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("non-river-land"),
-              TileMappingUtils.newSelfReferringEntry("non-river-harbor"),
+              TileMappingUtils.newSelfReferringEntry("harbor"),
               TileMappingUtils.newSelfReferringEntry("river-mountain"),
               TileMappingUtils.newSelfReferringEntry("river-hill"),
               TileMappingUtils.newSelfReferringEntry("river-pasture"),
@@ -276,7 +274,7 @@ public class RiversOfCatan {
           .appendAll(Array.fill(5, PASTURE))
           .appendAll(Array.fill(7, FIELD))
           .appendAll(Array.fill(8, FOREST));
-  private static final Array<Tile> P7_P8_NON_RIVER_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
+  private static final Array<Tile> P7_P8_HARBOR_TILES = Base.P7_P8_HARBOR_TILES;
   private static final Array<Tile> P7_P8_RIVER_MOUNTAIN_TILES = P5_P6_RIVER_MOUNTAIN_TILES;
   private static final Array<Tile> P7_P8_RIVER_HILL_TILES = P5_P6_RIVER_HILL_TILES;
   private static final Array<Tile> P7_P8_RIVER_PASTURE_TILES = P5_P6_RIVER_PASTURE_TILES;
@@ -286,8 +284,8 @@ public class RiversOfCatan {
       HashMap.of(
           "non-river-land",
           P7_P8_NON_RIVER_LAND_TILES,
-          "non-river-harbor",
-          P7_P8_NON_RIVER_HARBOR_TILES,
+          "harbor",
+          P7_P8_HARBOR_TILES,
           "river-mountain",
           P7_P8_RIVER_MOUNTAIN_TILES,
           "river-hill",
@@ -328,8 +326,7 @@ public class RiversOfCatan {
           Coordinates.of(5, 7),
           Coordinates.of(7, 7),
           Coordinates.of(11, 7));
-  private static final Array<Coordinate> P7_P8_NON_RIVER_HARBOR_COORDINATES =
-      Base.P7_P8_HARBOR_COORDINATES;
+  private static final Array<Coordinate> P7_P8_HARBOR_COORDINATES = Base.P7_P8_HARBOR_COORDINATES;
   private static final Array<Coordinate> P7_P8_NON_RIVER_FISHERY_COORDINATES =
       Base.P7_P8_FISHERY_COORDINATES;
   private static final Array<Coordinate> P7_P8_RIVER_MOUNTAIN_COORDINATES =
@@ -356,8 +353,8 @@ public class RiversOfCatan {
       HashMap.of(
           "non-river-land",
           P7_P8_NON_RIVER_LAND_COORDINATES,
-          "non-river-harbor",
-          P7_P8_NON_RIVER_HARBOR_COORDINATES,
+          "harbor",
+          P7_P8_HARBOR_COORDINATES,
           "river-mountain",
           P7_P8_RIVER_MOUNTAIN_COORDINATES,
           "river-hill",
@@ -389,7 +386,7 @@ public class RiversOfCatan {
           P7_P8_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("non-river-land"),
-              TileMappingUtils.newSelfReferringEntry("non-river-harbor"),
+              TileMappingUtils.newSelfReferringEntry("harbor"),
               TileMappingUtils.newSelfReferringEntry("river-mountain"),
               TileMappingUtils.newSelfReferringEntry("river-hill"),
               TileMappingUtils.newSelfReferringEntry("river-pasture"),

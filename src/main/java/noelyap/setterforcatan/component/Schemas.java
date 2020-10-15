@@ -9,6 +9,7 @@ import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFAR
 import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_THROUGH_THE_DESERT;
 import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_WONDERS_OF_CATAN;
 import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.TRADERS_AND_BARBARIANS_RIVERS_OF_CATAN;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.TRADERS_AND_BARBARIANS_THE_CARAVANS;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -19,11 +20,12 @@ import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.scenario.seafarers.ClothForCatan;
 import noelyap.setterforcatan.scenario.seafarers.HeadingForNewShores;
 import noelyap.setterforcatan.scenario.seafarers.Oceania;
-import noelyap.setterforcatan.scenario.seafarers.RiversOfCatan;
 import noelyap.setterforcatan.scenario.seafarers.TheForgottenTribe;
 import noelyap.setterforcatan.scenario.seafarers.TheNIslands;
 import noelyap.setterforcatan.scenario.seafarers.ThroughTheDesert;
 import noelyap.setterforcatan.scenario.seafarers.WondersOfCatan;
+import noelyap.setterforcatan.scenario.tradersandbarbarians.RiversOfCatan;
+import noelyap.setterforcatan.scenario.tradersandbarbarians.TheCaravans;
 import org.apache.commons.lang3.Range;
 
 public class Schemas {
@@ -161,7 +163,21 @@ public class Schemas {
                   Range.between(7, 8),
                   Tuple.of(
                       RiversOfCatan.P7_P8_SPECIFICATION_IMPL,
-                      RiversOfCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
+                      RiversOfCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
+              TRADERS_AND_BARBARIANS_THE_CARAVANS,
+              HashMap.of(
+                  Range.between(3, 4),
+                  Tuple.of(
+                      TheCaravans.P3_P4_SPECIFICATION_IMPL,
+                      TheCaravans.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(5, 6),
+                  Tuple.of(
+                      TheCaravans.P5_P6_SPECIFICATION_IMPL,
+                      TheCaravans.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(7, 8),
+                  Tuple.of(
+                      TheCaravans.P7_P8_SPECIFICATION_IMPL,
+                      TheCaravans.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 
   public static SpecificationImpl toSpecification(
       final Scenario scenario, final int playerCount, final boolean fishermenOfCatan) {
