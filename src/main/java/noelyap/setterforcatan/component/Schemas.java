@@ -1,14 +1,25 @@
 package noelyap.setterforcatan.component;
 
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.BASE;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_CLOTH_FOR_CATAN;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_HEADING_FOR_NEW_SHORES;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_OCEANIA;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_THE_FORGOTTEN_TRIBE;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_THE_N_ISLANDS;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_THROUGH_THE_DESERT;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFARERS_WONDERS_OF_CATAN;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.TRADERS_AND_BARBARIANS_RIVERS_OF_CATAN;
+
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
-import noelyap.setterforcatan.protogen.ScenarioOuterClass;
+import noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario;
 import noelyap.setterforcatan.scenario.Base;
 import noelyap.setterforcatan.scenario.seafarers.ClothForCatan;
 import noelyap.setterforcatan.scenario.seafarers.HeadingForNewShores;
 import noelyap.setterforcatan.scenario.seafarers.Oceania;
+import noelyap.setterforcatan.scenario.seafarers.RiversOfCatan;
 import noelyap.setterforcatan.scenario.seafarers.TheForgottenTribe;
 import noelyap.setterforcatan.scenario.seafarers.TheNIslands;
 import noelyap.setterforcatan.scenario.seafarers.ThroughTheDesert;
@@ -17,11 +28,10 @@ import org.apache.commons.lang3.Range;
 
 public class Schemas {
   public static final Map<
-          ScenarioOuterClass.Scenario,
-          Map<Range<Integer>, Tuple2<SpecificationImpl, SpecificationImpl>>>
+          Scenario, Map<Range<Integer>, Tuple2<SpecificationImpl, SpecificationImpl>>>
       OFFICIAL_SCHEMAS =
           HashMap.of(
-              ScenarioOuterClass.Scenario.BASE,
+              BASE,
               HashMap.of(
                   Range.between(3, 4),
                   Tuple.of(Base.P3_P4_SPECIFICATION_IMPL, Base.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
@@ -29,7 +39,7 @@ public class Schemas {
                   Tuple.of(Base.P5_P6_SPECIFICATION_IMPL, Base.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
                   Range.between(7, 8),
                   Tuple.of(Base.P7_P8_SPECIFICATION_IMPL, Base.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
-              ScenarioOuterClass.Scenario.SEAFARERS_HEADING_FOR_NEW_SHORES,
+              SEAFARERS_HEADING_FOR_NEW_SHORES,
               HashMap.of(
                   Range.is(3),
                   Tuple.of(
@@ -47,7 +57,7 @@ public class Schemas {
                   Tuple.of(
                       HeadingForNewShores.P7_P8_SPECIFICATION_IMPL,
                       HeadingForNewShores.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
-              ScenarioOuterClass.Scenario.SEAFARERS_THE_N_ISLANDS,
+              SEAFARERS_THE_N_ISLANDS,
               HashMap.of(
                   Range.is(3),
                   Tuple.of(
@@ -65,7 +75,7 @@ public class Schemas {
                   Tuple.of(
                       TheNIslands.P7_P8_SPECIFICATION_IMPL,
                       TheNIslands.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
-              ScenarioOuterClass.Scenario.SEAFARERS_OCEANIA,
+              SEAFARERS_OCEANIA,
               HashMap.of(
                   Range.is(3),
                   Tuple.of(Oceania.P3_SPECIFICATION_IMPL, Oceania.P3_FISHERMEN_SPECIFICATION_IMPL),
@@ -78,7 +88,7 @@ public class Schemas {
                   Tuple.of(
                       Oceania.P7_P8_SPECIFICATION_IMPL,
                       Oceania.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
-              ScenarioOuterClass.Scenario.SEAFARERS_THROUGH_THE_DESERT,
+              SEAFARERS_THROUGH_THE_DESERT,
               HashMap.of(
                   Range.is(3),
                   Tuple.of(
@@ -96,7 +106,7 @@ public class Schemas {
                   Tuple.of(
                       ThroughTheDesert.P7_P8_SPECIFICATION_IMPL,
                       ThroughTheDesert.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
-              ScenarioOuterClass.Scenario.SEAFARERS_THE_FORGOTTEN_TRIBE,
+              SEAFARERS_THE_FORGOTTEN_TRIBE,
               HashMap.of(
                   Range.between(3, 4),
                   Tuple.of(
@@ -110,7 +120,7 @@ public class Schemas {
                   Tuple.of(
                       TheForgottenTribe.P7_P8_SPECIFICATION_IMPL,
                       TheForgottenTribe.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
-              ScenarioOuterClass.Scenario.SEAFARERS_CLOTH_FOR_CATAN,
+              SEAFARERS_CLOTH_FOR_CATAN,
               HashMap.of(
                   Range.between(3, 4),
                   Tuple.of(
@@ -124,7 +134,7 @@ public class Schemas {
                   Tuple.of(
                       ClothForCatan.P7_P8_SPECIFICATION_IMPL,
                       ClothForCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
-              ScenarioOuterClass.Scenario.SEAFARERS_WONDERS_OF_CATAN,
+              SEAFARERS_WONDERS_OF_CATAN,
               HashMap.of(
                   Range.between(3, 4),
                   Tuple.of(
@@ -137,13 +147,25 @@ public class Schemas {
                   Range.between(7, 8),
                   Tuple.of(
                       WondersOfCatan.P7_P8_SPECIFICATION_IMPL,
-                      WondersOfCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
+                      WondersOfCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)),
+              TRADERS_AND_BARBARIANS_RIVERS_OF_CATAN,
+              HashMap.of(
+                  Range.between(3, 4),
+                  Tuple.of(
+                      RiversOfCatan.P3_P4_SPECIFICATION_IMPL,
+                      RiversOfCatan.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(5, 6),
+                  Tuple.of(
+                      RiversOfCatan.P5_P6_SPECIFICATION_IMPL,
+                      RiversOfCatan.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                  Range.between(7, 8),
+                  Tuple.of(
+                      RiversOfCatan.P7_P8_SPECIFICATION_IMPL,
+                      RiversOfCatan.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 
   public static SpecificationImpl toSpecification(
-      final ScenarioOuterClass.Scenario scenario,
-      final int playerCount,
-      final boolean fishermenOfCatan) {
-    if (scenario == ScenarioOuterClass.Scenario.UNRECOGNIZED) {
+      final Scenario scenario, final int playerCount, final boolean fishermenOfCatan) {
+    if (scenario == Scenario.UNRECOGNIZED) {
       throw new InternalError(String.format("Unrecognized Scenario `%s`.", scenario.toString()));
     }
 
