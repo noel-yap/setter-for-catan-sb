@@ -94,18 +94,17 @@ public class ThroughTheDesert {
           Coordinates.of(3, 5));
   private static final Array<Coordinate> P3_INDIGENOUS_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(3, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(5, 1, BOTTOM_RIGHT),
-          Coordinates.withEdges(0, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(8, 2, LEFT),
-          Coordinates.withEdges(0, 4, TOP_RIGHT),
-          Coordinates.withEdges(12, 4, LEFT),
-          Coordinates.withEdges(1, 5, RIGHT),
-          Coordinates.withEdges(5, 5, TOP_LEFT));
+          Coordinates.onEdges(3, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(5, 1, BOTTOM_RIGHT),
+          Coordinates.onEdges(0, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(8, 2, LEFT),
+          Coordinates.onEdges(0, 4, TOP_RIGHT),
+          Coordinates.onEdges(12, 4, LEFT),
+          Coordinates.onEdges(1, 5, RIGHT),
+          Coordinates.onEdges(5, 5, TOP_LEFT));
   private static final Array<Coordinate> P3_INDIGENOUS_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(2, 2, LEFT, TOP_LEFT),
-          Coordinates.withEdges(2, 4, BOTTOM_LEFT, LEFT));
+          Coordinates.onEdges(2, 2, LEFT, TOP_LEFT), Coordinates.onEdges(2, 4, BOTTOM_LEFT, LEFT));
   private static final Array<Coordinate> P3_DESERT_COORDINATES =
       Array.of(Coordinates.of(7, 5), Coordinates.of(9, 5), Coordinates.of(11, 5));
   private static final Array<Coordinate> P3_FOREIGN_COORDINATES =
@@ -212,19 +211,19 @@ public class ThroughTheDesert {
           Coordinates.of(4, 6));
   private static final Array<Coordinate> P4_INDIGENOUS_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 2, BOTTOM_LEFT),
-          Coordinates.withEdges(6, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(10, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(1, 3, RIGHT),
-          Coordinates.withEdges(13, 3, LEFT),
-          Coordinates.withEdges(2, 4, BOTTOM_RIGHT),
-          Coordinates.withEdges(14, 4, BOTTOM_LEFT),
-          Coordinates.withEdges(2, 6, TOP_RIGHT),
-          Coordinates.withEdges(6, 6, TOP_RIGHT));
+          Coordinates.onEdges(4, 2, BOTTOM_LEFT),
+          Coordinates.onEdges(6, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(10, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(1, 3, RIGHT),
+          Coordinates.onEdges(13, 3, LEFT),
+          Coordinates.onEdges(2, 4, BOTTOM_RIGHT),
+          Coordinates.onEdges(14, 4, BOTTOM_LEFT),
+          Coordinates.onEdges(2, 6, TOP_RIGHT),
+          Coordinates.onEdges(6, 6, TOP_RIGHT));
   private static final Array<Coordinate> P4_INDIGENOUS_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(13, 5, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(4, 6, BOTTOM_LEFT, LEFT));
+          Coordinates.onEdges(13, 5, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(4, 6, BOTTOM_LEFT, LEFT));
   private static final Array<Coordinate> P4_DESERT_COORDINATES =
       Array.of(Coordinates.of(8, 6), Coordinates.of(10, 6), Coordinates.of(12, 6));
   private static final Array<Coordinate> P4_FOREIGN_COORDINATES =
@@ -342,21 +341,21 @@ public class ThroughTheDesert {
           Coordinates.of(13, 5));
   private static final Array<Coordinate> P5_P6_INDIGENOUS_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(2, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(5, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(0, 2, RIGHT),
-          Coordinates.withEdges(6, 2, BOTTOM_LEFT),
-          Coordinates.withEdges(8, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(12, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(15, 3, BOTTOM_LEFT),
-          Coordinates.withEdges(0, 4, TOP_RIGHT),
-          Coordinates.withEdges(1, 5, TOP_RIGHT),
-          Coordinates.withEdges(5, 5, TOP_RIGHT),
-          Coordinates.withEdges(15, 5, LEFT));
+          Coordinates.onEdges(2, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(5, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(0, 2, RIGHT),
+          Coordinates.onEdges(6, 2, BOTTOM_LEFT),
+          Coordinates.onEdges(8, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(12, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(15, 3, BOTTOM_LEFT),
+          Coordinates.onEdges(0, 4, TOP_RIGHT),
+          Coordinates.onEdges(1, 5, TOP_RIGHT),
+          Coordinates.onEdges(5, 5, TOP_RIGHT),
+          Coordinates.onEdges(15, 5, LEFT));
   private static final Array<Coordinate> P5_P6_INDIGENOUS_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(1, 1, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(1, 3, LEFT, TOP_LEFT));
+          Coordinates.onEdges(1, 1, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(1, 3, LEFT, TOP_LEFT));
   private static final Array<Coordinate> P5_P6_DESERT_COORDINATES =
       Array.of(
           Coordinates.of(6, 6),
@@ -503,18 +502,18 @@ public class ThroughTheDesert {
           Coordinates.of(17, 5));
   private static final Array<Coordinate> P7_P8_INDIGENOUS_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.withEdges(2, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(5, 1, BOTTOM_LEFT),
-          Coordinates.withEdges(0, 2, RIGHT),
-          Coordinates.withEdges(6, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(10, 2, BOTTOM_LEFT),
-          Coordinates.withEdges(12, 2, BOTTOM_RIGHT),
-          Coordinates.withEdges(16, 2, BOTTOM_LEFT),
-          Coordinates.withEdges(17, 3, BOTTOM_RIGHT),
-          Coordinates.withEdges(0, 4, TOP_RIGHT),
-          Coordinates.withEdges(3, 5, TOP_LEFT),
-          Coordinates.withEdges(5, 5, TOP_RIGHT),
-          Coordinates.withEdges(19, 5, TOP_LEFT));
+          Coordinates.onEdges(2, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(5, 1, BOTTOM_LEFT),
+          Coordinates.onEdges(0, 2, RIGHT),
+          Coordinates.onEdges(6, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(10, 2, BOTTOM_LEFT),
+          Coordinates.onEdges(12, 2, BOTTOM_RIGHT),
+          Coordinates.onEdges(16, 2, BOTTOM_LEFT),
+          Coordinates.onEdges(17, 3, BOTTOM_RIGHT),
+          Coordinates.onEdges(0, 4, TOP_RIGHT),
+          Coordinates.onEdges(3, 5, TOP_LEFT),
+          Coordinates.onEdges(5, 5, TOP_RIGHT),
+          Coordinates.onEdges(19, 5, TOP_LEFT));
   private static final Array<Coordinate> P7_P8_INDIGENOUS_FISHERY_COORDINATES =
       P5_P6_INDIGENOUS_FISHERY_COORDINATES;
   private static final Array<Coordinate> P7_P8_DESERT_COORDINATES =

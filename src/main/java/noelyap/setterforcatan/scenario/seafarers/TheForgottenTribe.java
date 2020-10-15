@@ -32,6 +32,7 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 
+import com.google.common.annotations.VisibleForTesting;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
@@ -50,14 +51,6 @@ import org.hamcrest.core.AllOf;
 import org.hamcrest.core.IsNot;
 
 public class TheForgottenTribe {
-  private static final Array<Coordinate> P3_P4_BOUNDED_ODDS_TILES =
-      Array.of(Coordinates.of(11, 3), Coordinates.of(12, 4), Coordinates.of(11, 5));
-  private static final Matcher<ConfigurationOuterClass.Configuration> P3_P4_CONFIGURATION_MATCHER =
-      IsNot.not(
-          AllOf.allOf(
-              CoordinateIsIn.coordinateIsIn(P3_P4_BOUNDED_ODDS_TILES),
-              HasOddsGreaterThan.hasOddsGreaterThan(3)));
-
   private static final Array<Tile> P3_P4_MAIN_ISLAND_LAND_TILES = Base.P3_P4_PRODUCING_TILES;
   private static final Array<Tile> P3_P4_SMALL_ISLAND_LAND_TILES =
       Array.of(FIELD, FOREST, PASTURE)
@@ -85,27 +78,28 @@ public class TheForgottenTribe {
           P3_P4_SMALL_ISLAND_VICTORY_POINT_TILES);
 
   private static final Array<Coordinate> P3_P4_MAIN_ISLAND_LAND_COORDINATES =
-      P3_P4_BOUNDED_ODDS_TILES.appendAll(
-          Array.of(
-              Coordinates.of(1, 3),
-              Coordinates.of(3, 3),
-              Coordinates.of(5, 3),
-              Coordinates.of(7, 3),
-              Coordinates.of(9, 3),
-              Coordinates.of(2, 4),
-              Coordinates.of(4, 4),
-              Coordinates.of(6, 4),
-              Coordinates.of(8, 4),
-              Coordinates.of(10, 4),
-              Coordinates.of(1, 5),
-              Coordinates.of(3, 5),
-              Coordinates.of(5, 5),
-              Coordinates.of(7, 5),
-              Coordinates.of(9, 5)));
+      Array.of(
+          Coordinates.of(1, 3),
+          Coordinates.of(3, 3),
+          Coordinates.of(5, 3),
+          Coordinates.of(7, 3),
+          Coordinates.of(9, 3),
+          Coordinates.of(11, 3),
+          Coordinates.of(2, 4),
+          Coordinates.of(4, 4),
+          Coordinates.of(6, 4),
+          Coordinates.of(8, 4),
+          Coordinates.of(10, 4),
+          Coordinates.of(12, 4),
+          Coordinates.of(1, 5),
+          Coordinates.of(3, 5),
+          Coordinates.of(5, 5),
+          Coordinates.of(7, 5),
+          Coordinates.of(9, 5),
+          Coordinates.of(11, 5));
   private static final Array<Coordinate> P3_P4_MAIN_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(1, 3, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(1, 5, LEFT, TOP_LEFT));
+          Coordinates.onEdges(1, 3, BOTTOM_LEFT, LEFT), Coordinates.onEdges(1, 5, LEFT, TOP_LEFT));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(3, 1),
@@ -136,14 +130,14 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(15, 7, RIGHT, LEFT));
   private static final Array<Coordinate> P3_P4_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
       Array.of(
-          Coordinates.withEdges(4, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(10, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(14, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(17, 3, LEFT),
-          Coordinates.withEdges(17, 5, LEFT),
-          Coordinates.withEdges(4, 8, TOP_LEFT),
-          Coordinates.withEdges(8, 8, TOP_RIGHT),
-          Coordinates.withEdges(14, 8, TOP_LEFT));
+          Coordinates.onEdges(4, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(14, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(17, 3, LEFT),
+          Coordinates.onEdges(17, 5, LEFT),
+          Coordinates.onEdges(4, 8, TOP_LEFT),
+          Coordinates.onEdges(8, 8, TOP_RIGHT),
+          Coordinates.onEdges(14, 8, TOP_LEFT));
   private static final Map<String, Array<Coordinate>> P3_P4_COORDINATES =
       HashMap.of(
           "main-island-land",
@@ -161,6 +155,26 @@ public class TheForgottenTribe {
       Base.P3_P4_PRODUCING_CHITS;
   private static final Map<String, Array<ChitOuterClass.Chit>> P3_P4_CHITS =
       HashMap.of("main-island-land", P3_P4_MAIN_ISLAND_LAND_CHITS);
+
+  // Eastern-most tiles on main island.
+  @VisibleForTesting
+  static final Array<Coordinate> P3_P4_BOUNDED_ODDS_COORDINATES =
+      P3_P4_MAIN_ISLAND_LAND_COORDINATES
+          .foldLeft(
+              HashMap.empty(),
+              ((HashMap<Integer, Integer> map, Coordinate coordinate) -> {
+                final int y = coordinate.getY();
+
+                return map.put(y, Math.max(map.get(y).getOrElse(0), coordinate.getX()));
+              }))
+          .toArray()
+          .map(t2 -> Coordinates.of(t2._2, t2._1));
+
+  private static final Matcher<ConfigurationOuterClass.Configuration> P3_P4_CONFIGURATION_MATCHER =
+      IsNot.not(
+          AllOf.allOf(
+              CoordinateIsIn.coordinateIsIn(P3_P4_BOUNDED_ODDS_COORDINATES),
+              HasOddsGreaterThan.hasOddsGreaterThan(3)));
 
   private static final SpecificationImpl.Builder P3_P4_SPECIFICATION_BUILDER =
       SpecificationImpl.newBuilder(
@@ -244,8 +258,8 @@ public class TheForgottenTribe {
           Coordinates.of(19, 5));
   private static final Array<Coordinate> P5_P6_MAIN_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(19, 3, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(19, 5, TOP_RIGHT, RIGHT));
+          Coordinates.onEdges(19, 3, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(19, 5, TOP_RIGHT, RIGHT));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(3, 1),
@@ -280,16 +294,16 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(8, 8, TOP_RIGHT, BOTTOM_LEFT));
   private static final Array<Coordinate> P5_P6_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
       Array.of(
-          Coordinates.withEdges(2, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(4, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(10, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(10, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(16, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(6, 8, TOP_LEFT),
-          Coordinates.withEdges(10, 8, TOP_RIGHT),
-          Coordinates.withEdges(10, 8, TOP_LEFT),
-          Coordinates.withEdges(16, 8, TOP_LEFT),
-          Coordinates.withEdges(18, 8, TOP_LEFT));
+          Coordinates.onEdges(2, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(4, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(10, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(16, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(6, 8, TOP_LEFT),
+          Coordinates.onEdges(10, 8, TOP_RIGHT),
+          Coordinates.onEdges(10, 8, TOP_LEFT),
+          Coordinates.onEdges(16, 8, TOP_LEFT),
+          Coordinates.onEdges(18, 8, TOP_LEFT));
   private static final Map<String, Array<Coordinate>> P5_P6_COORDINATES =
       HashMap.of(
           "main-island-land",
@@ -404,10 +418,10 @@ public class TheForgottenTribe {
           Coordinates.of(27, 5));
   private static final Array<Coordinate> P7_P8_MAIN_ISLAND_FISHERY_COORDINATES =
       Array.of(
-          Coordinates.withEdges(1, 3, RIGHT, BOTTOM_RIGHT),
-          Coordinates.withEdges(29, 3, BOTTOM_LEFT, LEFT),
-          Coordinates.withEdges(1, 5, TOP_RIGHT, RIGHT),
-          Coordinates.withEdges(29, 5, LEFT, TOP_LEFT));
+          Coordinates.onEdges(1, 3, RIGHT, BOTTOM_RIGHT),
+          Coordinates.onEdges(29, 3, BOTTOM_LEFT, LEFT),
+          Coordinates.onEdges(1, 5, TOP_RIGHT, RIGHT),
+          Coordinates.onEdges(29, 5, LEFT, TOP_LEFT));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_LAND_COORDINATES =
       Array.of(
           Coordinates.of(5, 1),
@@ -446,18 +460,18 @@ public class TheForgottenTribe {
           Coordinates.faceDownOf(27, 7, RIGHT, LEFT));
   private static final Array<Coordinate> P7_P8_SMALL_ISLAND_VICTORY_POINT_COORDINATES =
       Array.of(
-          Coordinates.withEdges(6, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(8, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(14, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(16, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(22, 0, BOTTOM_LEFT),
-          Coordinates.withEdges(24, 0, BOTTOM_RIGHT),
-          Coordinates.withEdges(4, 8, TOP_RIGHT),
-          Coordinates.withEdges(10, 8, TOP_LEFT),
-          Coordinates.withEdges(12, 8, TOP_RIGHT),
-          Coordinates.withEdges(18, 8, TOP_LEFT),
-          Coordinates.withEdges(20, 8, TOP_RIGHT),
-          Coordinates.withEdges(26, 8, TOP_LEFT));
+          Coordinates.onEdges(6, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(8, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(14, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(16, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(22, 0, BOTTOM_LEFT),
+          Coordinates.onEdges(24, 0, BOTTOM_RIGHT),
+          Coordinates.onEdges(4, 8, TOP_RIGHT),
+          Coordinates.onEdges(10, 8, TOP_LEFT),
+          Coordinates.onEdges(12, 8, TOP_RIGHT),
+          Coordinates.onEdges(18, 8, TOP_LEFT),
+          Coordinates.onEdges(20, 8, TOP_RIGHT),
+          Coordinates.onEdges(26, 8, TOP_LEFT));
   private static final Map<String, Array<Coordinate>> P7_P8_COORDINATES =
       HashMap.of(
           "main-island-land",
