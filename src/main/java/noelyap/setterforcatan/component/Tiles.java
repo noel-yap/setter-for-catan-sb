@@ -1,13 +1,12 @@
 package noelyap.setterforcatan.component;
 
-import io.vavr.collection.Array;
-import noelyap.setterforcatan.protogen.CoordinateOuterClass;
-import noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex;
-import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
-
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex.Position.BOTTOM;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex.Position.TOP_RIGHT;
+
+import io.vavr.collection.Array;
+import noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex;
+import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 
 public class Tiles {
   // TODO: Move into proto definitions.
@@ -36,7 +35,8 @@ public class Tiles {
 
   public static final Tile GOLD_FIELD = Tiles.ofType(Tile.Type.GOLD_FIELD);
   public static final Tile SWAMP = Tiles.ofType(Tile.Type.SWAMP);
-  public static final Tile OASIS = Tiles.withSpecialVertices(Tile.Type.OASIS, TOP_RIGHT, BOTTOM, TOP_LEFT);
+  public static final Tile OASIS =
+      Tiles.withSpecialVertices(Tile.Type.OASIS, TOP_RIGHT, BOTTOM, TOP_LEFT);
   public static final Tile CASTLE = Tiles.ofType(Tile.Type.CASTLE);
   public static final Tile GLASSWORKS = Tiles.ofType(Tile.Type.GLASSWORKS);
   public static final Tile QUARRY = Tiles.ofType(Tile.Type.QUARRY);
@@ -52,10 +52,8 @@ public class Tiles {
     return Tile.newBuilder().setType(type).build();
   }
 
-  private static Tile withSpecialVertices(final Tile.Type type, Vertex.Position... specialVertices) {
-    return Tile.newBuilder()
-        .setType(type)
-        .addAllSpecialVertices(Array.of(specialVertices))
-        .build();
+  private static Tile withSpecialVertices(
+      final Tile.Type type, Vertex.Position... specialVertices) {
+    return Tile.newBuilder().setType(type).addAllSpecialVertices(Array.of(specialVertices)).build();
   }
 }
