@@ -11,6 +11,7 @@ import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.SEAFAR
 import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.TRADERS_AND_BARBARIANS_BARBARIAN_ATTACK;
 import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.TRADERS_AND_BARBARIANS_RIVERS_OF_CATAN;
 import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.TRADERS_AND_BARBARIANS_THE_CARAVANS;
+import static noelyap.setterforcatan.protogen.ScenarioOuterClass.Scenario.TRADERS_AND_BARBARIANS_TRADERS_AND_BARBARIANS;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -28,6 +29,7 @@ import noelyap.setterforcatan.scenario.seafarers.WondersOfCatan;
 import noelyap.setterforcatan.scenario.tradersandbarbarians.BarbarianAttack;
 import noelyap.setterforcatan.scenario.tradersandbarbarians.RiversOfCatan;
 import noelyap.setterforcatan.scenario.tradersandbarbarians.TheCaravans;
+import noelyap.setterforcatan.scenario.tradersandbarbarians.TradersAndBarbarians;
 import org.apache.commons.lang3.Range;
 
 public class Schemas {
@@ -209,7 +211,22 @@ public class Schemas {
                       Range.between(7, 8),
                       Tuple.of(
                           BarbarianAttack.P7_P8_SPECIFICATION_IMPL,
-                          BarbarianAttack.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
+                          BarbarianAttack.P7_P8_FISHERMEN_SPECIFICATION_IMPL)))
+              .put(
+                  TRADERS_AND_BARBARIANS_TRADERS_AND_BARBARIANS,
+                  HashMap.of(
+                      Range.between(3, 4),
+                      Tuple.of(
+                          TradersAndBarbarians.P3_P4_SPECIFICATION_IMPL,
+                          TradersAndBarbarians.P3_P4_FISHERMEN_SPECIFICATION_IMPL),
+                      Range.between(5, 6),
+                      Tuple.of(
+                          TradersAndBarbarians.P5_P6_SPECIFICATION_IMPL,
+                          TradersAndBarbarians.P5_P6_FISHERMEN_SPECIFICATION_IMPL),
+                      Range.between(7, 8),
+                      Tuple.of(
+                          TradersAndBarbarians.P7_P8_SPECIFICATION_IMPL,
+                          TradersAndBarbarians.P7_P8_FISHERMEN_SPECIFICATION_IMPL)));
 
   public static SpecificationImpl toSpecification(
       final Scenario scenario, final int playerCount, final boolean fishermenOfCatan) {
