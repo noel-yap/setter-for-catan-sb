@@ -114,18 +114,18 @@ public class TheForgottenTribe {
           Coordinates.of(13, 7));
   private static final Array<Coordinate> P3_P4_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.faceDownOf(2, 0, BOTTOM_RIGHT),
-          Coordinates.faceDownOf(8, 0, BOTTOM_RIGHT),
-          Coordinates.faceDownOf(16, 2, BOTTOM_LEFT),
-          Coordinates.faceDownOf(2, 8, TOP_RIGHT),
-          Coordinates.faceDownOf(10, 8, TOP_LEFT),
-          Coordinates.faceDownOf(16, 6, TOP_LEFT));
+          Coordinates.faceDownOnEdges(2, 0, BOTTOM_RIGHT),
+          Coordinates.faceDownOnEdges(8, 0, BOTTOM_RIGHT),
+          Coordinates.faceDownOnEdges(16, 2, BOTTOM_LEFT),
+          Coordinates.faceDownOnEdges(2, 8, TOP_RIGHT),
+          Coordinates.faceDownOnEdges(10, 8, TOP_LEFT),
+          Coordinates.faceDownOnEdges(16, 6, TOP_LEFT));
   private static final Array<Coordinate> P3_P4_DEVELOPMENT_CARD_COORDINATES =
       Array.of(
-          Coordinates.faceDownOf(1, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(15, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(1, 7, RIGHT, LEFT),
-          Coordinates.faceDownOf(15, 7, RIGHT, LEFT));
+          Coordinates.faceDownOnEdges(1, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(15, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(1, 7, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(15, 7, RIGHT, LEFT));
   private static final Array<Coordinate> P3_P4_VICTORY_POINT_COORDINATES =
       Array.of(
           Coordinates.onEdges(4, 0, BOTTOM_LEFT),
@@ -272,22 +272,22 @@ public class TheForgottenTribe {
           Coordinates.of(17, 7));
   private static final Array<Coordinate> P5_P6_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.faceDownOf(6, 0, BOTTOM_LEFT),
-          Coordinates.faceDownOf(8, 0, BOTTOM_RIGHT),
-          Coordinates.faceDownOf(14, 0, BOTTOM_RIGHT),
-          Coordinates.faceDownOf(18, 0, BOTTOM_LEFT),
-          Coordinates.faceDownOf(2, 8, TOP_RIGHT),
-          Coordinates.faceDownOf(4, 8, TOP_RIGHT),
-          Coordinates.faceDownOf(12, 8, TOP_LEFT),
-          Coordinates.faceDownOf(14, 8, TOP_RIGHT));
+          Coordinates.faceDownOnEdges(6, 0, BOTTOM_LEFT),
+          Coordinates.faceDownOnEdges(8, 0, BOTTOM_RIGHT),
+          Coordinates.faceDownOnEdges(14, 0, BOTTOM_RIGHT),
+          Coordinates.faceDownOnEdges(18, 0, BOTTOM_LEFT),
+          Coordinates.faceDownOnEdges(2, 8, TOP_RIGHT),
+          Coordinates.faceDownOnEdges(4, 8, TOP_RIGHT),
+          Coordinates.faceDownOnEdges(12, 8, TOP_LEFT),
+          Coordinates.faceDownOnEdges(14, 8, TOP_RIGHT));
   private static final Array<Coordinate> P5_P6_DEVELOPMENT_CARD_COORDINATES =
       Array.of(
-          Coordinates.faceDownOf(12, 0, TOP_RIGHT, BOTTOM_LEFT),
-          Coordinates.faceDownOf(1, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(19, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(1, 7, RIGHT, LEFT),
-          Coordinates.faceDownOf(19, 7, RIGHT, LEFT),
-          Coordinates.faceDownOf(8, 8, TOP_RIGHT, BOTTOM_LEFT));
+          Coordinates.faceDownOnEdges(12, 0, TOP_RIGHT, BOTTOM_LEFT),
+          Coordinates.faceDownOnEdges(1, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(19, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(1, 7, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(19, 7, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(8, 8, TOP_RIGHT, BOTTOM_LEFT));
   private static final Array<Coordinate> P5_P6_VICTORY_POINT_COORDINATES =
       Array.of(
           Coordinates.onEdges(2, 0, BOTTOM_RIGHT),
@@ -432,26 +432,26 @@ public class TheForgottenTribe {
           Coordinates.of(25, 7));
   private static final Array<Coordinate> P7_P8_HARBOR_COORDINATES =
       Array.of(
-          Coordinates.faceDownOf(4, 0, BOTTOM_RIGHT),
-          Coordinates.faceDownOf(10, 0, BOTTOM_LEFT),
-          Coordinates.faceDownOf(12, 0, BOTTOM_RIGHT),
-          Coordinates.faceDownOf(20, 0, BOTTOM_RIGHT),
-          Coordinates.faceDownOf(26, 0, BOTTOM_LEFT),
-          Coordinates.faceDownOf(6, 8, TOP_LEFT),
-          Coordinates.faceDownOf(8, 8, TOP_RIGHT),
-          Coordinates.faceDownOf(16, 8, TOP_RIGHT),
-          Coordinates.faceDownOf(22, 8, TOP_LEFT),
-          Coordinates.faceDownOf(24, 8, TOP_RIGHT));
+          Coordinates.faceDownOnEdges(4, 0, BOTTOM_RIGHT),
+          Coordinates.faceDownOnEdges(10, 0, BOTTOM_LEFT),
+          Coordinates.faceDownOnEdges(12, 0, BOTTOM_RIGHT),
+          Coordinates.faceDownOnEdges(20, 0, BOTTOM_RIGHT),
+          Coordinates.faceDownOnEdges(26, 0, BOTTOM_LEFT),
+          Coordinates.faceDownOnEdges(6, 8, TOP_LEFT),
+          Coordinates.faceDownOnEdges(8, 8, TOP_RIGHT),
+          Coordinates.faceDownOnEdges(16, 8, TOP_RIGHT),
+          Coordinates.faceDownOnEdges(22, 8, TOP_LEFT),
+          Coordinates.faceDownOnEdges(24, 8, TOP_RIGHT));
   private static final Array<Coordinate> P7_P8_DEVELOPMENT_CARD_COORDINATES =
       Array.of(
-          Coordinates.faceDownOf(3, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(11, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(19, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(27, 1, RIGHT, LEFT),
-          Coordinates.faceDownOf(3, 7, RIGHT, LEFT),
-          Coordinates.faceDownOf(11, 7, RIGHT, LEFT),
-          Coordinates.faceDownOf(19, 7, RIGHT, LEFT),
-          Coordinates.faceDownOf(27, 7, RIGHT, LEFT));
+          Coordinates.faceDownOnEdges(3, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(11, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(19, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(27, 1, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(3, 7, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(11, 7, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(19, 7, RIGHT, LEFT),
+          Coordinates.faceDownOnEdges(27, 7, RIGHT, LEFT));
   private static final Array<Coordinate> P7_P8_VICTORY_POINT_COORDINATES =
       Array.of(
           Coordinates.onEdges(6, 0, BOTTOM_LEFT),
