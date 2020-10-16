@@ -99,7 +99,7 @@ public class SpecificationImpl {
     }
 
     public Builder withFisheries(final Array<Coordinate> fisheryCoordinates) {
-      final Tile fisheryTile = Tile.newBuilder().setType(Tile.Type.FISHERY).build();
+      final Tile fisheryTile = noelyap.setterforcatan.component.Tiles.FISHERY;
       final Stream<Chit> fisheryChits =
           Stream.of(CHIT_4, CHIT_10, CHIT_5, CHIT_9, CHIT_6, CHIT_8, CHIT_5, CHIT_9);
 
@@ -298,6 +298,7 @@ public class SpecificationImpl {
         checkForEmptyFeatureMaps("tiles", tiles)
             .union(checkForEmptyFeatureMaps("coordinates", coordinates))
             .union(checkForEmptyFeatureMaps("chits", chits))
+            .union(checkTileShapes(tiles))
             .union(checkForDuplicateCoordinates(coordinates))
             .union(
                 checkForUnreferencedTilesErrors(
@@ -328,6 +329,27 @@ public class SpecificationImpl {
     return featuresMap.isEmpty()
         ? HashSet.of(String.format("%s map is empty.", StringUtils.capitalize(feature)))
         : HashSet.empty();
+  }
+
+  @VisibleForTesting
+  static Set<String> checkTileShapes(final Map<String, Array<Tile>> tileSets) {
+    return tileSets
+        .flatMap(t2 -> {
+              final var tileName = t2._1;
+              final var tiles = t2._2;
+
+              final Set<Tile.Shape> shapes = tiles.map(Tile::getShape).toSet();
+
+              return (shapes.size() < 2
+                  ? Option.none()
+                  : Option.of(
+                      String.format(
+                          "\"%s\" tiles contain mixed shapes: %s",
+                          tileName,
+                          String.join(
+                              ", ", shapes.map(Tile.Shape::toString).toJavaArray(String[]::new)))));
+            })
+        .toSet();
   }
 
   @VisibleForTesting
