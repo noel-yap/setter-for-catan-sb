@@ -48,7 +48,19 @@ public class Coordinates {
         .build();
   }
 
-  public static Coordinate faceDownOf(
+  public static Coordinate faceDownOf(final int x, final int y) {
+    return faceDownOnEdges(
+        x,
+        y,
+        Edge.Position.TOP_RIGHT,
+        Edge.Position.RIGHT,
+        Edge.Position.BOTTOM_RIGHT,
+        Edge.Position.BOTTOM_LEFT,
+        Edge.Position.LEFT,
+        Edge.Position.TOP_LEFT);
+  }
+
+  public static Coordinate faceDownOnEdges(
       final int x, final int y, final Edge.Position... edgePositions) {
     final Set<Vertex.Position> vertexPositions =
         HashSet.of(edgePositions)
