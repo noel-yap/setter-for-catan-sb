@@ -26,12 +26,17 @@ import static noelyap.setterforcatan.component.Tiles.PASTURE;
 import static noelyap.setterforcatan.component.Tiles.QUARRY;
 import static noelyap.setterforcatan.component.Tiles.SEA;
 import static noelyap.setterforcatan.component.Tiles.SWAMP;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_RIGHT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.RIGHT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import io.vavr.Tuple3;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
@@ -43,7 +48,6 @@ import noelyap.setterforcatan.matcher.TileIs;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
-import noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import noelyap.setterforcatan.util.MersenneTwister;
 import noelyap.setterforcatan.util.TileMappingUtils;
@@ -96,16 +100,16 @@ public class SpecificationImplTest {
             TileMappingUtils.newSelfReferringEntry(DESERT_OR_LAKE_NAME));
 
     final Array<Coordinate> fisheriesCoordinates =
-        newCoordinates(
-            Tuple.of(6, 6, Vertex.Position.TOP),
-            Tuple.of(7, 7, Vertex.Position.TOP_RIGHT),
-            Tuple.of(8, 8, Vertex.Position.BOTTOM_RIGHT),
-            Tuple.of(9, 9, Vertex.Position.BOTTOM),
-            Tuple.of(10, 10, Vertex.Position.BOTTOM_LEFT),
-            Tuple.of(11, 11, Vertex.Position.TOP_LEFT),
-            Tuple.of(12, 12, Vertex.Position.TOP),
-            Tuple.of(13, 13, Vertex.Position.BOTTOM_RIGHT),
-            Tuple.of(14, 14, Vertex.Position.BOTTOM_LEFT));
+        Array.of(
+            Coordinates.onEdges(6, 6, TOP_LEFT, TOP_RIGHT),
+            Coordinates.onEdges(7, 7, TOP_RIGHT, RIGHT),
+            Coordinates.onEdges(8, 8, RIGHT, BOTTOM_RIGHT),
+            Coordinates.onEdges(9, 9, BOTTOM_RIGHT, BOTTOM_LEFT),
+            Coordinates.onEdges(10, 10, BOTTOM_LEFT, LEFT),
+            Coordinates.onEdges(11, 11, LEFT, TOP_LEFT),
+            Coordinates.onEdges(12, 12, TOP_LEFT, TOP_RIGHT),
+            Coordinates.onEdges(13, 13, RIGHT, BOTTOM_RIGHT),
+            Coordinates.onEdges(14, 14, BOTTOM_LEFT, LEFT));
 
     final Array<Configuration> actual =
         SpecificationImpl.newBuilder(tiles, coordinates, chits, coordinatesTilesMap, chitsTilesMap)
@@ -334,6 +338,17 @@ public class SpecificationImplTest {
 
     assertThat(actual).isNotEmpty();
     assertThat(actual.get()).hasSize(2);
+  }
+
+  @Test
+  @DisplayName("Should validate tile shapes.")
+  public void shouldValidateTileShapes() {
+    final Map<String, Array<Tile>> waterTiles = HashMap.of("water", Array.of(LAKE, FISHERY, SEA));
+
+    final Set<String> actual = SpecificationImpl.checkTileShapes(waterTiles);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder("\"water\" tiles contain mixed shapes: HEXAGON, CHEVRON");
   }
 
   @Test
@@ -743,14 +758,5 @@ public class SpecificationImplTest {
     final Option<Array<Configuration>> actual = specification.toConfiguration();
 
     assertThat(actual).isEmpty();
-  }
-
-  private Array<Coordinate> newCoordinates(
-      final Tuple3<Integer, Integer, Vertex.Position>... tuple3s) {
-    return Array.of(tuple3s).map(t3 -> newCoordinate(t3._1, t3._2, t3._3));
-  }
-
-  private Coordinate newCoordinate(final int x, final int y, final Vertex.Position p) {
-    return Coordinate.newBuilder().setX(x).setY(y).addVertexPositions(p).build();
   }
 }
