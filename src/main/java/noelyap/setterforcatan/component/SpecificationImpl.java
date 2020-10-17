@@ -11,6 +11,13 @@ import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
 import static noelyap.setterforcatan.component.Tiles.FISHERY_NAME;
 import static noelyap.setterforcatan.component.Tiles.LAKE_NAME;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_RIGHT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.RIGHT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
+import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
+import static org.assertj.core.api.HamcrestCondition.matching;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.GeneratedMessageV3;
@@ -29,6 +36,8 @@ import io.vavr.collection.Stream;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
 import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import noelyap.setterforcatan.matcher.PassThroughMatcher;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
@@ -36,6 +45,7 @@ import noelyap.setterforcatan.protogen.ChitOuterClass.Chits;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinates;
+import noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge;
 import noelyap.setterforcatan.protogen.MarkerOuterClass.Marker;
 import noelyap.setterforcatan.protogen.SpecificationOuterClass.ChitsTilesMapping;
 import noelyap.setterforcatan.protogen.SpecificationOuterClass.CoordinateTilesMapping;
@@ -44,6 +54,7 @@ import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tiles;
 import noelyap.setterforcatan.util.MersenneTwister;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matcher;
 
 @Slf4j
@@ -299,10 +310,13 @@ public class SpecificationImpl {
             .union(checkForEmptyFeatureMaps("coordinates", coordinates))
             .union(checkForEmptyFeatureMaps("chits", chits))
             .union(checkTileShapes(tiles))
+            .union(
+                checkForCoordinateEdgesVersusTileShapesMismatchError(
+                    tiles, coordinates, coordinatesTilesMap))
             .union(checkForDuplicateCoordinates(coordinates))
             .union(
                 checkForUnreferencedTilesErrors(
-                    "coordinates", this.tiles, widenFeaturesMap(coordinates), coordinatesTilesMap))
+                    "coordinates", tiles, widenFeaturesMap(coordinates), coordinatesTilesMap))
             .union(
                 HashSet.ofAll(fns.crossProduct(args))
                     .flatMap(t2 -> {
@@ -344,10 +358,166 @@ public class SpecificationImpl {
                   ? Option.none()
                   : Option.of(
                       String.format(
-                          "\"%s\" tiles contain mixed shapes: %s",
+                          "\"%s\" tiles contain mixed shapes: %s.",
                           tileName,
                           String.join(
                               ", ", shapes.map(Tile.Shape::toString).toJavaArray(String[]::new)))));
+            })
+        .toSet();
+  }
+
+  @VisibleForTesting
+  static Set<String> checkForCoordinateEdgesVersusTileShapesMismatchError(
+      final Map<String, Array<Tile>> tiles,
+      final Map<String, Array<Coordinate>> coordinates,
+      final Map<String, Array<String>> coordinatesTilesMap) {
+    return coordinatesTilesMap
+        .flatMap(t2 -> {
+              final String coordinatesName = t2._1;
+              final Array<String> tilesNames = t2._2;
+
+              final Set<Tile.Shape> shapes =
+                  tilesNames
+                      .flatMap(tileName -> tiles.get(tileName).getOrElse(Array.empty()))
+                      .map(Tile::getShape)
+                      .toSet();
+
+              if (shapes.size() > 1) {
+                return Option.of(
+                    String.format(
+                        "[%s] in \"%s\" contain mixed shapes: %s.",
+                        String.join(", ", tilesNames.toJavaArray(String[]::new)),
+                        coordinatesName,
+                        String.join(
+                            ", ", shapes.map(Tile.Shape::toString).toJavaArray(String[]::new))));
+              } else {
+                final var shape = shapes.get();
+
+                if (shape != Tile.Shape.POLYMORPHIC) {
+                  final Set<Integer> edgeCounts =
+                      coordinates
+                          .get(coordinatesName)
+                          .getOrElse(Array.empty())
+                          .groupBy(Coordinate::getEdgePositionsCount)
+                          .keySet();
+
+                  if (edgeCounts.size() > 1) {
+                    return Option.of(
+                        String.format(
+                            "\"%s\" coordinates contain mixed edge counts: %s.",
+                            coordinatesName,
+                            String.join(
+                                ", ",
+                                edgeCounts
+                                    .map(i -> Integer.toString(i))
+                                    .toJavaArray(String[]::new))));
+                  } else {
+                    final int edgeCount = edgeCounts.getOrElse(0);
+                    final Array<Array<Edge.Position>> edgePositions =
+                        coordinates
+                            .get(coordinatesName)
+                            .getOrElse(Array.empty())
+                            .map(Coordinate::getEdgePositionsList)
+                            .map(Array::ofAll);
+
+                    final BiFunction<Integer, Array<Array<Edge.Position>>, Array<String>>
+                        validateEdges =
+                            (final Integer expectedEdgeCount,
+                                final Array<Array<Edge.Position>> expectedEdgePositions) -> {
+                              final Function<Integer, String> edgesString =
+                                  ec -> ec == 1 ? "edge" : "edges";
+
+                              final Array<String> edgeCountErrorMessage =
+                                  (edgeCount == expectedEdgeCount)
+                                      ? Array.empty()
+                                      : Array.of(
+                                          String.format(
+                                              "%s tiles needing %d %s are being configured with \"%s\" coordinates having %d %s.",
+                                              shape,
+                                              expectedEdgeCount,
+                                              edgesString.apply(expectedEdgeCount),
+                                              coordinatesName,
+                                              edgeCount,
+                                              edgesString.apply(edgeCount)));
+                              final Array<String> edgePositionErrorMessages =
+                                  edgePositions
+                                      .filterNot(expectedEdgePositions::contains)
+                                      .map(eps ->
+                                              String.format(
+                                                  "Edge positions [%s] are not compatible with %s tiles.",
+                                                  String.join(
+                                                      ", ",
+                                                      eps.map(Edge.Position::toString)
+                                                          .toJavaArray(String[]::new)),
+                                                  shape));
+
+                              return edgeCountErrorMessage.appendAll(edgePositionErrorMessages);
+                            };
+
+                    return switch (shape) {
+                      case HEXAGON -> validateEdges.apply(
+                          6,
+                          Array.of(
+                              Array.of(TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT),
+                              Array.of(RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT),
+                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT, RIGHT),
+                              Array.of(BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT),
+                              Array.of(LEFT, TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT),
+                              Array.of(
+                                  TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT)));
+                      case PENTAGON -> validateEdges.apply(
+                          4,
+                          Array.of(
+                              Array.of(TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT),
+                              Array.of(RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT),
+                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT),
+                              Array.of(BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT),
+                              Array.of(LEFT, TOP_LEFT, TOP_RIGHT, RIGHT),
+                              Array.of(TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT)));
+                      case TRAPEZOID -> validateEdges.apply(
+                          3,
+                          Array.of(
+                              Array.of(TOP_RIGHT, RIGHT, BOTTOM_RIGHT),
+                              Array.of(RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT),
+                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT, LEFT),
+                              Array.of(BOTTOM_LEFT, LEFT, TOP_LEFT),
+                              Array.of(LEFT, TOP_LEFT, TOP_RIGHT),
+                              Array.of(TOP_LEFT, TOP_RIGHT, RIGHT)));
+                      case CHEVRON -> validateEdges.apply(
+                          2,
+                          Array.of(
+                              Array.of(TOP_RIGHT, RIGHT),
+                              Array.of(RIGHT, BOTTOM_RIGHT),
+                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT),
+                              Array.of(BOTTOM_LEFT, LEFT),
+                              Array.of(LEFT, TOP_LEFT),
+                              Array.of(TOP_LEFT, TOP_RIGHT)));
+                      case RECTANGLE -> validateEdges.apply(
+                          2,
+                          Array.of(
+                              Array.of(TOP_RIGHT, BOTTOM_LEFT),
+                              Array.of(RIGHT, LEFT),
+                              Array.of(BOTTOM_RIGHT, TOP_LEFT),
+                              Array.of(BOTTOM_LEFT, TOP_RIGHT),
+                              Array.of(LEFT, RIGHT),
+                              Array.of(TOP_LEFT, BOTTOM_RIGHT)));
+                      case TRIANGLE -> validateEdges.apply(
+                          1,
+                          Array.of(
+                              Array.of(TOP_RIGHT),
+                              Array.of(RIGHT),
+                              Array.of(BOTTOM_RIGHT),
+                              Array.of(BOTTOM_LEFT),
+                              Array.of(LEFT),
+                              Array.of(TOP_LEFT)));
+                      case POINT -> validateEdges.apply(0, Array.of(Array.empty()));
+                      default -> throw new IllegalStateException("Unexpected value: " + shape);
+                    };
+                  }
+                }
+              }
+
+              return Option.none();
             })
         .toSet();
   }
@@ -453,8 +623,7 @@ public class SpecificationImpl {
               final String featuresName = t2._1;
               final Array<String> tilesNames = t2._2;
 
-              final int featuresCount;
-              featuresCount = features.get(featuresName).getOrElse(Array.empty()).size();
+              final int featuresCount = features.get(featuresName).getOrElse(Array.empty()).size();
 
               final int tilesCount =
                   tilesNames
@@ -514,11 +683,21 @@ public class SpecificationImpl {
                                   .build());
                 });
 
-    final boolean isValid = configurations.forAll(this::validateConfiguration);
+    try {
+      final SoftAssertions softly = new SoftAssertions();
 
-    log.debug("Configuration is " + (isValid ? "valid" : "INVALID"));
+      for (final Configuration configuration : configurations) {
+        softly.assertThat(configuration).is(matching(configurationMatcher));
+      }
 
-    return isValid ? Option.of(configurations) : Option.none();
+      softly.assertAll();
+    } catch (final AssertionError e) {
+      log.debug(e.getMessage());
+
+      return Option.none();
+    }
+
+    return Option.of(configurations);
   }
 
   @VisibleForTesting
@@ -528,7 +707,9 @@ public class SpecificationImpl {
           final Map<String, Array<Tile>> tiles,
           final Map<String, Array<ChitsOrCoordinates>> featuresMap,
           final Map<String, Array<String>> featuresTilesMap) {
-    return Array.ofAll(featuresTilesMap.keySet()) // prevent dedupe
+    return featuresTilesMap
+        .keySet()
+        .toArray()
         .flatMap(featureName -> {
               final Array<String> tilesNames = featuresTilesMap.get(featureName).get();
               final Array<Tuple2<String, Tile>> tileIds =
@@ -539,10 +720,6 @@ public class SpecificationImpl {
 
               return tileIds.zip(chitsOrCoordinates.shuffle(prng));
             });
-  }
-
-  public boolean validateConfiguration(final Configuration configuration) {
-    return configurationMatcher.matches(configuration);
   }
 
   @VisibleForTesting
