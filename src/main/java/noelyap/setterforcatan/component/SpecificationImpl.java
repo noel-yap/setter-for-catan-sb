@@ -11,16 +11,13 @@ import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
 import static noelyap.setterforcatan.component.Tiles.FISHERY_NAME;
 import static noelyap.setterforcatan.component.Tiles.LAKE_NAME;
-import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_LEFT;
-import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.BOTTOM_RIGHT;
-import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.LEFT;
-import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.RIGHT;
-import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
-import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
 import static org.assertj.core.api.HamcrestCondition.matching;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.GeneratedMessageV3;
+import io.vavr.Function0;
+import io.vavr.Function1;
+import io.vavr.Function2;
 import io.vavr.Function4;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -36,8 +33,6 @@ import io.vavr.collection.Stream;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
 import java.util.Random;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import noelyap.setterforcatan.matcher.PassThroughMatcher;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
@@ -420,11 +415,11 @@ public class SpecificationImpl {
                             .map(Coordinate::getEdgePositionsList)
                             .map(Array::ofAll);
 
-                    final BiFunction<Integer, Array<Array<Edge.Position>>, Array<String>>
-                        validateEdges =
+                    final Function2<Integer, Function0<Array<String>>, Array<String>>
+                        edgeValidator =
                             (final Integer expectedEdgeCount,
-                                final Array<Array<Edge.Position>> expectedEdgePositions) -> {
-                              final Function<Integer, String> edgesString =
+                                final Function0<Array<String>> edgePositionValidator) -> {
+                              final Function1<Integer, String> edgesString =
                                   ec -> ec == 1 ? "edge" : "edges";
 
                               final Array<String> edgeCountErrorMessage =
@@ -440,77 +435,81 @@ public class SpecificationImpl {
                                               edgeCount,
                                               edgesString.apply(edgeCount)));
                               final Array<String> edgePositionErrorMessages =
-                                  edgePositions
-                                      .filterNot(expectedEdgePositions::contains)
-                                      .map(eps ->
-                                              String.format(
-                                                  "Edge positions [%s] are not compatible with %s tiles.",
-                                                  String.join(
-                                                      ", ",
-                                                      eps.map(Edge.Position::toString)
-                                                          .toJavaArray(String[]::new)),
-                                                  shape));
+                                  edgePositionValidator.apply();
 
                               return edgeCountErrorMessage.appendAll(edgePositionErrorMessages);
                             };
+                    final Function1<Array<Edge.Position>, String>
+                        edgePositionErrorMessageGenerator =
+                            eps ->
+                                String.format(
+                                    "Edge positions [%s] are not compatible with %s tiles.",
+                                    String.join(
+                                        ", ",
+                                        eps.map(Edge.Position::toString)
+                                            .toJavaArray(String[]::new)),
+                                    shape);
 
                     return switch (shape) {
-                      case HEXAGON -> validateEdges.apply(
+                      case HEXAGON -> edgeValidator.apply(
                           6,
-                          Array.of(
-                              Array.of(TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT),
-                              Array.of(RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT),
-                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT, RIGHT),
-                              Array.of(BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT),
-                              Array.of(LEFT, TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT),
-                              Array.of(
-                                  TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT)));
-                      case PENTAGON -> validateEdges.apply(
-                          4,
-                          Array.of(
-                              Array.of(TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT),
-                              Array.of(RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT),
-                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT),
-                              Array.of(BOTTOM_LEFT, LEFT, TOP_LEFT, TOP_RIGHT),
-                              Array.of(LEFT, TOP_LEFT, TOP_RIGHT, RIGHT),
-                              Array.of(TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT)));
-                      case TRAPEZOID -> validateEdges.apply(
-                          3,
-                          Array.of(
-                              Array.of(TOP_RIGHT, RIGHT, BOTTOM_RIGHT),
-                              Array.of(RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT),
-                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT, LEFT),
-                              Array.of(BOTTOM_LEFT, LEFT, TOP_LEFT),
-                              Array.of(LEFT, TOP_LEFT, TOP_RIGHT),
-                              Array.of(TOP_LEFT, TOP_RIGHT, RIGHT)));
-                      case CHEVRON -> validateEdges.apply(
+                          () ->
+                              edgePositions
+                                  .filterNot(eps ->
+                                          eps.sorted()
+                                              .equals(
+                                                  Array.of(Edge.Position.values())
+                                                      .filter(ep -> ep != Edge.Position.UNRECOGNIZED)))
+                                  .map(edgePositionErrorMessageGenerator));
+                      case PENTAGON, TRAPEZOID -> throw new UnsupportedOperationException(
+                          "Unsupported shape: " + shape);
+                      case CHEVRON -> edgeValidator.apply(
                           2,
-                          Array.of(
-                              Array.of(TOP_RIGHT, RIGHT),
-                              Array.of(RIGHT, BOTTOM_RIGHT),
-                              Array.of(BOTTOM_RIGHT, BOTTOM_LEFT),
-                              Array.of(BOTTOM_LEFT, LEFT),
-                              Array.of(LEFT, TOP_LEFT),
-                              Array.of(TOP_LEFT, TOP_RIGHT)));
-                      case RECTANGLE -> validateEdges.apply(
+                          () ->
+                              edgePositions
+                                  .filter(eps -> {
+                                        final var edgeNumbers = eps.map(Edge.Position::getNumber);
+
+                                        return edgeNumbers.size() != 2
+                                            || !Array.of(1, 5)
+                                                .contains(
+                                                    Math.abs(
+                                                        edgeNumbers.get(0) - edgeNumbers.get(1)));
+                                      })
+                                  .map(edgePositionErrorMessageGenerator));
+                      case RECTANGLE -> edgeValidator.apply(
                           2,
-                          Array.of(
-                              Array.of(TOP_RIGHT, BOTTOM_LEFT),
-                              Array.of(RIGHT, LEFT),
-                              Array.of(BOTTOM_RIGHT, TOP_LEFT),
-                              Array.of(BOTTOM_LEFT, TOP_RIGHT),
-                              Array.of(LEFT, RIGHT),
-                              Array.of(TOP_LEFT, BOTTOM_RIGHT)));
-                      case TRIANGLE -> validateEdges.apply(
+                          () ->
+                              edgePositions
+                                  .filter(eps -> {
+                                        final int edgePositionCount =
+                                            Edge.Position.values().length - 1;
+                                        final var edgeNumbers = eps.map(Edge.Position::getNumber);
+
+                                        return edgeNumbers.size() != 2
+                                            || Math.abs(edgeNumbers.get(0) - edgeNumbers.get(1))
+                                                != edgePositionCount / 2;
+                                      })
+                                  .map(edgePositionErrorMessageGenerator));
+                      case TRIANGLE -> edgeValidator.apply(
                           1,
-                          Array.of(
-                              Array.of(TOP_RIGHT),
-                              Array.of(RIGHT),
-                              Array.of(BOTTOM_RIGHT),
-                              Array.of(BOTTOM_LEFT),
-                              Array.of(LEFT),
-                              Array.of(TOP_LEFT)));
-                      case POINT -> validateEdges.apply(0, Array.of(Array.empty()));
+                          () ->
+                              edgePositions
+                                  .filter(eps -> eps.size() != 1)
+                                  .map(eps ->
+                                          String.format(
+                                              "Edge positions [%s] are not compatible with %s tiles.",
+                                              String.join(
+                                                  ", ",
+                                                  eps.map(Edge.Position::toString)
+                                                      .toJavaArray(String[]::new)),
+                                              shape)));
+                      case POINT -> edgeValidator.apply(
+                          0,
+                          () ->
+                              edgePositions
+                                  .filterNot(Array::isEmpty)
+                                  .map(edgePositionErrorMessageGenerator));
                       default -> throw new IllegalStateException("Unexpected value: " + shape);
                     };
                   }
