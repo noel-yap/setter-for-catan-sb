@@ -38,8 +38,12 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Shape.PENTAGON;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Shape.TRAPEZOID;
 import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.UNDEFINED;
+import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.HamcrestCondition.matching;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.startsWith;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -54,6 +58,7 @@ import noelyap.setterforcatan.matcher.TileIs;
 import noelyap.setterforcatan.protogen.ChitOuterClass.Chit;
 import noelyap.setterforcatan.protogen.ConfigurationOuterClass.Configuration;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Coordinate;
+import noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
 import noelyap.setterforcatan.util.MersenneTwister;
 import noelyap.setterforcatan.util.TileMappingUtils;
@@ -412,8 +417,70 @@ public class SpecificationImplTest {
   }
 
   @Test
-  @DisplayName("Should validate pentagon tile edge count.")
-  public void shouldValidatePentagonTileEdgeCount() {
+  @DisplayName("Should accept hexagon edge positions in any order.")
+  public void shouldAcceptHexagonEdgePositionsInAnyOrder() {
+    final Array<Edge.Position> edgePositions =
+        Array.of(Edge.Position.values())
+            .filter(ep -> ep != Edge.Position.UNRECOGNIZED)
+            .shuffle(prng);
+
+    final Map<String, Array<Tile>> tiles = HashMap.of("hexagon", Array.of(LAKE));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of(
+            "six-edges",
+            Array.of(
+                Coordinate.newBuilder()
+                    .setX(0)
+                    .setY(0)
+                    .addAllEdgePositions(edgePositions)
+                    .build()));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("six-edges", "hexagon"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual).isEmpty();
+  }
+
+  @Test
+  @DisplayName("Should reject hexagon edge positions with duplicates.")
+  public void shouldRejectHexagonEdgePositionsWithDuplicates() {
+    final Array<Edge.Position> shuffledEdgePositions =
+        Array.of(Edge.Position.values())
+            .filter(ep -> ep != Edge.Position.UNRECOGNIZED)
+            .shuffle(prng);
+    final Array<Edge.Position> edgePositions =
+        shuffledEdgePositions.dropRight(1).insert(1, shuffledEdgePositions.get(3));
+
+    final Map<String, Array<Tile>> tiles = HashMap.of("hexagon", Array.of(LAKE));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of(
+            "six-edges",
+            Array.of(
+                Coordinate.newBuilder()
+                    .setX(0)
+                    .setY(0)
+                    .addAllEdgePositions(edgePositions)
+                    .build()));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("six-edges", "hexagon"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .are(
+            allOf(
+                matching(startsWith("Edge positions ")),
+                matching(endsWith(" are not compatible with HEXAGON tiles."))));
+  }
+
+  @Test
+  @DisplayName("Should not support pentagon tiles.")
+  public void shouldNotSupportPentagonTiles() {
     final Map<String, Array<Tile>> tiles =
         HashMap.of(
             "pentagon", Array.of(Tile.newBuilder().setShape(PENTAGON).setType(UNDEFINED).build()));
@@ -422,19 +489,17 @@ public class SpecificationImplTest {
     final Map<String, Array<String>> coordinateTilesMap =
         HashMap.of(TileMappingUtils.newEntry("no-edges", "pentagon"));
 
-    final Set<String> actual =
-        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
-            tiles, coordinates, coordinateTilesMap);
-
-    assertThat(actual)
-        .containsExactlyInAnyOrder(
-            "PENTAGON tiles needing 4 edges are being configured with \"no-edges\" coordinates having 0 edges.",
-            "Edge positions [] are not compatible with PENTAGON tiles.");
+    assertThatThrownBy(
+            () ->
+                SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+                    tiles, coordinates, coordinateTilesMap))
+        .isInstanceOf(UnsupportedOperationException.class)
+        .hasMessage("Unsupported shape: PENTAGON");
   }
 
   @Test
-  @DisplayName("Should validate trapezoid tile edge count.")
-  public void shouldValidateTrapezoidTileEdgeCount() {
+  @DisplayName("Should not support trapezoid tiles.")
+  public void shouldNotSupportTrapezoidTiles() {
     final Map<String, Array<Tile>> tiles =
         HashMap.of(
             "trapezoid",
@@ -444,14 +509,12 @@ public class SpecificationImplTest {
     final Map<String, Array<String>> coordinateTilesMap =
         HashMap.of(TileMappingUtils.newEntry("no-edges", "trapezoid"));
 
-    final Set<String> actual =
-        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
-            tiles, coordinates, coordinateTilesMap);
-
-    assertThat(actual)
-        .containsExactlyInAnyOrder(
-            "TRAPEZOID tiles needing 3 edges are being configured with \"no-edges\" coordinates having 0 edges.",
-            "Edge positions [] are not compatible with TRAPEZOID tiles.");
+    assertThatThrownBy(
+            () ->
+                SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+                    tiles, coordinates, coordinateTilesMap))
+        .isInstanceOf(UnsupportedOperationException.class)
+        .hasMessage("Unsupported shape: TRAPEZOID");
   }
 
   @Test
@@ -474,6 +537,70 @@ public class SpecificationImplTest {
   }
 
   @Test
+  @DisplayName("Should accept chevron with adjacent edge positions.")
+  public void shouldAcceptChevronWithAdjacentEdgePositions() {
+    final int edgePositionCount = Edge.Position.values().length - 1;
+    final var firstEdgePosition = Edge.Position.forNumber(prng.nextInt(edgePositionCount));
+    final var secondEdgePosition =
+        Edge.Position.forNumber(
+            (firstEdgePosition.getNumber() + prng.nextInt(2) * 2 - 1) % edgePositionCount);
+    final var edgePositions = Array.of(firstEdgePosition, secondEdgePosition);
+
+    final Map<String, Array<Tile>> tiles = HashMap.of("chevron", Array.of(FISHERY));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of(
+            "two-edges",
+            Array.of(
+                Coordinate.newBuilder()
+                    .setX(0)
+                    .setY(0)
+                    .addAllEdgePositions(edgePositions)
+                    .build()));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("two-edges", "chevron"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual).isEmpty();
+  }
+
+  @Test
+  @DisplayName("Should reject chevron with non-adjacent edge positions.")
+  public void shouldRejectChevronWithNonAdjacentEdgePositions() {
+    final int edgePositionCount = Edge.Position.values().length - 1;
+    final var firstEdgePosition = Edge.Position.forNumber(prng.nextInt(edgePositionCount));
+    final var secondEdgePosition =
+        Edge.Position.forNumber(
+            (firstEdgePosition.getNumber() + prng.nextInt(5) + 2) % edgePositionCount);
+    final var edgePositions = Array.of(firstEdgePosition, secondEdgePosition);
+
+    final Map<String, Array<Tile>> tiles = HashMap.of("chevron", Array.of(FISHERY));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of(
+            "two-edges",
+            Array.of(
+                Coordinate.newBuilder()
+                    .setX(0)
+                    .setY(0)
+                    .addAllEdgePositions(edgePositions)
+                    .build()));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("two-edges", "chevron"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .are(
+            allOf(
+                matching(startsWith("Edge positions ")),
+                matching(endsWith(" are not compatible with CHEVRON tiles."))));
+  }
+
+  @Test
   @DisplayName("Should validate rectangle tile edge count.")
   public void shouldValidateRectangleTileEdgeCount() {
     final Map<String, Array<Tile>> tiles = HashMap.of("rectangle", Array.of(DEVELOPMENT_CARD));
@@ -490,6 +617,70 @@ public class SpecificationImplTest {
         .containsExactlyInAnyOrder(
             "RECTANGLE tiles needing 2 edges are being configured with \"no-edges\" coordinates having 0 edges.",
             "Edge positions [] are not compatible with RECTANGLE tiles.");
+  }
+
+  @Test
+  @DisplayName("Should accept rectangle with opposite edge positions.")
+  public void shouldAcceptRectangleWithOppositeEdgePositions() {
+    final int edgePositionCount = Edge.Position.values().length - 1;
+    final var firstEdgePosition = Edge.Position.forNumber(prng.nextInt(edgePositionCount));
+    final var secondEdgePosition =
+        Edge.Position.forNumber(
+            (firstEdgePosition.getNumber() + edgePositionCount / 2) % edgePositionCount);
+    final var edgePositions = Array.of(firstEdgePosition, secondEdgePosition);
+
+    final Map<String, Array<Tile>> tiles = HashMap.of("rectangle", Array.of(DEVELOPMENT_CARD));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of(
+            "two-edges",
+            Array.of(
+                Coordinate.newBuilder()
+                    .setX(0)
+                    .setY(0)
+                    .addAllEdgePositions(edgePositions)
+                    .build()));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("two-edges", "rectangle"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual).isEmpty();
+  }
+
+  @Test
+  @DisplayName("Should reject rectangle with non-opposite edge positions.")
+  public void shouldRejectChevronWithNonOppositeEdgePositions() {
+    final int edgePositionCount = Edge.Position.values().length - 1;
+    final var firstEdgePosition = Edge.Position.forNumber(prng.nextInt(edgePositionCount));
+    final var secondEdgePosition =
+        Edge.Position.forNumber(
+            (firstEdgePosition.getNumber() + prng.nextInt(5) + 4) % edgePositionCount);
+    final var edgePositions = Array.of(firstEdgePosition, secondEdgePosition);
+
+    final Map<String, Array<Tile>> tiles = HashMap.of("rectangle", Array.of(DEVELOPMENT_CARD));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of(
+            "two-edges",
+            Array.of(
+                Coordinate.newBuilder()
+                    .setX(0)
+                    .setY(0)
+                    .addAllEdgePositions(edgePositions)
+                    .build()));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("two-edges", "rectangle"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .are(
+            allOf(
+                matching(startsWith("Edge positions ")),
+                matching(endsWith(" are not compatible with RECTANGLE tiles."))));
   }
 
   @Test
