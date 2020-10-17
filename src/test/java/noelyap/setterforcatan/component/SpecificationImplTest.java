@@ -11,11 +11,14 @@ import static noelyap.setterforcatan.component.Chits.CHIT_6;
 import static noelyap.setterforcatan.component.Chits.CHIT_8;
 import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.CASTLE;
+import static noelyap.setterforcatan.component.Tiles.CHIT;
 import static noelyap.setterforcatan.component.Tiles.DESERT;
 import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
+import static noelyap.setterforcatan.component.Tiles.DEVELOPMENT_CARD;
 import static noelyap.setterforcatan.component.Tiles.FIELD;
 import static noelyap.setterforcatan.component.Tiles.FISHERY;
 import static noelyap.setterforcatan.component.Tiles.FOREST;
+import static noelyap.setterforcatan.component.Tiles.GENERIC_HARBOR;
 import static noelyap.setterforcatan.component.Tiles.GLASSWORKS;
 import static noelyap.setterforcatan.component.Tiles.GOLD_FIELD;
 import static noelyap.setterforcatan.component.Tiles.HILL;
@@ -32,6 +35,9 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.RIGHT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_LEFT;
 import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Edge.Position.TOP_RIGHT;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Shape.PENTAGON;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Shape.TRAPEZOID;
+import static noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type.UNDEFINED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -348,7 +354,180 @@ public class SpecificationImplTest {
     final Set<String> actual = SpecificationImpl.checkTileShapes(waterTiles);
 
     assertThat(actual)
-        .containsExactlyInAnyOrder("\"water\" tiles contain mixed shapes: HEXAGON, CHEVRON");
+        .containsExactlyInAnyOrder("\"water\" tiles contain mixed shapes: HEXAGON, CHEVRON.");
+  }
+
+  @Test
+  @DisplayName("Should validate mixed tile shapes.")
+  public void shouldValidateMixedTileShapes() {
+    final Map<String, Array<Tile>> tiles =
+        HashMap.of("lake", Array.of(LAKE), "fishery", Array.of(FISHERY), "sea", Array.of(SEA));
+    final Map<String, Array<Coordinate>> coordinates = HashMap.empty();
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("water", "lake", "fishery", "sea"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "[lake, fishery, sea] in \"water\" contain mixed shapes: HEXAGON, CHEVRON.");
+  }
+
+  @Test
+  @DisplayName("Should validate mixed edge counts.")
+  public void shouldValidateMixedEdgeCounts() {
+    final Map<String, Array<Tile>> tiles = HashMap.of("lake", Array.of(LAKE), "sea", Array.of(SEA));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("water", Array.of(Coordinates.of(0, 0), Coordinates.onEdges(1, 1)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("water", "lake", "sea"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder("\"water\" coordinates contain mixed edge counts: 6, 0.");
+  }
+
+  @Test
+  @DisplayName("Should validate hexagon tile edge count.")
+  public void shouldValidateHexagonTileEdgeCount() {
+    final Map<String, Array<Tile>> tiles = HashMap.of("hexagon", Array.of(LAKE));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("no-edges", Array.of(Coordinates.onEdges(0, 0)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("no-edges", "hexagon"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "HEXAGON tiles needing 6 edges are being configured with \"no-edges\" coordinates having 0 edges.",
+            "Edge positions [] are not compatible with HEXAGON tiles.");
+  }
+
+  @Test
+  @DisplayName("Should validate pentagon tile edge count.")
+  public void shouldValidatePentagonTileEdgeCount() {
+    final Map<String, Array<Tile>> tiles =
+        HashMap.of(
+            "pentagon", Array.of(Tile.newBuilder().setShape(PENTAGON).setType(UNDEFINED).build()));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("no-edges", Array.of(Coordinates.onEdges(0, 0)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("no-edges", "pentagon"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "PENTAGON tiles needing 4 edges are being configured with \"no-edges\" coordinates having 0 edges.",
+            "Edge positions [] are not compatible with PENTAGON tiles.");
+  }
+
+  @Test
+  @DisplayName("Should validate trapezoid tile edge count.")
+  public void shouldValidateTrapezoidTileEdgeCount() {
+    final Map<String, Array<Tile>> tiles =
+        HashMap.of(
+            "trapezoid",
+            Array.of(Tile.newBuilder().setShape(TRAPEZOID).setType(UNDEFINED).build()));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("no-edges", Array.of(Coordinates.onEdges(0, 0)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("no-edges", "trapezoid"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "TRAPEZOID tiles needing 3 edges are being configured with \"no-edges\" coordinates having 0 edges.",
+            "Edge positions [] are not compatible with TRAPEZOID tiles.");
+  }
+
+  @Test
+  @DisplayName("Should validate chevron tile edge count.")
+  public void shouldValidateChevronTileEdgeCount() {
+    final Map<String, Array<Tile>> tiles = HashMap.of("chevron", Array.of(FISHERY));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("no-edges", Array.of(Coordinates.onEdges(0, 0)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("no-edges", "chevron"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "CHEVRON tiles needing 2 edges are being configured with \"no-edges\" coordinates having 0 edges.",
+            "Edge positions [] are not compatible with CHEVRON tiles.");
+  }
+
+  @Test
+  @DisplayName("Should validate rectangle tile edge count.")
+  public void shouldValidateRectangleTileEdgeCount() {
+    final Map<String, Array<Tile>> tiles = HashMap.of("rectangle", Array.of(DEVELOPMENT_CARD));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("no-edges", Array.of(Coordinates.onEdges(0, 0)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("no-edges", "rectangle"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "RECTANGLE tiles needing 2 edges are being configured with \"no-edges\" coordinates having 0 edges.",
+            "Edge positions [] are not compatible with RECTANGLE tiles.");
+  }
+
+  @Test
+  @DisplayName("Should validate triangle tile edge count.")
+  public void shouldValidateTriangleTileEdgeCount() {
+    final Map<String, Array<Tile>> tiles = HashMap.of("triangle", Array.of(GENERIC_HARBOR));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("no-edges", Array.of(Coordinates.onEdges(0, 0)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("no-edges", "triangle"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "TRIANGLE tiles needing 1 edge are being configured with \"no-edges\" coordinates having 0 edges.",
+            "Edge positions [] are not compatible with TRIANGLE tiles.");
+  }
+
+  @Test
+  @DisplayName("Should validate point tile edge count.")
+  public void shouldValidatePointTileEdgeCount() {
+    final Map<String, Array<Tile>> tiles = HashMap.of("point", Array.of(CHIT));
+    final Map<String, Array<Coordinate>> coordinates =
+        HashMap.of("no-edges", Array.of(Coordinates.of(0, 0)));
+    final Map<String, Array<String>> coordinateTilesMap =
+        HashMap.of(TileMappingUtils.newEntry("no-edges", "point"));
+
+    final Set<String> actual =
+        SpecificationImpl.checkForCoordinateEdgesVersusTileShapesMismatchError(
+            tiles, coordinates, coordinateTilesMap);
+
+    assertThat(actual)
+        .containsExactlyInAnyOrder(
+            "POINT tiles needing 0 edges are being configured with \"no-edges\" coordinates having 6 edges.",
+            "Edge positions [TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT, TOP_LEFT] are not compatible with POINT tiles.");
   }
 
   @Test
