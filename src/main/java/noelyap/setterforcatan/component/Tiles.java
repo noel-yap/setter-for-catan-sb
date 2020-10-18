@@ -6,15 +6,22 @@ import static noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex.Positi
 
 import io.vavr.collection.Array;
 import noelyap.setterforcatan.protogen.CoordinateOuterClass.Vertex;
+import noelyap.setterforcatan.protogen.TileOuterClass;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile;
+import noelyap.setterforcatan.protogen.TileOuterClass.Tile.ReservedName;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile.Shape;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type;
 
 public class Tiles {
-  // TODO: Move into proto definitions.
-  public static final String DESERT_OR_LAKE_NAME = "«DESERT»|«LAKE»";
-  public static final String FISHERY_NAME = "«FISHERY»";
-  public static final String LAKE_NAME = "«LAKE»";
+  public static final String DESERT_OR_LAKE_NAME =
+      ReservedName.DESERT_OR_LAKE_NAME
+          .getValueDescriptor()
+          .getOptions()
+          .getExtension(TileOuterClass.name);
+  public static final String FISHERY_NAME =
+      ReservedName.FISHERY_NAME.getValueDescriptor().getOptions().getExtension(TileOuterClass.name);
+  public static final String LAKE_NAME =
+      ReservedName.LAKE_NAME.getValueDescriptor().getOptions().getExtension(TileOuterClass.name);
 
   public static final Tile GENERIC_HARBOR = Tiles.ofType(Type.GENERIC_HARBOR, Shape.TRIANGLE);
   public static final Tile BRICK_HARBOR = Tiles.ofType(Type.BRICK_HARBOR, Shape.TRIANGLE);
