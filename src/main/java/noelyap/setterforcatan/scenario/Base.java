@@ -11,8 +11,8 @@ import static noelyap.setterforcatan.component.Chits.CHIT_6;
 import static noelyap.setterforcatan.component.Chits.CHIT_8;
 import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.DESERT;
-import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
 import static noelyap.setterforcatan.component.Tiles.FIELD;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE;
 import static noelyap.setterforcatan.component.Tiles.FOREST;
 import static noelyap.setterforcatan.component.Tiles.GENERIC_HARBOR;
 import static noelyap.setterforcatan.component.Tiles.GRAIN_HARBOR;
@@ -53,7 +53,7 @@ public class Base {
       HashMap.of(
           "producing",
           P3_P4_PRODUCING_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P3_P4_NON_PRODUCING_TILES,
           "harbor",
           P3_P4_HARBOR_TILES);
@@ -121,7 +121,8 @@ public class Base {
           P3_P4_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry("land", "producing", DESERT_OR_LAKE_NAME)),
+              TileMappingUtils.newEntry(
+                  "land", "producing", FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing")));
 
   public static final SpecificationImpl P3_P4_SPECIFICATION_IMPL =
@@ -143,7 +144,7 @@ public class Base {
       HashMap.of(
           "producing",
           P5_P6_PRODUCING_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P5_P6_NON_PRODUCING_LAND_TILES,
           "harbor",
           P5_P6_HARBOR_TILES);
@@ -220,7 +221,8 @@ public class Base {
           P5_P6_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry("land", "producing", DESERT_OR_LAKE_NAME)),
+              TileMappingUtils.newEntry(
+                  "land", "producing", FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing")));
 
   public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =
@@ -237,7 +239,7 @@ public class Base {
       HashMap.of(
           "producing",
           P7_P8_PRODUCING_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P7_P8_NON_PRODUCING_LAND_TILES,
           "harbor",
           P7_P8_HARBOR_TILES);
@@ -320,7 +322,8 @@ public class Base {
           P7_P8_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry("land", "producing", DESERT_OR_LAKE_NAME)),
+              TileMappingUtils.newEntry(
+                  "land", "producing", FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("producing")));
 
   public static final SpecificationImpl P7_P8_SPECIFICATION_IMPL =
