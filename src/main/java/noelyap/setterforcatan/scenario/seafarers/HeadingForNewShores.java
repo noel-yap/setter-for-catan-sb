@@ -11,8 +11,8 @@ import static noelyap.setterforcatan.component.Chits.CHIT_6;
 import static noelyap.setterforcatan.component.Chits.CHIT_8;
 import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.DESERT;
-import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
 import static noelyap.setterforcatan.component.Tiles.FIELD;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE;
 import static noelyap.setterforcatan.component.Tiles.FOREST;
 import static noelyap.setterforcatan.component.Tiles.GENERIC_HARBOR;
 import static noelyap.setterforcatan.component.Tiles.GOLD_FIELD;
@@ -166,7 +166,7 @@ public class HeadingForNewShores {
       HashMap.of(
           "big-island-producing-land",
           P4_BIG_ISLAND_PRODUCING_LAND_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P4_BIG_ISLAND_NON_PRODUCING_LAND_TILES,
           "big-island-harbor",
           P4_BIG_ISLAND_HARBOR_TILES,
@@ -223,7 +223,9 @@ public class HeadingForNewShores {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-harbor"),
               TileMappingUtils.newEntry(
-                  "big-island-land", "big-island-producing-land", DESERT_OR_LAKE_NAME),
+                  "big-island-land",
+                  "big-island-producing-land",
+                  FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE),
               TileMappingUtils.newEntry("small-island", "small-island-land", "small-island-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-producing-land"),
@@ -250,7 +252,7 @@ public class HeadingForNewShores {
       HashMap.of(
           "big-island-producing-land",
           P5_P6_BIG_ISLAND_PRODUCING_LAND_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P5_P6_BIG_ISLAND_NON_PRODUCING_LAND_TILES,
           "big-island-harbor",
           P5_P6_BIG_ISLAND_HARBOR_TILES,
@@ -331,7 +333,9 @@ public class HeadingForNewShores {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-harbor"),
               TileMappingUtils.newEntry(
-                  "big-island-land", "big-island-producing-land", DESERT_OR_LAKE_NAME),
+                  "big-island-land",
+                  "big-island-producing-land",
+                  FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE),
               TileMappingUtils.newEntry("small-island", "small-island-land", "small-island-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-producing-land"),
@@ -354,7 +358,7 @@ public class HeadingForNewShores {
       HashMap.of(
           "big-island-producing-land",
           P7_P8_BIG_ISLAND_PRODUCING_LAND_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P7_P8_BIG_ISLAND_NON_PRODUCING_LAND_TILES,
           "big-island-harbor",
           P7_P8_BIG_ISLAND_HARBOR_TILES,
@@ -444,7 +448,9 @@ public class HeadingForNewShores {
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-harbor"),
               TileMappingUtils.newEntry(
-                  "big-island-land", "big-island-producing-land", DESERT_OR_LAKE_NAME),
+                  "big-island-land",
+                  "big-island-producing-land",
+                  FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE),
               TileMappingUtils.newEntry("small-island", "small-island-land", "small-island-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("big-island-producing-land"),

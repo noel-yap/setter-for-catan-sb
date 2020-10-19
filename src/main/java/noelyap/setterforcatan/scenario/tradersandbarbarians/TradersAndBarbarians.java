@@ -10,8 +10,8 @@ import static noelyap.setterforcatan.component.Chits.CHIT_8;
 import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.CASTLE;
 import static noelyap.setterforcatan.component.Tiles.DESERT;
-import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
 import static noelyap.setterforcatan.component.Tiles.FIELD;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE;
 import static noelyap.setterforcatan.component.Tiles.FOREST;
 import static noelyap.setterforcatan.component.Tiles.GENERIC_HARBOR;
 import static noelyap.setterforcatan.component.Tiles.GLASSWORKS;
@@ -125,7 +125,7 @@ public class TradersAndBarbarians {
       HashMap.of(
           "non-trade-producing",
           P5_P6_NON_TRADE_PRODUCING_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P5_P6_NON_TRADE_NON_PRODUCING_TILES,
           "trade-castle",
           P5_P6_TRADE_CASTLE_TILES,
@@ -224,7 +224,10 @@ public class TradersAndBarbarians {
               TileMappingUtils.newSelfReferringEntry("trade-glassworks"),
               TileMappingUtils.newSelfReferringEntry("trade-quarry"),
               TileMappingUtils.newSelfReferringEntry("harbor"),
-              TileMappingUtils.newEntry("non-trade", "non-trade-producing", DESERT_OR_LAKE_NAME)),
+              TileMappingUtils.newEntry(
+                  "non-trade",
+                  "non-trade-producing",
+                  FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE)),
           HashMap.ofEntries(TileMappingUtils.newSelfReferringEntry("non-trade-producing")));
 
   public static final SpecificationImpl P5_P6_SPECIFICATION_IMPL =

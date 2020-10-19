@@ -13,15 +13,21 @@ import noelyap.setterforcatan.protogen.TileOuterClass.Tile.Shape;
 import noelyap.setterforcatan.protogen.TileOuterClass.Tile.Type;
 
 public class Tiles {
-  public static final String DESERT_OR_LAKE_NAME =
-      ReservedName.DESERT_OR_LAKE_NAME
+  public static final String FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE =
+      ReservedName.FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE
           .getValueDescriptor()
           .getOptions()
           .getExtension(TileOuterClass.name);
-  public static final String FISHERY_NAME =
-      ReservedName.FISHERY_NAME.getValueDescriptor().getOptions().getExtension(TileOuterClass.name);
-  public static final String LAKE_NAME =
-      ReservedName.LAKE_NAME.getValueDescriptor().getOptions().getExtension(TileOuterClass.name);
+  public static final String FISHERMEN_OF_CATAN_LAKE =
+      ReservedName.FISHERMEN_OF_CATAN_LAKE_CONVERTED_FROM_DESERT
+          .getValueDescriptor()
+          .getOptions()
+          .getExtension(TileOuterClass.name);
+  public static final String FISHERMEN_OF_CATAN_FISHERY =
+      ReservedName.FISHERMEN_OF_CATAN_FISHERY
+          .getValueDescriptor()
+          .getOptions()
+          .getExtension(TileOuterClass.name);
 
   public static final Tile GENERIC_HARBOR = Tiles.ofType(Type.GENERIC_HARBOR, Shape.TRIANGLE);
   public static final Tile BRICK_HARBOR = Tiles.ofType(Type.BRICK_HARBOR, Shape.TRIANGLE);

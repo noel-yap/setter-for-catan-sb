@@ -13,9 +13,9 @@ import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.CASTLE;
 import static noelyap.setterforcatan.component.Tiles.CHIT;
 import static noelyap.setterforcatan.component.Tiles.DESERT;
-import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
 import static noelyap.setterforcatan.component.Tiles.DEVELOPMENT_CARD;
 import static noelyap.setterforcatan.component.Tiles.FIELD;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE;
 import static noelyap.setterforcatan.component.Tiles.FISHERY;
 import static noelyap.setterforcatan.component.Tiles.FOREST;
 import static noelyap.setterforcatan.component.Tiles.GENERIC_HARBOR;
@@ -91,7 +91,7 @@ public class SpecificationImplTest {
             Array.of(GOLD_FIELD),
             "desert",
             Array.of(DESERT),
-            DESERT_OR_LAKE_NAME,
+            FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
             Array.of(DESERT, DESERT, DESERT, DESERT));
     final Map<String, Array<Chit>> chits = HashMap.of("gold-field", Array.of(CHIT_6));
     final Map<String, Array<String>> chitsTilesMap =
@@ -102,13 +102,13 @@ public class SpecificationImplTest {
             goldFieldCoordinates,
             "desert",
             desertCoordinates,
-            DESERT_OR_LAKE_NAME,
+            FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
             desertOrLakeCoordinates);
     final Map<String, Array<String>> coordinatesTilesMap =
         HashMap.ofEntries(
             TileMappingUtils.newSelfReferringEntry("gold-field"),
             TileMappingUtils.newSelfReferringEntry("desert"),
-            TileMappingUtils.newSelfReferringEntry(DESERT_OR_LAKE_NAME));
+            TileMappingUtils.newSelfReferringEntry(FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE));
 
     final Array<Coordinate> fisheriesCoordinates =
         Array.of(

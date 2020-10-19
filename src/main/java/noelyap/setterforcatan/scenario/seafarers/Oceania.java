@@ -12,8 +12,8 @@ import static noelyap.setterforcatan.component.Chits.CHIT_6;
 import static noelyap.setterforcatan.component.Chits.CHIT_8;
 import static noelyap.setterforcatan.component.Chits.CHIT_9;
 import static noelyap.setterforcatan.component.Tiles.DESERT;
-import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
 import static noelyap.setterforcatan.component.Tiles.FIELD;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE;
 import static noelyap.setterforcatan.component.Tiles.FOREST;
 import static noelyap.setterforcatan.component.Tiles.GENERIC_HARBOR;
 import static noelyap.setterforcatan.component.Tiles.GOLD_FIELD;
@@ -431,7 +431,7 @@ public class Oceania {
       HashMap.of(
           "face-up-producing",
           P7_P8_FACE_UP_PRODUCING_TILES,
-          DESERT_OR_LAKE_NAME,
+          FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE,
           P7_P8_FACE_UP_NON_PRODUCING_TILES,
           "face-up-harbor",
           P7_P8_FACE_UP_HARBOR_TILES,
@@ -581,7 +581,10 @@ public class Oceania {
           P7_P8_CHITS,
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("face-up-harbor"),
-              TileMappingUtils.newEntry("face-up-land", "face-up-producing", DESERT_OR_LAKE_NAME),
+              TileMappingUtils.newEntry(
+                  "face-up-land",
+                  "face-up-producing",
+                  FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE),
               TileMappingUtils.newEntry("face-down", "face-down-land", "face-down-sea")),
           HashMap.ofEntries(
               TileMappingUtils.newSelfReferringEntry("face-up-producing"),

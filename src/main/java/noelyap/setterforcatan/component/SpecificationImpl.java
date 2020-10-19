@@ -8,9 +8,9 @@ import static noelyap.setterforcatan.component.Chits.CHIT_5;
 import static noelyap.setterforcatan.component.Chits.CHIT_6;
 import static noelyap.setterforcatan.component.Chits.CHIT_8;
 import static noelyap.setterforcatan.component.Chits.CHIT_9;
-import static noelyap.setterforcatan.component.Tiles.DESERT_OR_LAKE_NAME;
-import static noelyap.setterforcatan.component.Tiles.FISHERY_NAME;
-import static noelyap.setterforcatan.component.Tiles.LAKE_NAME;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_FISHERY;
+import static noelyap.setterforcatan.component.Tiles.FISHERMEN_OF_CATAN_LAKE;
 import static org.assertj.core.api.HamcrestCondition.matching;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -112,31 +112,42 @@ public class SpecificationImpl {
       final Tile lakeTile = Tile.newBuilder().setType(Tile.Type.LAKE).build();
       final Stream<Chit> lakeChits = Stream.of(CHITS_2_3_11_12, CHITS_4_10);
 
-      final int desertCount = tiles.get(DESERT_OR_LAKE_NAME).map(Traversable::size).getOrElse(0);
+      final int desertCount =
+          tiles
+              .get(FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE)
+              .map(Traversable::size)
+              .getOrElse(0);
       final int fisheryCount = fisheryCoordinates.size();
 
       final Map<String, Array<Tile>> tiles =
           this.tiles
-              .filter(t2 -> !DESERT_OR_LAKE_NAME.equals(t2._1))
-              .put(LAKE_NAME, Array.fill(desertCount, lakeTile))
-              .filter(t2 -> desertCount > 0 || !t2._1.equals(LAKE_NAME))
-              .put(FISHERY_NAME, Array.fill(fisheryCount, fisheryTile));
+              .filter(t2 -> !FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE.equals(t2._1))
+              .put(FISHERMEN_OF_CATAN_LAKE, Array.fill(desertCount, lakeTile))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(FISHERMEN_OF_CATAN_LAKE))
+              .put(FISHERMEN_OF_CATAN_FISHERY, Array.fill(fisheryCount, fisheryTile));
 
       final Map<String, Array<Chit>> chits =
           this.chits
-              .put(LAKE_NAME, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
-              .filter(t2 -> desertCount > 0 || !t2._1.equals(LAKE_NAME))
-              .put(FISHERY_NAME, Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
+              .put(FISHERMEN_OF_CATAN_LAKE, Array.ofAll(lakeChits.cycle().slice(0, desertCount)))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(FISHERMEN_OF_CATAN_LAKE))
+              .put(
+                  FISHERMEN_OF_CATAN_FISHERY,
+                  Array.ofAll(fisheryChits.cycle().slice(0, fisheryCount)));
       final Map<String, Array<String>> chitsTilesMap =
           this.chitsTilesMap
-              .put(LAKE_NAME, Array.of(LAKE_NAME))
-              .filter(t2 -> desertCount > 0 || !t2._1.equals(LAKE_NAME))
-              .put(FISHERY_NAME, Array.of(FISHERY_NAME));
+              .put(FISHERMEN_OF_CATAN_LAKE, Array.of(FISHERMEN_OF_CATAN_LAKE))
+              .filter(t2 -> desertCount > 0 || !t2._1.equals(FISHERMEN_OF_CATAN_LAKE))
+              .put(FISHERMEN_OF_CATAN_FISHERY, Array.of(FISHERMEN_OF_CATAN_FISHERY));
 
       final Map<String, Array<Coordinate>> coordinates =
           HashMap.ofEntries(
-                  this.coordinates.map(t2 -> Tuple.of(DESERT_OR_LAKE_NAME.equals(t2._1) ? LAKE_NAME : t2._1, t2._2)))
-              .put(FISHERY_NAME, fisheryCoordinates);
+                  this.coordinates.map(t2 ->
+                          Tuple.of(
+                              FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE.equals(t2._1)
+                                  ? FISHERMEN_OF_CATAN_LAKE
+                                  : t2._1,
+                              t2._2)))
+              .put(FISHERMEN_OF_CATAN_FISHERY, fisheryCoordinates);
       final Map<String, Array<String>> coordinatesTilesMap =
           HashMap.ofEntries(
                   this.coordinatesTilesMap.map(t2 -> {
@@ -144,10 +155,15 @@ public class SpecificationImpl {
                         final Array<String> value = t2._2;
 
                         return Tuple.of(
-                            DESERT_OR_LAKE_NAME.equals(key) ? LAKE_NAME : key,
-                            value.map(v -> DESERT_OR_LAKE_NAME.equals(v) ? LAKE_NAME : v));
+                            FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE.equals(key)
+                                ? FISHERMEN_OF_CATAN_LAKE
+                                : key,
+                            value.map(v ->
+                                    FISHERMEN_OF_CATAN_DESERT_CONVERTIBLE_TO_LAKE.equals(v)
+                                        ? FISHERMEN_OF_CATAN_LAKE
+                                        : v));
                       }))
-              .put(FISHERY_NAME, Array.of(FISHERY_NAME));
+              .put(FISHERMEN_OF_CATAN_FISHERY, Array.of(FISHERMEN_OF_CATAN_FISHERY));
 
       return new Builder(
           tiles,
